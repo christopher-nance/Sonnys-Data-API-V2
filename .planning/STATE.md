@@ -5,15 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-10)
 
 **Core value:** Dead-simple interface with rock-solid reliability — any developer or AI agent picks it up instantly, and it never crashes your apps.
-**Current focus:** v1.0 shipped — no active milestone
+**Current focus:** v1.1 Documentation — comprehensive docs suite for the SDK
 
 ## Current Position
 
-Milestone: v1.0 Initial Release — SHIPPED 2026-02-10
-Status: Complete
-Last activity: 2026-02-10 — Milestone shipped, UAT verified against live API
+Phase: 11 of 18 (README Overhaul)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-02-10 - Milestone v1.1 created
 
-Progress: ██████████ 100%
+Progress: ░░░░░░░░░░ 0%
 
 ## Performance Metrics
 
@@ -52,8 +53,13 @@ None.
 
 None.
 
+### Roadmap Evolution
+
+- Milestone v1.0 created: Initial SDK release, 10 phases (Phase 1-10) — shipped 2026-02-10
+- Milestone v1.1 created: Documentation suite, 8 phases (Phase 11-18)
+
 ## Session Continuity
 
 Last session: 2026-02-10
-Stopped at: v1.0 milestone shipped and archived
+Stopped at: Milestone v1.1 initialization
 Resume file: None
