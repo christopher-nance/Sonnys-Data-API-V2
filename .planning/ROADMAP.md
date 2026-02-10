@@ -23,7 +23,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Resource Framework** - Base resource class, list/get patterns, auto-pagination
 - [x] **Phase 6: Standard Resources** - Customers, Items, Employees, Sites
 - [x] **Phase 7: Account Resources** - Giftcards, Washbooks, Recurring accounts
-- [ ] **Phase 8: Transaction Resources** - All transaction endpoints (list, by type, detail, v2)
+- [x] **Phase 8: Transaction Resources** - All transaction endpoints (list, by type, detail, v2)
 - [ ] **Phase 9: Batch Job System** - load-job, get-job-data, auto-polling
 - [ ] **Phase 10: Packaging & Distribution** - pip-install from GitHub, logging polish, integration tests
 
@@ -108,8 +108,8 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 08-01: Transaction list, by-type, and detail
-- [ ] 08-02: Transaction v2 list endpoint
+- [x] 08-01: Transaction list, by-type, and detail
+- [x] 08-02: Transaction v2 list endpoint
 
 ### Phase 9: Batch Job System
 **Goal**: Implement the transaction batch job flow — POST load-job, poll get-job-data, auto-poll loop with configurable timeout and interval
@@ -144,6 +144,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 5. Resource Framework | 1/1 | Complete | 2026-02-10 |
 | 6. Standard Resources | 2/2 | Complete | 2026-02-10 |
 | 7. Account Resources | 2/2 | Complete | 2026-02-10 |
-| 8. Transaction Resources | 1/2 | In progress | - |
+| 8. Transaction Resources | 2/2 | Complete | 2026-02-10 |
 | 9. Batch Job System | 0/1 | Not started | - |
 | 10. Packaging & Distribution | 0/1 | Not started | - |
