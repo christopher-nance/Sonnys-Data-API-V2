@@ -36,16 +36,17 @@ Complete Python SDK wrapping the Sonny's Carwash Controls Data API with 8 resour
 
 **Milestone Goal:** Comprehensive documentation suite — expanded README, auto-generated API reference, per-resource guides, and polished docstrings so any developer or AI agent can use the SDK without reading source code.
 
-#### Phase 11: README Overhaul
+#### Phase 11: README Overhaul -- COMPLETE
 
 **Goal**: Expand README with badges, table of contents, complete parameter documentation, and richer examples for every resource
 **Depends on**: Previous milestone complete
 **Research**: Unlikely (enhancing existing content)
 **Plans**: 2
+**Completed**: 2026-02-10
 
 Plans:
 - [x] 11-01: README Structure & Client Docs (badges, ToC, constructor params)
-- [ ] 11-02: Complete Resource Documentation (all 8 resources with param tables + examples)
+- [x] 11-02: Complete Resource Documentation (all 8 resources with param tables + examples)
 
 #### Phase 12: API Reference Setup
 
@@ -125,7 +126,7 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 
 | Phase | Milestone | Plans | Status | Completed |
 |-------|-----------|-------|--------|-----------|
-| 11. README Overhaul | v1.1 | 1/2 | In progress | - |
+| 11. README Overhaul | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 12. API Reference Setup | v1.1 | 0/? | Not started | - |
 | 13. Resource Guides | v1.1 | 0/? | Not started | - |
 | 14. Transaction Deep Dive | v1.1 | 0/? | Not started | - |
