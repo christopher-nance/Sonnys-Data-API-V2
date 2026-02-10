@@ -97,7 +97,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 07-01: Giftcards and Washbooks resources
+- [x] 07-01: Giftcards and Washbooks resources
 - [ ] 07-02: Recurring resource with status history
 
 ### Phase 8: Transaction Resources
@@ -143,7 +143,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 4. Response Models | 3/3 | Complete | 2026-02-10 |
 | 5. Resource Framework | 1/1 | Complete | 2026-02-10 |
 | 6. Standard Resources | 2/2 | Complete | 2026-02-10 |
-| 7. Account Resources | 0/2 | Not started | - |
+| 7. Account Resources | 1/2 | In progress | - |
 | 8. Transaction Resources | 0/2 | Not started | - |
 | 9. Batch Job System | 0/1 | Not started | - |
 | 10. Packaging & Distribution | 0/1 | Not started | - |
