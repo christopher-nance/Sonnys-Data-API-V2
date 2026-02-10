@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-10)
 
 **Core value:** Dead-simple interface with rock-solid reliability — any developer or AI agent picks it up instantly, and it never crashes your apps.
-**Current focus:** Phase 4 complete — ready for Phase 5: Resource Framework
+**Current focus:** Phase 5 complete — ready for Phase 6: Standard Resources
 
 ## Current Position
 
-Phase: 4 of 10 (Response Models)
-Plan: 3 of 3 in current phase
+Phase: 5 of 10 (Resource Framework)
+Plan: 1 of 1 in current phase
 Status: Phase complete
-Last activity: 2026-02-10 — Completed 04-03-PLAN.md
+Last activity: 2026-02-10 — Completed 05-01-PLAN.md
 
-Progress: █████░░░░░ 47%
+Progress: ██████░░░░ 53%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 3.0 min
-- Total execution time: 0.40 hours
+- Total plans completed: 9
+- Average duration: 3.1 min
+- Total execution time: 0.47 hours
 
 **By Phase:**
 
@@ -31,9 +31,10 @@ Progress: █████░░░░░ 47%
 | 2. HTTP Transport & Errors | 2/2 | 5 min | 2.5 min |
 | 3. Rate Limiting | 2/2 | 7 min | 3.5 min |
 | 4. Response Models | 3/3 | 9 min | 3 min |
+| 5. Resource Framework | 1/1 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 4 min, 3 min, 3 min, 3 min
+- Last 5 plans: 4 min, 3 min, 3 min, 3 min, 4 min
 - Trend: —
 
 ## Accumulated Context
@@ -63,6 +64,9 @@ Recent decisions affecting current work:
 | 04 | Shared sub-objects in _washbooks.py imported by _recurring.py | Avoids duplication; WashbookTag/Vehicle/Customer reused |
 | 04 | Field(alias="siteID") for Site.site_id | to_camel produces "siteId" but API returns "siteID" |
 | 04 | 30 models total in types/__all__ | Plan said 29 but actual count includes TransactionJobItem |
+| 05 | ListableResource/GettableResource as independent mixins | Concrete resources inherit one or both |
+| 05 | TYPE_CHECKING guard for circular imports | _resources.py imports SonnysClient only at type-check time |
+| 05 | _list_paginated/_list_non_paginated private dispatch | Clean separation of paginated vs non-paginated logic |
 
 ### Deferred Issues
 
@@ -74,6 +78,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-10T10:36:16Z
-Stopped at: Completed 04-03-PLAN.md — Phase 4 complete
+Last session: 2026-02-10T17:23:38Z
+Stopped at: Completed 05-01-PLAN.md — Phase 5 complete
 Resume file: None

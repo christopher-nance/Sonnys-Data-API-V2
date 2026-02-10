@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: HTTP Transport & Errors** - Request/response cycle, auth headers, exception hierarchy, error mapping
 - [x] **Phase 3: Rate Limiting** - Per-instance sliding window, 429 backoff, retry logic
 - [x] **Phase 4: Response Models** - Pydantic v2 models for all 8 resource types
-- [ ] **Phase 5: Resource Framework** *(In progress)* - Base resource class, list/get patterns, auto-pagination
+- [x] **Phase 5: Resource Framework** - Base resource class, list/get patterns, auto-pagination
 - [ ] **Phase 6: Standard Resources** - Customers, Items, Employees, Sites
 - [ ] **Phase 7: Account Resources** - Giftcards, Washbooks, Recurring accounts
 - [ ] **Phase 8: Transaction Resources** - All transaction endpoints (list, by type, detail, v2)
@@ -78,7 +78,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 05-01: Base resource class and auto-pagination
+- [x] 05-01: Base resource class and auto-pagination (TDD)
 
 ### Phase 6: Standard Resources
 **Goal**: Implement resource classes for Customers (list, get), Items (list), Employees (list, get with clock entries), and Sites (list)
@@ -141,7 +141,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 2. HTTP Transport & Errors | 2/2 | Complete | 2026-02-10 |
 | 3. Rate Limiting | 2/2 | Complete | 2026-02-10 |
 | 4. Response Models | 3/3 | Complete | 2026-02-10 |
-| 5. Resource Framework | 0/1 | Not started | - |
+| 5. Resource Framework | 1/1 | Complete | 2026-02-10 |
 | 6. Standard Resources | 0/2 | Not started | - |
 | 7. Account Resources | 0/2 | Not started | - |
 | 8. Transaction Resources | 0/2 | Not started | - |
