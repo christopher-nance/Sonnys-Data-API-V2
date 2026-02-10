@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-10)
 
 **Core value:** Dead-simple interface with rock-solid reliability — any developer or AI agent picks it up instantly, and it never crashes your apps.
-**Current focus:** Phase 3 complete — rate limiting
+**Current focus:** Phase 4 in progress — response models
 
 ## Current Position
 
-Phase: 3 of 10 (Rate Limiting)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-02-10 — Completed 03-02-PLAN.md
+Phase: 4 of 10 (Response Models)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-02-10 — Completed 04-01-PLAN.md
 
-Progress: ██▉░░░░░░░ 29%
+Progress: ███▌░░░░░░ 35%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
+- Total plans completed: 6
 - Average duration: 3.2 min
-- Total execution time: 0.27 hours
+- Total execution time: 0.32 hours
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: ██▉░░░░░░░ 29%
 | 1. Project Foundation | 1/1 | 4 min | 4 min |
 | 2. HTTP Transport & Errors | 2/2 | 5 min | 2.5 min |
 | 3. Rate Limiting | 2/2 | 7 min | 3.5 min |
+| 4. Response Models | 1/3 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 4 min, 1 min, 4 min, 3 min, 4 min
+- Last 5 plans: 1 min, 4 min, 3 min, 4 min, 3 min
 - Trend: —
 
 ## Accumulated Context
@@ -55,6 +56,8 @@ Recent decisions affecting current work:
 | 03 | acquire() returns wait duration, does not sleep | Keeps rate limiter pure and testable; caller decides |
 | 03 | Exponential backoff 1s/2s/4s for 429 retry | Standard doubling from base_delay=1.0 |
 | 03 | Only 429 triggers retry; other errors raise immediately | No retry on 5xx — fail fast for non-transient errors |
+| 04 | SonnysModel with ConfigDict(populate_by_name, alias_generator=to_camel) | Automatic snake_case-to-camelCase JSON aliasing |
+| 04 | TransactionV2ListItem extends TransactionListItem; TransactionJobItem extends Transaction | Inheritance for shared fields between v1/v2/job variants |
 
 ### Deferred Issues
 
@@ -66,6 +69,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-10T15:41:28Z
-Stopped at: Completed 03-02-PLAN.md — Phase 3 complete
+Last session: 2026-02-10T16:13:37Z
+Stopped at: Completed 04-01-PLAN.md — 1 of 3 plans in Phase 4
 Resume file: None
