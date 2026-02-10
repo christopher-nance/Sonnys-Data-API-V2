@@ -46,7 +46,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 02-01: HTTP session and request methods
+- [x] 02-01: Exception hierarchy
 - [ ] 02-02: Exception hierarchy and error mapping
 
 ### Phase 3: Rate Limiting
@@ -137,7 +137,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Project Foundation | 1/1 | Complete | 2026-02-10 |
-| 2. HTTP Transport & Errors | 0/2 | Not started | - |
+| 2. HTTP Transport & Errors | 1/2 | In progress | - |
 | 3. Rate Limiting | 0/1 | Not started | - |
 | 4. Response Models | 0/3 | Not started | - |
 | 5. Resource Framework | 0/1 | Not started | - |
