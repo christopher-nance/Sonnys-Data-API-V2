@@ -22,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Response Models** - Pydantic v2 models for all 8 resource types
 - [x] **Phase 5: Resource Framework** - Base resource class, list/get patterns, auto-pagination
 - [x] **Phase 6: Standard Resources** - Customers, Items, Employees, Sites
-- [ ] **Phase 7: Account Resources** - Giftcards, Washbooks, Recurring accounts
+- [x] **Phase 7: Account Resources** - Giftcards, Washbooks, Recurring accounts
 - [ ] **Phase 8: Transaction Resources** - All transaction endpoints (list, by type, detail, v2)
 - [ ] **Phase 9: Batch Job System** - load-job, get-job-data, auto-polling
 - [ ] **Phase 10: Packaging & Distribution** - pip-install from GitHub, logging polish, integration tests
@@ -98,7 +98,7 @@ Plans:
 
 Plans:
 - [x] 07-01: Giftcards and Washbooks resources
-- [ ] 07-02: Recurring resource with status history
+- [x] 07-02: Recurring resource with status history
 
 ### Phase 8: Transaction Resources
 **Goal**: Implement the transaction resource with all endpoints — list, list by type, get detail, and v2 list
@@ -143,7 +143,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 4. Response Models | 3/3 | Complete | 2026-02-10 |
 | 5. Resource Framework | 1/1 | Complete | 2026-02-10 |
 | 6. Standard Resources | 2/2 | Complete | 2026-02-10 |
-| 7. Account Resources | 1/2 | In progress | - |
+| 7. Account Resources | 2/2 | Complete | 2026-02-10 |
 | 8. Transaction Resources | 0/2 | Not started | - |
 | 9. Batch Job System | 0/1 | Not started | - |
 | 10. Packaging & Distribution | 0/1 | Not started | - |
