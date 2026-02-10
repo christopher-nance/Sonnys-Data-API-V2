@@ -20,7 +20,14 @@ with exponential-backoff retry keeps your application within the API's
 - [Quick Start](#quick-start)
 - [Client Configuration](#client-configuration)
 - [Resources](#resources)
-  - [Batch Jobs](#batch-jobs)
+  - [Customers](#customers)
+  - [Items](#items)
+  - [Employees](#employees)
+  - [Sites](#sites)
+  - [Giftcards](#giftcards)
+  - [Washbooks](#washbooks)
+  - [Recurring Accounts](#recurring-accounts)
+  - [Transactions](#transactions)
 - [Error Handling](#error-handling)
 - [Logging](#logging)
 - [Multi-Site Usage](#multi-site-usage)
@@ -110,24 +117,185 @@ Credentials are sent as HTTP headers on every request:
 | `client.recurring` | `list(**params)`, `get(id)`, `list_status_changes(**params)`, `list_modifications(**params)`, `list_details(**params)` |
 | `client.transactions` | `list(**params)`, `get(id)`, `list_by_type(item_type, **params)`, `list_v2(**params)`, `load_job(*, poll_interval, timeout, **params)` |
 
-Common query parameters passed via `**params` include `startDate`, `endDate`,
-`site`, `region`, `limit`, and `offset`. Check the Sonny's API documentation
-for endpoint-specific parameters.
+All `list()` methods auto-paginate by default -- every page is fetched
+transparently and the complete result set is returned. Common query parameters
+include `startDate`, `endDate`, `site`, `region`, `limit`, and `offset`.
 
-### Batch Jobs
+### Customers
 
-The `load_job` method submits a batch job and polls until results are ready:
+**Methods:** `list(**params)` | `get(id)`
+
+```python
+customers = client.customers.list(startDate="2024-01-01", endDate="2024-01-31")
+for c in customers:
+    print(c.customer_id, c.first_name, c.last_name, c.is_active)
+
+# Get full detail for a single customer
+detail = client.customers.get("12345")
+print(detail.email, detail.phone, detail.address.city)
+```
+
+**Returns:** `list[CustomerListItem]` from `list()` -- fields include
+`customer_id`, `first_name`, `last_name`, `phone_number`, `is_active`,
+`created_date`. `Customer` from `get()` -- adds `email`, `address`, `company_name`,
+`loyalty_number`, `birth_date`.
+
+### Items
+
+**Methods:** `list(**params)`
+
+```python
+items = client.items.list()
+for item in items:
+    print(item.sku, item.name, item.department_name, item.price_at_site)
+```
+
+**Returns:** `list[Item]` -- fields include `sku`, `name`, `department_name`,
+`price_at_site`, `cost_per_item`, `is_prompt_for_price`, `site_location`.
+
+### Employees
+
+**Methods:** `list(**params)` | `get(id)` | `get_clock_entries(employee_id, *, start_date, end_date)`
+
+```python
+employees = client.employees.list()
+for emp in employees:
+    print(emp.employee_id, emp.first_name, emp.last_name)
+
+# Get clock entries for a date range
+entries = client.employees.get_clock_entries(
+    42, start_date="2024-01-01", end_date="2024-01-07"
+)
+for entry in entries:
+    print(entry.clock_in, entry.clock_out, entry.regular_hours, entry.site_code)
+```
+
+**Returns:** `list[EmployeeListItem]` from `list()` -- fields include
+`employee_id`, `first_name`, `last_name`. `Employee` from `get()` -- adds
+`active`, `start_date`, `phone`, `email`. `list[ClockEntry]` from
+`get_clock_entries()` -- fields include `clock_in`, `clock_out`,
+`regular_hours`, `overtime_hours`, `regular_rate`, `site_code`.
+
+### Sites
+
+**Methods:** `list(**params)`
+
+```python
+sites = client.sites.list()
+for site in sites:
+    print(site.site_id, site.code, site.name, site.timezone)
+```
+
+**Returns:** `list[Site]` -- fields include `site_id`, `code`, `name`,
+`timezone`. Sites is non-paginated; all sites are returned in a single
+request.
+
+### Giftcards
+
+**Methods:** `list(**params)`
+
+```python
+giftcards = client.giftcards.list(startDate="2024-01-01", endDate="2024-01-31")
+for gc in giftcards:
+    print(gc.giftcard_id, gc.number, gc.value, gc.amount_used, gc.site_code)
+```
+
+**Returns:** `list[GiftcardListItem]` -- fields include `giftcard_id`,
+`number`, `value`, `amount_used`, `site_code`, `complete_date`.
+
+### Washbooks
+
+**Methods:** `list(**params)` | `get(id)`
+
+```python
+washbooks = client.washbooks.list()
+for wb in washbooks:
+    print(wb.id, wb.name, wb.balance, wb.status)
+
+# Get full detail including tags and vehicles
+detail = client.washbooks.get("WB-123")
+print(detail.customer.first_name, detail.recurring_info.next_bill_date)
+for tag in detail.tags:
+    print(tag.number, tag.enabled)
+```
+
+**Returns:** `list[WashbookListItem]` from `list()` -- fields include `id`,
+`name`, `balance`, `sign_up_date`, `cancel_date`, `status`, `customer_id`.
+`Washbook` from `get()` -- adds `customer`, `recurring_info`, `tags`,
+`vehicles`.
+
+### Recurring Accounts
+
+**Methods:** `list(**params)` | `get(id)` | `list_status_changes(**params)` | `list_modifications(**params)` | `list_details(**params)`
+
+```python
+accounts = client.recurring.list(startDate="2024-01-01", endDate="2024-01-31")
+for acct in accounts:
+    print(acct.id, acct.name, acct.status_name, acct.billing_site_code)
+
+# Get status changes for a date range
+changes = client.recurring.list_status_changes(
+    startDate="2024-01-01", endDate="2024-01-31"
+)
+for change in changes:
+    print(change.recurring_id, change.old_status, "->", change.new_status)
+```
+
+**Returns:** `list[RecurringListItem]` from `list()` -- fields include `id`,
+`name`, `status_name`, `sign_up_date`, `billing_site_code`, `customer_id`.
+`Recurring` from `get()` -- adds `plan_name`, `customer`, `tags`, `vehicles`,
+`recurring_statuses`, `recurring_billings`. `list[RecurringStatusChange]` from
+`list_status_changes()`. `list[RecurringModification]` from
+`list_modifications()`. `list[Recurring]` from `list_details()` (full detail
+for every account).
+
+### Transactions
+
+**Methods:** `list(**params)` | `get(id)` | `list_by_type(item_type, **params)` | `list_v2(**params)` | `load_job(*, poll_interval, timeout, **params)`
+
+```python
+txns = client.transactions.list(startDate="2024-01-01", endDate="2024-01-31")
+for txn in txns:
+    print(txn.trans_id, txn.date, txn.total)
+
+# Filter by type: wash, prepaid-wash, recurring, washbook,
+#   giftcard, merchandise, house-account
+washes = client.transactions.list_by_type(
+    "wash", startDate="2024-01-01", endDate="2024-01-31"
+)
+```
+
+**`list_v2`** returns enriched items with extra fields -- `customer_id`,
+`is_recurring_plan_sale`, `is_recurring_plan_redemption`, `transaction_status`:
+
+```python
+v2 = client.transactions.list_v2(startDate="2024-01-01", endDate="2024-01-31")
+for txn in v2:
+    print(txn.trans_id, txn.customer_id, txn.transaction_status)
+```
+
+**`load_job`** submits a batch job and auto-polls until results are ready.
+The API caches job data for 20 minutes and limits the date range to 24 hours:
 
 ```python
 results = client.transactions.load_job(
     startDate="2024-01-01",
     endDate="2024-01-01",
-    poll_interval=2.0,
-    timeout=300.0,
+    poll_interval=2.0,   # seconds between poll attempts (default 2.0)
+    timeout=300.0,        # max seconds to wait per job (default 300.0)
 )
+for item in results:
+    print(item.id, item.complete_date, item.total, item.transaction_status)
 ```
 
-The API caches job data for 20 minutes and limits the date range to 24 hours.
+**Returns:** `list[TransactionListItem]` from `list()` and `list_by_type()` --
+fields include `trans_id`, `trans_number`, `total`, `date`.
+`Transaction` from `get()` -- adds `items`, `tenders`, `discounts`,
+`customer_name`, `employee_cashier`, `location_code`.
+`list[TransactionV2ListItem]` from `list_v2()` -- extends list item with
+`customer_id`, `is_recurring_plan_sale`, `is_recurring_plan_redemption`,
+`transaction_status`. `list[TransactionJobItem]` from `load_job()` -- full
+transaction detail plus v2 enrichment fields.
 
 ## Error Handling
 
