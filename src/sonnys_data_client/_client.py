@@ -14,7 +14,9 @@ from sonnys_data_client._exceptions import (
 )
 from sonnys_data_client._rate_limiter import RateLimiter
 from sonnys_data_client.resources._customers import Customers
+from sonnys_data_client.resources._employees import Employees
 from sonnys_data_client.resources._items import Items
+from sonnys_data_client.resources._sites import Sites
 
 
 class SonnysClient:
@@ -65,6 +67,16 @@ class SonnysClient:
     def items(self) -> Items:
         """Access the Items resource."""
         return Items(self)
+
+    @functools.cached_property
+    def employees(self) -> Employees:
+        """Access the Employees resource."""
+        return Employees(self)
+
+    @functools.cached_property
+    def sites(self) -> Sites:
+        """Access the Sites resource."""
+        return Sites(self)
 
     def _request(
         self,
