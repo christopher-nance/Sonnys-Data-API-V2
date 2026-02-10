@@ -19,8 +19,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Project Foundation** - Package scaffolding, SonnysClient class, dependency declarations
 - [x] **Phase 2: HTTP Transport & Errors** - Request/response cycle, auth headers, exception hierarchy, error mapping
 - [x] **Phase 3: Rate Limiting** - Per-instance sliding window, 429 backoff, retry logic
-- [ ] **Phase 4: Response Models** *(In progress)* - Pydantic v2 models for all 8 resource types
-- [ ] **Phase 5: Resource Framework** - Base resource class, list/get patterns, auto-pagination
+- [x] **Phase 4: Response Models** - Pydantic v2 models for all 8 resource types
+- [ ] **Phase 5: Resource Framework** *(In progress)* - Base resource class, list/get patterns, auto-pagination
 - [ ] **Phase 6: Standard Resources** - Customers, Items, Employees, Sites
 - [ ] **Phase 7: Account Resources** - Giftcards, Washbooks, Recurring accounts
 - [ ] **Phase 8: Transaction Resources** - All transaction endpoints (list, by type, detail, v2)
@@ -69,7 +69,7 @@ Plans:
 Plans:
 - [x] 04-01: Transaction and customer models
 - [x] 04-02: Item, giftcard, washbook, and recurring models
-- [ ] 04-03: Employee and site models
+- [x] 04-03: Employee and site models
 
 ### Phase 5: Resource Framework
 **Goal**: Build the base resource class with reusable list/get method patterns and auto-pagination logic (offset/limit loop using total count)
@@ -140,7 +140,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 1. Project Foundation | 1/1 | Complete | 2026-02-10 |
 | 2. HTTP Transport & Errors | 2/2 | Complete | 2026-02-10 |
 | 3. Rate Limiting | 2/2 | Complete | 2026-02-10 |
-| 4. Response Models | 2/3 | In progress | - |
+| 4. Response Models | 3/3 | Complete | 2026-02-10 |
 | 5. Resource Framework | 0/1 | Not started | - |
 | 6. Standard Resources | 0/2 | Not started | - |
 | 7. Account Resources | 0/2 | Not started | - |
