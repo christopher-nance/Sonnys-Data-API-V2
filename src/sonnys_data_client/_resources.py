@@ -77,13 +77,13 @@ class ListableResource(BaseResource):
             data = response.json()["data"]
 
             items = data[self._items_key]
-            total = data["total"]
+            total = data.get("total")
 
             for item in items:
                 all_items.append(self._model.model_validate(item))
 
             offset += self._default_limit
-            if offset > total:
+            if total is None or offset > total:
                 break
 
         return all_items

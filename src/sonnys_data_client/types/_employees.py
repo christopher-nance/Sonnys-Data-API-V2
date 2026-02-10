@@ -27,6 +27,6 @@ class Employee(SonnysModel):
     last_name: str
     active: bool
     start_date: str
-    start_date_change: str
+    start_date_change: str | None = None
     phone: str | None = None
     email: str | None = None

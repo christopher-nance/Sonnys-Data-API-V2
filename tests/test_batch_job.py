@@ -71,7 +71,7 @@ SAMPLE_JOB_ITEM = {
             "isVoided": False,
         }
     ],
-    "discount": [],
+    "discounts": [],
     "isRecurringPayment": False,
     "isRecurringRedemption": False,
     "isRecurringSale": False,

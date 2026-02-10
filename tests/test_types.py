@@ -108,7 +108,7 @@ class TestTransactionModels:
                     "isVoided": False,
                 }
             ],
-            "discount": [],
+            "discounts": [],
             "isRecurringPayment": False,
             "isRecurringRedemption": False,
             "isRecurringSale": False,
@@ -140,7 +140,7 @@ class TestTransactionModels:
         data = {
             "discountName": "Senior Discount",
             "appliedToItemName": "Basic Wash",
-            "discount": 2.50,
+            "discountAmount": 2.50,
             "discountCode": "SENIOR10",
         }
         obj = types.TransactionDiscount(**data)

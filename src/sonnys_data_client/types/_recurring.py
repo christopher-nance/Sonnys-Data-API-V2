@@ -67,9 +67,9 @@ class RecurringStatusChange(SonnysModel):
 
 
 class RecurringModificationEntry(SonnysModel):
-    modification_type: str
-    modification_date: str
-    modification_comment: str | None = None
+    name: str
+    date: str
+    comment: str | None = None
 
 
 class RecurringModification(Recurring):

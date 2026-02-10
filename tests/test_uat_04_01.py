@@ -80,10 +80,10 @@ class TestTransactionSubModels:
         d = TransactionDiscount(
             discount_name="10% Off", discount_sku="D10",
             applied_to_item_name="Full Service",
-            discount=1.50, discount_code="SAVE10",
+            discount_amount=1.50, discount_code="SAVE10",
         )
         assert d.discount_name == "10% Off"
-        assert d.discount == 1.50
+        assert d.discount_amount == 1.50
 
 
 # --- Test 3: Transaction main models ---
@@ -123,7 +123,7 @@ class TestTransactionMainModels:
                  "discount": 1.0, "tax": 1.82, "additionalFee": 0.0,
                  "isVoided": False},
             ],
-            discount=[],
+            discounts=[],
             is_recurring_payment=False, is_recurring_redemption=False,
             is_recurring_sale=False, is_prepaid_redemption=False,
             is_prepaid_sale=False,
@@ -139,7 +139,7 @@ class TestTransactionMainModels:
             id="1:2", number=1, type="Sale",
             complete_date="2024-01-15", location_code="MAIN",
             sales_device_name="POS1", total=10.0,
-            tenders=[], items=[], discount=[],
+            tenders=[], items=[], discounts=[],
             is_recurring_payment=False, is_recurring_redemption=False,
             is_recurring_sale=False, is_prepaid_redemption=False,
             is_prepaid_sale=False,
@@ -153,7 +153,7 @@ class TestTransactionMainModels:
             id="1:2", number=1, type="Sale",
             complete_date="2024-01-15", location_code="MAIN",
             sales_device_name="POS1", total=10.0,
-            tenders=[], items=[], discount=[],
+            tenders=[], items=[], discounts=[],
             is_recurring_payment=False, is_recurring_redemption=False,
             is_recurring_sale=False, is_prepaid_redemption=False,
             is_prepaid_sale=False,
@@ -171,7 +171,7 @@ class TestTransactionMainModels:
             id="1:2", number=1, type="Sale",
             complete_date="2024-01-15", location_code="MAIN",
             sales_device_name="POS1", total=10.0,
-            tenders=[], items=[], discount=[],
+            tenders=[], items=[], discounts=[],
             is_recurring_payment=False, is_recurring_redemption=False,
             is_recurring_sale=False, is_prepaid_redemption=False,
             is_prepaid_sale=False,

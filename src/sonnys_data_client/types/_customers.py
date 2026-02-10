@@ -18,7 +18,7 @@ class CustomerListItem(SonnysModel):
     customer_number: str | None = None
     is_active: bool
     created_date: str
-    modified_date: str
+    modified_date: str | None = None
 
 
 class Customer(SonnysModel):
@@ -26,8 +26,8 @@ class Customer(SonnysModel):
     number: str
     first_name: str
     last_name: str
-    company_name: str
-    loyalty_number: str
+    company_name: str | None = None
+    loyalty_number: str | None = None
     address: Address
     phone: str
     email: str | None = None

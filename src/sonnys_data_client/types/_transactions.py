@@ -29,7 +29,7 @@ class TransactionDiscount(SonnysModel):
     discount_name: str
     discount_sku: str | None = None
     applied_to_item_name: str
-    discount: float
+    discount_amount: float
     discount_code: str
 
 
@@ -62,7 +62,7 @@ class Transaction(SonnysModel):
     vehicle_license_plate: str | None = None
     employee_cashier: str | None = None
     employee_greeter: str | None = None
-    discount: list[TransactionDiscount]
+    discounts: list[TransactionDiscount]
     is_recurring_payment: bool
     is_recurring_redemption: bool
     is_recurring_sale: bool
