@@ -17,7 +17,7 @@ None
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Project Foundation** - Package scaffolding, SonnysClient class, dependency declarations
-- [ ] **Phase 2: HTTP Transport & Errors** - Request/response cycle, auth headers, exception hierarchy, error mapping
+- [x] **Phase 2: HTTP Transport & Errors** - Request/response cycle, auth headers, exception hierarchy, error mapping
 - [ ] **Phase 3: Rate Limiting** - Per-instance sliding window, 429 backoff, retry logic
 - [ ] **Phase 4: Response Models** - Pydantic v2 models for all 8 resource types
 - [ ] **Phase 5: Resource Framework** - Base resource class, list/get patterns, auto-pagination
@@ -47,7 +47,7 @@ Plans:
 
 Plans:
 - [x] 02-01: Exception hierarchy
-- [ ] 02-02: Exception hierarchy and error mapping
+- [x] 02-02: Error body parsing and status mapping (TDD)
 
 ### Phase 3: Rate Limiting
 **Goal**: Implement per-instance sliding window rate limiter (20 req/15s), automatic backoff on 429 responses, and retry logic
@@ -137,7 +137,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Project Foundation | 1/1 | Complete | 2026-02-10 |
-| 2. HTTP Transport & Errors | 1/2 | In progress | - |
+| 2. HTTP Transport & Errors | 2/2 | Complete | 2026-02-10 |
 | 3. Rate Limiting | 0/1 | Not started | - |
 | 4. Response Models | 0/3 | Not started | - |
 | 5. Resource Framework | 0/1 | Not started | - |
