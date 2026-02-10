@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import functools
+import logging
 import time
 
 import requests
+
+logger = logging.getLogger("sonnys_data_client")
 
 from sonnys_data_client._exceptions import (
     APIConnectionError,
@@ -131,9 +134,11 @@ class SonnysClient:
             # Step 1: Rate limit check
             wait = self._rate_limiter.acquire()
             if wait > 0:
+                logger.debug("Rate limiter: waiting %.3fs", wait)
                 time.sleep(wait)
 
             # Step 2: Send request
+            logger.debug("Request: %s %s params=%s", method, path, params)
             try:
                 response = self._session.request(
                     method,
@@ -147,11 +152,21 @@ class SonnysClient:
 
             # Step 4: Handle success
             if response.status_code < 400:
+                logger.debug(
+                    "Response: %s %s status=%d elapsed=%.3fs",
+                    method, path, response.status_code,
+                    response.elapsed.total_seconds(),
+                )
                 return response
 
             # Step 5: Handle 429
             if response.status_code == 429:
                 if attempt < self._max_retries:
+                    logger.warning(
+                        "Rate limited (429), retry %d/%d after %.1fs",
+                        attempt + 1, self._max_retries,
+                        base_delay * (2 ** attempt),
+                    )
                     time.sleep(base_delay * (2**attempt))
                     continue
                 raise make_status_error(response)
