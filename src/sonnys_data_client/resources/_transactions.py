@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from sonnys_data_client._resources import GettableResource, ListableResource
 from sonnys_data_client.types._base import SonnysModel
-from sonnys_data_client.types._transactions import Transaction, TransactionListItem
+from sonnys_data_client.types._transactions import (
+    Transaction,
+    TransactionListItem,
+    TransactionV2ListItem,
+)
 
 
 class Transactions(ListableResource, GettableResource):
@@ -85,5 +89,24 @@ class Transactions(ListableResource, GettableResource):
             f"/transaction/type/{item_type}",
             "transactions",
             TransactionListItem,
+            **params,
+        )
+
+    def list_v2(self, **params: object) -> list[TransactionV2ListItem]:
+        """Fetch all transactions using the v2 endpoint.
+
+        The v2 endpoint returns enriched list items with ``customer_id``,
+        ``is_recurring_plan_sale``, ``is_recurring_plan_redemption``, and
+        ``transaction_status`` fields.
+
+        Note: The API caches v2 responses for 10 minutes per reporting criteria.
+
+        Returns:
+            A flat list of :class:`TransactionV2ListItem` instances.
+        """
+        return self._paginated_fetch(
+            "/transaction/version-2",
+            "transactions",
+            TransactionV2ListItem,
             **params,
         )
