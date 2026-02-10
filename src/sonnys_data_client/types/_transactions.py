@@ -1,3 +1,5 @@
+from pydantic import Field
+
 from sonnys_data_client.types._base import SonnysModel
 
 
@@ -62,7 +64,7 @@ class Transaction(SonnysModel):
     vehicle_license_plate: str | None = None
     employee_cashier: str | None = None
     employee_greeter: str | None = None
-    discounts: list[TransactionDiscount]
+    discounts: list[TransactionDiscount] = Field(alias="discount")
     is_recurring_payment: bool
     is_recurring_redemption: bool
     is_recurring_sale: bool
@@ -72,6 +74,6 @@ class Transaction(SonnysModel):
 
 class TransactionJobItem(Transaction):
     customer_id: str | None = None
-    is_recurring_plan_sale: bool
-    is_recurring_plan_redemption: bool
-    transaction_status: str
+    is_recurring_plan_sale: bool | None = None
+    is_recurring_plan_redemption: bool | None = None
+    transaction_status: str | None = None

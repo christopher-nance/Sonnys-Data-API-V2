@@ -115,6 +115,46 @@ class Transactions(ListableResource, GettableResource):
             **params,
         )
 
+    def _submit_and_poll(
+        self,
+        *,
+        poll_interval: float,
+        timeout: float,
+        **params: object,
+    ) -> tuple[list[dict], int]:
+        """Submit a single load-job page and poll until results are ready.
+
+        Returns:
+            A tuple of (list of raw item dicts, total count).
+        """
+        response = self._client._request(
+            "POST", "/transaction/load-job", params=params,
+        )
+        hash_value = response.json()["data"]["hash"]
+
+        deadline = time.monotonic() + timeout
+        while True:
+            response = self._client._request(
+                "GET",
+                "/transaction/get-job-data",
+                params={"hash": hash_value},
+            )
+            body = response.json()["data"]
+            status = body["status"]
+
+            if status == "pass":
+                return body["data"], body.get("total", len(body["data"]))
+
+            if status == "fail":
+                raise APIError("Batch job failed")
+
+            if time.monotonic() >= deadline:
+                raise APITimeoutError(
+                    f"Batch job did not complete within {timeout}s"
+                )
+
+            time.sleep(poll_interval)
+
     def load_job(
         self,
         *,
@@ -122,18 +162,19 @@ class Transactions(ListableResource, GettableResource):
         timeout: float = 300.0,
         **params: object,
     ) -> list[TransactionJobItem]:
-        """Submit a batch job and poll until results are ready.
+        """Submit batch jobs and auto-paginate through all results.
 
-        Posts reporting criteria to ``/transaction/load-job``, then polls
-        ``/transaction/get-job-data`` until the job completes, fails, or
-        the timeout is exceeded.
+        Pagination happens at the job submission level: each call to
+        ``/transaction/load-job`` with a different ``offset`` fetches
+        one page. The method submits as many jobs as needed to retrieve
+        all records.
 
         Note: The API caches job data for 20 minutes and limits the date
         range to a maximum of 24 hours.
 
         Args:
             poll_interval: Seconds between poll attempts (default 2.0).
-            timeout: Max seconds to wait for job completion (default 300.0).
+            timeout: Max seconds to wait for each job (default 300.0).
             **params: Query parameters (``startDate``, ``endDate``,
                 ``site``, ``limit``, ``offset``, etc.).
 
@@ -141,37 +182,31 @@ class Transactions(ListableResource, GettableResource):
             A list of :class:`TransactionJobItem` instances.
 
         Raises:
-            APIError: If the job status is ``"fail"``.
-            APITimeoutError: If the job does not complete within *timeout*.
+            APIError: If any job status is ``"fail"``.
+            APITimeoutError: If any job does not complete within *timeout*.
         """
-        # Step 1: Submit job
-        response = self._client._request(
-            "POST", "/transaction/load-job", params=params,
+        limit = int(params.get("limit", 100))
+        page = int(params.get("offset", 1))
+
+        # First page
+        items, total = self._submit_and_poll(
+            poll_interval=poll_interval,
+            timeout=timeout,
+            **{**params, "limit": limit, "offset": page},
         )
-        hash_value = response.json()["data"]["hash"]
+        all_items = [TransactionJobItem.model_validate(i) for i in items]
 
-        # Step 2: Poll until complete
-        deadline = time.monotonic() + timeout
-        while True:
-            response = self._client._request(
-                "GET", "/transaction/get-job-data", params={"hash": hash_value},
+        # Remaining pages
+        total_pages = (total + limit - 1) // limit
+        page += 1
+        while page <= total_pages:
+            items, _ = self._submit_and_poll(
+                poll_interval=poll_interval,
+                timeout=timeout,
+                **{**params, "limit": limit, "offset": page},
             )
-            body = response.json()["data"]
-            status = body["status"]
+            for i in items:
+                all_items.append(TransactionJobItem.model_validate(i))
+            page += 1
 
-            if status == "pass":
-                return [
-                    TransactionJobItem.model_validate(item)
-                    for item in body["data"]
-                ]
-
-            if status == "fail":
-                raise APIError("Batch job failed")
-
-            # status == "working"
-            if time.monotonic() >= deadline:
-                raise APITimeoutError(
-                    f"Batch job did not complete within {timeout}s"
-                )
-
-            time.sleep(poll_interval)
+        return all_items
