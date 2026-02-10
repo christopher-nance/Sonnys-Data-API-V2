@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-10)
 
 **Core value:** Dead-simple interface with rock-solid reliability — any developer or AI agent picks it up instantly, and it never crashes your apps.
-**Current focus:** Phase 6 in progress — Standard Resources
+**Current focus:** Phase 6 complete — Ready for Phase 7
 
 ## Current Position
 
 Phase: 6 of 10 (Standard Resources)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-02-10 — Completed 06-01-PLAN.md
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-02-10 — Completed 06-02-PLAN.md
 
-Progress: ██████░░░░ 59%
+Progress: ██████▌░░░ 65%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 3.2 min
-- Total execution time: 0.52 hours
+- Total plans completed: 11
+- Average duration: 3.1 min
+- Total execution time: 0.57 hours
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: ██████░░░░ 59%
 | 3. Rate Limiting | 2/2 | 7 min | 3.5 min |
 | 4. Response Models | 3/3 | 9 min | 3 min |
 | 5. Resource Framework | 1/1 | 4 min | 4 min |
-| 6. Standard Resources | 1/2 | 3 min | 3 min |
+| 6. Standard Resources | 2/2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 3 min, 3 min, 4 min, 3 min
+- Last 5 plans: 3 min, 3 min, 4 min, 3 min, 2 min
 - Trend: —
 
 ## Accumulated Context
@@ -70,6 +70,8 @@ Recent decisions affecting current work:
 | 05 | _list_paginated/_list_non_paginated private dispatch | Clean separation of paginated vs non-paginated logic |
 | 06 | Module-level resource imports in _client.py | No circular dependency — resources import from _resources.py not _client.py |
 | 06 | functools.cached_property for resource accessors | Instantiated once per client, no repeated allocation |
+| 06 | get_clock_entries flattens weeks[].clockEntries[] | Keeps consumer API simple — flat list[ClockEntry] |
+| 06 | Sites _path="/site/list" with _paginated=False | Non-standard API endpoint returns all sites at once |
 
 ### Deferred Issues
 
@@ -81,6 +83,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-10T17:35:01Z
-Stopped at: Completed 06-01-PLAN.md — Phase 6 in progress (1/2 plans)
+Last session: 2026-02-10T17:42:00Z
+Stopped at: Completed 06-02-PLAN.md — Phase 6 complete
 Resume file: None

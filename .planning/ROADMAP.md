@@ -21,7 +21,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Rate Limiting** - Per-instance sliding window, 429 backoff, retry logic
 - [x] **Phase 4: Response Models** - Pydantic v2 models for all 8 resource types
 - [x] **Phase 5: Resource Framework** - Base resource class, list/get patterns, auto-pagination
-- [ ] **Phase 6: Standard Resources** - Customers, Items, Employees, Sites
+- [x] **Phase 6: Standard Resources** - Customers, Items, Employees, Sites
 - [ ] **Phase 7: Account Resources** - Giftcards, Washbooks, Recurring accounts
 - [ ] **Phase 8: Transaction Resources** - All transaction endpoints (list, by type, detail, v2)
 - [ ] **Phase 9: Batch Job System** - load-job, get-job-data, auto-polling
@@ -88,7 +88,7 @@ Plans:
 
 Plans:
 - [x] 06-01: Customers and Items resources
-- [ ] 06-02: Employees and Sites resources
+- [x] 06-02: Employees and Sites resources
 
 ### Phase 7: Account Resources
 **Goal**: Implement resource classes for Giftcards (list, get), Washbooks (list, get), and Recurring accounts (list, get, status history)
@@ -142,7 +142,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 3. Rate Limiting | 2/2 | Complete | 2026-02-10 |
 | 4. Response Models | 3/3 | Complete | 2026-02-10 |
 | 5. Resource Framework | 1/1 | Complete | 2026-02-10 |
-| 6. Standard Resources | 1/2 | In progress | - |
+| 6. Standard Resources | 2/2 | Complete | 2026-02-10 |
 | 7. Account Resources | 0/2 | Not started | - |
 | 8. Transaction Resources | 0/2 | Not started | - |
 | 9. Batch Job System | 0/1 | Not started | - |
