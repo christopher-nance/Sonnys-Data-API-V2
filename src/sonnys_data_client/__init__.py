@@ -3,4 +3,30 @@
 from sonnys_data_client._client import SonnysClient
 from sonnys_data_client._version import __version__
 
-__all__ = ["SonnysClient", "__version__"]
+from sonnys_data_client._exceptions import (
+    APIConnectionError,
+    APIError,
+    APIStatusError,
+    APITimeoutError,
+    AuthError,
+    NotFoundError,
+    RateLimitError,
+    ServerError,
+    SonnysError,
+    ValidationError,
+)
+
+__all__ = [
+    "SonnysClient",
+    "__version__",
+    "APIConnectionError",
+    "APIError",
+    "APIStatusError",
+    "APITimeoutError",
+    "AuthError",
+    "NotFoundError",
+    "RateLimitError",
+    "ServerError",
+    "SonnysError",
+    "ValidationError",
+]
