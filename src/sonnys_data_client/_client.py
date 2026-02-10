@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import functools
 import time
 
 import requests
@@ -12,6 +13,8 @@ from sonnys_data_client._exceptions import (
     make_status_error,
 )
 from sonnys_data_client._rate_limiter import RateLimiter
+from sonnys_data_client.resources._customers import Customers
+from sonnys_data_client.resources._items import Items
 
 
 class SonnysClient:
@@ -52,6 +55,16 @@ class SonnysClient:
         )
         if site_code is not None:
             self._session.headers["X-Sonnys-Site-Code"] = site_code
+
+    @functools.cached_property
+    def customers(self) -> Customers:
+        """Access the Customers resource."""
+        return Customers(self)
+
+    @functools.cached_property
+    def items(self) -> Items:
+        """Access the Items resource."""
+        return Items(self)
 
     def _request(
         self,
