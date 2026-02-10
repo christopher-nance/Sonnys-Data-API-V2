@@ -2,10 +2,14 @@
 
 from __future__ import annotations
 
+import time
+
+from sonnys_data_client._exceptions import APIError, APITimeoutError
 from sonnys_data_client._resources import GettableResource, ListableResource
 from sonnys_data_client.types._base import SonnysModel
 from sonnys_data_client.types._transactions import (
     Transaction,
+    TransactionJobItem,
     TransactionListItem,
     TransactionV2ListItem,
 )
@@ -110,3 +114,64 @@ class Transactions(ListableResource, GettableResource):
             TransactionV2ListItem,
             **params,
         )
+
+    def load_job(
+        self,
+        *,
+        poll_interval: float = 2.0,
+        timeout: float = 300.0,
+        **params: object,
+    ) -> list[TransactionJobItem]:
+        """Submit a batch job and poll until results are ready.
+
+        Posts reporting criteria to ``/transaction/load-job``, then polls
+        ``/transaction/get-job-data`` until the job completes, fails, or
+        the timeout is exceeded.
+
+        Note: The API caches job data for 20 minutes and limits the date
+        range to a maximum of 24 hours.
+
+        Args:
+            poll_interval: Seconds between poll attempts (default 2.0).
+            timeout: Max seconds to wait for job completion (default 300.0).
+            **params: Query parameters (``startDate``, ``endDate``,
+                ``site``, ``limit``, ``offset``, etc.).
+
+        Returns:
+            A list of :class:`TransactionJobItem` instances.
+
+        Raises:
+            APIError: If the job status is ``"fail"``.
+            APITimeoutError: If the job does not complete within *timeout*.
+        """
+        # Step 1: Submit job
+        response = self._client._request(
+            "POST", "/transaction/load-job", params=params,
+        )
+        hash_value = response.json()["data"]["hash"]
+
+        # Step 2: Poll until complete
+        deadline = time.monotonic() + timeout
+        while True:
+            response = self._client._request(
+                "GET", "/transaction/get-job-data", params={"hash": hash_value},
+            )
+            body = response.json()["data"]
+            status = body["status"]
+
+            if status == "pass":
+                return [
+                    TransactionJobItem.model_validate(item)
+                    for item in body["data"]
+                ]
+
+            if status == "fail":
+                raise APIError("Batch job failed")
+
+            # status == "working"
+            if time.monotonic() >= deadline:
+                raise APITimeoutError(
+                    f"Batch job did not complete within {timeout}s"
+                )
+
+            time.sleep(poll_interval)
