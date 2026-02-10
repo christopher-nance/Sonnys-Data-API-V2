@@ -144,6 +144,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 5. Resource Framework | 1/1 | Complete | 2026-02-10 |
 | 6. Standard Resources | 2/2 | Complete | 2026-02-10 |
 | 7. Account Resources | 2/2 | Complete | 2026-02-10 |
-| 8. Transaction Resources | 0/2 | Not started | - |
+| 8. Transaction Resources | 1/2 | In progress | - |
 | 9. Batch Job System | 0/1 | Not started | - |
 | 10. Packaging & Distribution | 0/1 | Not started | - |
