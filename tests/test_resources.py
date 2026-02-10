@@ -1,12 +1,12 @@
 """Tests for base resource classes with auto-pagination and detail retrieval."""
 
 import json
-from unittest.mock import MagicMock, call
+from unittest.mock import MagicMock
 
 import requests
 
 from sonnys_data_client._client import SonnysClient
-from sonnys_data_client._resources import BaseResource, ListableResource, GettableResource
+from sonnys_data_client._resources import ListableResource, GettableResource
 from sonnys_data_client.types._base import SonnysModel
 
 
