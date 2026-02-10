@@ -46,6 +46,57 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
 All resources auto-paginate by default -- calling `.list()` returns every record
 across all pages.
 
+## Client Configuration
+
+### Constructor
+
+```python
+SonnysClient(
+    api_id: str,
+    api_key: str,
+    site_code: str | None = None,
+    *,
+    max_retries: int = 3,
+)
+```
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `api_id` | `str` | *required* | Sonny's API ID credential |
+| `api_key` | `str` | *required* | Sonny's API key credential |
+| `site_code` | `str \| None` | `None` | Optional site code to scope all requests to a single site |
+| `max_retries` | `int` | `3` | Maximum retry attempts for 429 rate-limit responses (uses exponential backoff) |
+
+### Context Manager
+
+Use the `with` statement to ensure the underlying HTTP session is closed
+automatically when you are done:
+
+```python
+with SonnysClient(api_id="id", api_key="key") as client:
+    data = client.customers.list()
+```
+
+If you prefer manual lifecycle management, call `.close()` explicitly:
+
+```python
+client = SonnysClient(api_id="id", api_key="key")
+try:
+    data = client.customers.list()
+finally:
+    client.close()
+```
+
+### Authentication
+
+Credentials are sent as HTTP headers on every request:
+
+- `X-Sonnys-API-ID` -- from `api_id`
+- `X-Sonnys-API-Key` -- from `api_key`
+- `X-Sonnys-Site-Code` -- from `site_code` (omitted when `None`)
+
 ## Resources
 
 | Resource | Methods |
