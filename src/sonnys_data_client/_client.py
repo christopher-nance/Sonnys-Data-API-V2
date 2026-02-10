@@ -2,7 +2,16 @@
 
 from __future__ import annotations
 
+import time
+
 import requests
+
+from sonnys_data_client._exceptions import (
+    APIConnectionError,
+    APITimeoutError,
+    make_status_error,
+)
+from sonnys_data_client._rate_limiter import RateLimiter
 
 
 class SonnysClient:
@@ -15,6 +24,7 @@ class SonnysClient:
         api_id: Sonny's API ID credential.
         api_key: Sonny's API key credential.
         site_code: Optional site code to scope requests to a specific site.
+        max_retries: Maximum number of retries for 429 responses.
     """
 
     BASE_URL = "https://trigonapi.sonnyscontrols.com/v1"
@@ -24,10 +34,14 @@ class SonnysClient:
         api_id: str,
         api_key: str,
         site_code: str | None = None,
+        *,
+        max_retries: int = 3,
     ) -> None:
         self.api_id = api_id
         self.api_key = api_key
         self.site_code = site_code
+        self._max_retries = max_retries
+        self._rate_limiter = RateLimiter()
 
         self._session = requests.Session()
         self._session.headers.update(
@@ -38,6 +52,66 @@ class SonnysClient:
         )
         if site_code is not None:
             self._session.headers["X-Sonnys-Site-Code"] = site_code
+
+    def _request(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: dict | None = None,
+    ) -> requests.Response:
+        """Send an HTTP request with rate limiting and 429 retry.
+
+        Args:
+            method: HTTP method (GET, POST, etc.).
+            path: URL path appended to :attr:`BASE_URL`.
+            params: Optional query parameters forwarded to the request.
+
+        Returns:
+            The HTTP response when the status code is < 400.
+
+        Raises:
+            APIConnectionError: On connection failure.
+            APITimeoutError: On request timeout.
+            RateLimitError: When 429 retries are exhausted.
+            APIStatusError: On other HTTP error status codes.
+        """
+        base_delay = 1.0
+
+        for attempt in range(self._max_retries + 1):
+            # Step 1: Rate limit check
+            wait = self._rate_limiter.acquire()
+            if wait > 0:
+                time.sleep(wait)
+
+            # Step 2: Send request
+            try:
+                response = self._session.request(
+                    method,
+                    self.BASE_URL + path,
+                    params=params,
+                )
+            except requests.ConnectionError:
+                raise APIConnectionError()
+            except requests.Timeout:
+                raise APITimeoutError()
+
+            # Step 4: Handle success
+            if response.status_code < 400:
+                return response
+
+            # Step 5: Handle 429
+            if response.status_code == 429:
+                if attempt < self._max_retries:
+                    time.sleep(base_delay * (2**attempt))
+                    continue
+                raise make_status_error(response)
+
+            # Step 6: Handle other errors
+            raise make_status_error(response)
+
+        # Should never reach here, but satisfy type checker
+        raise make_status_error(response)  # pragma: no cover
 
     def close(self) -> None:
         """Close the underlying HTTP session."""
