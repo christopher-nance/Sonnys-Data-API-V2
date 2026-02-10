@@ -1,6 +1,30 @@
 # sonnys-data-client
 
-Python client for the Sonny's Carwash Controls Data API.
+> A typed Python SDK for the Sonny's Carwash Controls Data API.
+
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
+![Pydantic v2](https://img.shields.io/badge/pydantic-v2-green)
+![License: MIT](https://img.shields.io/badge/license-MIT-yellow)
+![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-brightgreen)
+
+`sonnys-data-client` wraps the Sonny's Carwash Controls REST API with a
+resource-based interface (`client.transactions.list()`,
+`client.customers.get(id)`). Every response is returned as a validated Pydantic
+v2 model, list calls auto-paginate transparently, and a built-in rate limiter
+with exponential-backoff retry keeps your application within the API's
+20-request/15-second window.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Client Configuration](#client-configuration)
+- [Resources](#resources)
+  - [Batch Jobs](#batch-jobs)
+- [Error Handling](#error-handling)
+- [Logging](#logging)
+- [Multi-Site Usage](#multi-site-usage)
+- [Requirements](#requirements)
 
 ## Installation
 
