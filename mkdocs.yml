@@ -1,0 +1,52 @@
+site_name: "Sonny's Data Client"
+site_description: "Python client for the Sonny's Carwash Controls Data API"
+repo_url: "https://github.com/washu-carwash/sonnys-data-client"
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: blue
+    accent: light blue
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: false
+            show_root_heading: true
+            show_root_full_path: false
+            members_order: source
+            show_bases: true
+            show_signature_annotations: true
+            separate_signature: true
+            docstring_style: google
+            merge_init_into_class: true
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - attr_list
+
+nav:
+  - Home: index.md
+  - API Reference:
+      - Client: api/client.md
+      - Resources: api/resources.md
+      - Models: api/models.md
+      - Exceptions: api/exceptions.md
