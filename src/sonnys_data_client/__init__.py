@@ -2,7 +2,7 @@
 
 from sonnys_data_client._client import SonnysClient
 from sonnys_data_client._version import __version__
-from sonnys_data_client.resources import Customers, Employees, Giftcards, Items, Sites, Washbooks
+from sonnys_data_client.resources import Customers, Employees, Giftcards, Items, RecurringAccounts, Sites, Washbooks
 
 from sonnys_data_client._exceptions import (
     APIConnectionError,
@@ -24,6 +24,7 @@ __all__ = [
     "Employees",
     "Giftcards",
     "Items",
+    "RecurringAccounts",
     "Sites",
     "Washbooks",
     "APIConnectionError",

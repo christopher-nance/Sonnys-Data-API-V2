@@ -17,6 +17,7 @@ from sonnys_data_client.resources._customers import Customers
 from sonnys_data_client.resources._employees import Employees
 from sonnys_data_client.resources._giftcards import Giftcards
 from sonnys_data_client.resources._items import Items
+from sonnys_data_client.resources._recurring import RecurringAccounts
 from sonnys_data_client.resources._sites import Sites
 from sonnys_data_client.resources._washbooks import Washbooks
 
@@ -89,6 +90,11 @@ class SonnysClient:
     def washbooks(self) -> Washbooks:
         """Access the Washbooks resource."""
         return Washbooks(self)
+
+    @functools.cached_property
+    def recurring(self) -> RecurringAccounts:
+        """Access the Recurring Accounts resource."""
+        return RecurringAccounts(self)
 
     def _request(
         self,
