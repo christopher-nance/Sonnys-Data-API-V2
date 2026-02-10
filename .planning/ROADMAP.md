@@ -54,10 +54,11 @@ Plans:
 **Depends on**: Phase 11
 **Research**: Likely (tooling decision — mkdocs vs Sphinx, theme selection, autodoc config)
 **Research topics**: mkdocs-material vs Sphinx, autodoc plugins for Pydantic models, GitHub Pages deployment
-**Plans**: TBD
+**Plans**: 2
 
 Plans:
-- [ ] 12-01: TBD (run /gsd:plan-phase 12 to break down)
+- [x] 12-01: MkDocs Material Setup (docs dependencies, mkdocs.yml, landing page)
+- [ ] 12-02: TBD
 
 #### Phase 13: Resource Guides
 
@@ -127,7 +128,7 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | Phase | Milestone | Plans | Status | Completed |
 |-------|-----------|-------|--------|-----------|
 | 11. README Overhaul | v1.1 | 2/2 | Complete | 2026-02-10 |
-| 12. API Reference Setup | v1.1 | 0/? | Not started | - |
+| 12. API Reference Setup | v1.1 | 1/2 | In progress | - |
 | 13. Resource Guides | v1.1 | 0/? | Not started | - |
 | 14. Transaction Deep Dive | v1.1 | 0/? | Not started | - |
 | 15. Account Resources | v1.1 | 0/? | Not started | - |
