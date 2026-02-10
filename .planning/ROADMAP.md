@@ -87,7 +87,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 06-01: Customers and Items resources
+- [x] 06-01: Customers and Items resources
 - [ ] 06-02: Employees and Sites resources
 
 ### Phase 7: Account Resources
@@ -142,7 +142,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 3. Rate Limiting | 2/2 | Complete | 2026-02-10 |
 | 4. Response Models | 3/3 | Complete | 2026-02-10 |
 | 5. Resource Framework | 1/1 | Complete | 2026-02-10 |
-| 6. Standard Resources | 0/2 | Not started | - |
+| 6. Standard Resources | 1/2 | In progress | - |
 | 7. Account Resources | 0/2 | Not started | - |
 | 8. Transaction Resources | 0/2 | Not started | - |
 | 9. Batch Job System | 0/1 | Not started | - |

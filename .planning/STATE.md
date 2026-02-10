@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-10)
 
 **Core value:** Dead-simple interface with rock-solid reliability — any developer or AI agent picks it up instantly, and it never crashes your apps.
-**Current focus:** Phase 5 complete — ready for Phase 6: Standard Resources
+**Current focus:** Phase 6 in progress — Standard Resources
 
 ## Current Position
 
-Phase: 5 of 10 (Resource Framework)
-Plan: 1 of 1 in current phase
-Status: Phase complete
-Last activity: 2026-02-10 — Completed 05-01-PLAN.md
+Phase: 6 of 10 (Standard Resources)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-02-10 — Completed 06-01-PLAN.md
 
-Progress: ██████░░░░ 53%
+Progress: ██████░░░░ 59%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 3.1 min
-- Total execution time: 0.47 hours
+- Total plans completed: 10
+- Average duration: 3.2 min
+- Total execution time: 0.52 hours
 
 **By Phase:**
 
@@ -32,9 +32,10 @@ Progress: ██████░░░░ 53%
 | 3. Rate Limiting | 2/2 | 7 min | 3.5 min |
 | 4. Response Models | 3/3 | 9 min | 3 min |
 | 5. Resource Framework | 1/1 | 4 min | 4 min |
+| 6. Standard Resources | 1/2 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 4 min, 3 min, 3 min, 3 min, 4 min
+- Last 5 plans: 3 min, 3 min, 3 min, 4 min, 3 min
 - Trend: —
 
 ## Accumulated Context
@@ -67,6 +68,8 @@ Recent decisions affecting current work:
 | 05 | ListableResource/GettableResource as independent mixins | Concrete resources inherit one or both |
 | 05 | TYPE_CHECKING guard for circular imports | _resources.py imports SonnysClient only at type-check time |
 | 05 | _list_paginated/_list_non_paginated private dispatch | Clean separation of paginated vs non-paginated logic |
+| 06 | Module-level resource imports in _client.py | No circular dependency — resources import from _resources.py not _client.py |
+| 06 | functools.cached_property for resource accessors | Instantiated once per client, no repeated allocation |
 
 ### Deferred Issues
 
@@ -78,6 +81,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-10T17:23:38Z
-Stopped at: Completed 05-01-PLAN.md — Phase 5 complete
+Last session: 2026-02-10T17:35:01Z
+Stopped at: Completed 06-01-PLAN.md — Phase 6 in progress (1/2 plans)
 Resume file: None
