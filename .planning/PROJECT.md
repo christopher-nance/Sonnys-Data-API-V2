@@ -12,20 +12,16 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
 
 ### Validated
 
-(None yet — ship to validate)
-
-### Active
-
-- [ ] Class-based client with per-instance credentials (`SonnysClient(api_id=..., api_key=..., site_code=...)`)
-- [ ] Resource-based call pattern (`client.transactions.list()`, `client.customers.get(id)`)
-- [ ] Pydantic models for all API response types (transactions, customers, items, prepaid accounts, employees, sites)
-- [ ] Built-in rate limiting (20 requests per 15-second window, automatic backoff on 429s)
-- [ ] Auto-pagination — list methods fetch all pages transparently, return complete results
-- [ ] Auto-polling for batch job endpoints (load-job → poll get-job-data → return final results)
-- [ ] Custom exception hierarchy mapped to API error types (AuthError, RateLimitError, ValidationError, NotFoundError, ServerError)
-- [ ] Python standard logging (debug level shows requests/responses, configurable by caller)
-- [ ] pip-installable from GitHub (`pip install git+https://github.com/...`)
-- [ ] Full endpoint coverage for all API resources:
+- [x] Class-based client with per-instance credentials (`SonnysClient(api_id=..., api_key=..., site_code=...)`) — v1.0
+- [x] Resource-based call pattern (`client.transactions.list()`, `client.customers.get(id)`) — v1.0
+- [x] Pydantic models for all API response types (transactions, customers, items, prepaid accounts, employees, sites) — v1.0
+- [x] Built-in rate limiting (20 requests per 15-second window, automatic backoff on 429s) — v1.0
+- [x] Auto-pagination — list methods fetch all pages transparently, return complete results — v1.0
+- [x] Auto-polling for batch job endpoints (load-job → poll get-job-data → return final results) — v1.0
+- [x] Custom exception hierarchy mapped to API error types (AuthError, RateLimitError, ValidationError, NotFoundError, ServerError) — v1.0
+- [x] Python standard logging (debug level shows requests/responses, configurable by caller) — v1.0
+- [x] pip-installable from GitHub (`pip install git+https://github.com/...`) — v1.0
+- [x] Full endpoint coverage for all API resources — v1.0:
   - Transactions (list, list by type, get detail, v2 list, batch job)
   - Customers (list, get detail)
   - Items (list)
@@ -34,6 +30,10 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
   - Recurring accounts (list, get detail, status history)
   - Employees (list, get detail with clock entries)
   - Sites (list)
+
+### Active
+
+(None — v1.0 scope fully delivered)
 
 ### Out of Scope
 
@@ -95,13 +95,13 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Resource-based API (`client.transactions.list()`) | Intuitive, discoverable, mirrors API structure | — Pending |
-| Pydantic v2 models for responses | Typed, validated, autocomplete support in IDEs | — Pending |
-| Per-instance rate limiting | Multiple clients with different API IDs have independent rate limits | — Pending |
-| Auto-pagination by default | Callers shouldn't manage offset/limit loops for common operations | — Pending |
-| Auto-poll batch jobs | load-job → poll → return simplifies the most complex API pattern | — Pending |
-| Production only (no sandbox toggle) | Simplifies client, sandbox not needed for current use case | — Pending |
-| `requests` over `httpx` | Simpler, synchronous-only scope, widely understood | — Pending |
+| Resource-based API (`client.transactions.list()`) | Intuitive, discoverable, mirrors API structure | Validated v1.0 — 8 resource classes, clean `client.resource.method()` pattern |
+| Pydantic v2 models for responses | Typed, validated, autocomplete support in IDEs | Validated v1.0 — 30 models with camelCase aliases, live API tested |
+| Per-instance rate limiting | Multiple clients with different API IDs have independent rate limits | Validated v1.0 — sliding window 20 req/15s with exponential backoff |
+| Auto-pagination by default | Callers shouldn't manage offset/limit loops for common operations | Validated v1.0 — transparent offset/limit loop with null-safe total handling |
+| Auto-poll batch jobs | load-job → poll → return simplifies the most complex API pattern | Validated v1.0 — status-driven polling with configurable timeout/interval |
+| Production only (no sandbox toggle) | Simplifies client, sandbox not needed for current use case | Validated v1.0 — single base URL, no environment switching |
+| `requests` over `httpx` | Simpler, synchronous-only scope, widely understood | Validated v1.0 — requests + persistent session with auth headers |
 
 ---
-*Last updated: 2026-02-10 after initialization*
+*Last updated: 2026-02-10 — v1.0 shipped (3,783 LOC Python, 30 Pydantic models, 8 resource classes, 110 unit tests)*
