@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-10)
 ## Current Position
 
 Phase: 4 of 10 (Response Models)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-10 — Completed 04-01-PLAN.md
+Last activity: 2026-02-10 — Completed 04-02-PLAN.md
 
-Progress: ███▌░░░░░░ 35%
+Progress: ████░░░░░░ 41%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 3.2 min
-- Total execution time: 0.32 hours
+- Total plans completed: 7
+- Average duration: 3.1 min
+- Total execution time: 0.37 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: ███▌░░░░░░ 35%
 | 1. Project Foundation | 1/1 | 4 min | 4 min |
 | 2. HTTP Transport & Errors | 2/2 | 5 min | 2.5 min |
 | 3. Rate Limiting | 2/2 | 7 min | 3.5 min |
-| 4. Response Models | 1/3 | 3 min | 3 min |
+| 4. Response Models | 2/3 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 1 min, 4 min, 3 min, 4 min, 3 min
+- Last 5 plans: 4 min, 3 min, 4 min, 3 min, 3 min
 - Trend: —
 
 ## Accumulated Context
@@ -58,6 +58,9 @@ Recent decisions affecting current work:
 | 03 | Only 429 triggers retry; other errors raise immediately | No retry on 5xx — fail fast for non-transient errors |
 | 04 | SonnysModel with ConfigDict(populate_by_name, alias_generator=to_camel) | Automatic snake_case-to-camelCase JSON aliasing |
 | 04 | TransactionV2ListItem extends TransactionListItem; TransactionJobItem extends Transaction | Inheritance for shared fields between v1/v2/job variants |
+| 04 | Field(alias="lastFourCC") for RecurringBilling | to_camel produces wrong casing for abbreviations |
+| 04 | alias_generator=None for RecurringStatusChange | API returns snake_case for this endpoint |
+| 04 | Shared sub-objects in _washbooks.py imported by _recurring.py | Avoids duplication; WashbookTag/Vehicle/Customer reused |
 
 ### Deferred Issues
 
@@ -69,6 +72,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-10T16:13:37Z
-Stopped at: Completed 04-01-PLAN.md — 1 of 3 plans in Phase 4
+Last session: 2026-02-10T16:17:00Z
+Stopped at: Completed 04-02-PLAN.md — 2 of 3 plans in Phase 4
 Resume file: None

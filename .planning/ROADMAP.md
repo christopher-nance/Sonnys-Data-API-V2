@@ -68,7 +68,7 @@ Plans:
 
 Plans:
 - [x] 04-01: Transaction and customer models
-- [ ] 04-02: Item, giftcard, washbook, and recurring models
+- [x] 04-02: Item, giftcard, washbook, and recurring models
 - [ ] 04-03: Employee and site models
 
 ### Phase 5: Resource Framework
@@ -140,7 +140,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 1. Project Foundation | 1/1 | Complete | 2026-02-10 |
 | 2. HTTP Transport & Errors | 2/2 | Complete | 2026-02-10 |
 | 3. Rate Limiting | 2/2 | Complete | 2026-02-10 |
-| 4. Response Models | 1/3 | In progress | - |
+| 4. Response Models | 2/3 | In progress | - |
 | 5. Resource Framework | 0/1 | Not started | - |
 | 6. Standard Resources | 0/2 | Not started | - |
 | 7. Account Resources | 0/2 | Not started | - |
