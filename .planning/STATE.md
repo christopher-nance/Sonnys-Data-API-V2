@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-10)
 
 **Core value:** Dead-simple interface with rock-solid reliability — any developer or AI agent picks it up instantly, and it never crashes your apps.
-**Current focus:** Phase 8 complete — Transaction Resources done, Phase 9 (Batch Job System) next
+**Current focus:** Phase 9 complete — Batch Job System done, Phase 10 (Packaging & Distribution) next
 
 ## Current Position
 
-Phase: 8 of 10 (Transaction Resources)
-Plan: 2 of 2 in current phase
+Phase: 9 of 10 (Batch Job System)
+Plan: 1 of 1 in current phase
 Status: Phase complete
-Last activity: 2026-02-10 — Completed 08-02-PLAN.md
+Last activity: 2026-02-10 — Completed 09-01-PLAN.md
 
-Progress: █████████░ 88%
+Progress: █████████░ 94%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
-- Average duration: 2.7 min
-- Total execution time: 0.68 hours
+- Total plans completed: 16
+- Average duration: 2.8 min
+- Total execution time: 0.75 hours
 
 **By Phase:**
 
@@ -35,9 +35,10 @@ Progress: █████████░ 88%
 | 6. Standard Resources | 2/2 | 5 min | 2.5 min |
 | 7. Account Resources | 2/2 | 4 min | 2 min |
 | 8. Transaction Resources | 2/2 | 3 min | 1.5 min |
+| 9. Batch Job System | 1/1 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 2 min, 2 min, 2 min, 1 min
+- Last 5 plans: 2 min, 2 min, 2 min, 1 min, 4 min
 - Trend: —
 
 ## Accumulated Context
@@ -78,6 +79,9 @@ Recent decisions affecting current work:
 | 07 | Washbooks _items_key="accounts" | API returns "accounts" not "washbooks" in response |
 | 07 | RecurringAccounts class name (not Recurring) | Avoids collision with Recurring Pydantic model |
 | 07 | _paginated_fetch private helper for custom endpoints | DRYs up offset/limit/total pagination across 3 methods |
+| 09 | APIError/APITimeoutError for batch job failures | No new exception classes — existing ones are semantically correct |
+| 09 | Check timeout AFTER poll attempt, not before sleep | Ensures at least one poll even with timeout=0 |
+| 09 | Default poll_interval=2.0s, timeout=300.0s | 2s avoids rate limiter starvation; 5min generous for batch jobs |
 
 ### Deferred Issues
 
@@ -89,6 +93,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-10T18:19:55Z
-Stopped at: Completed 08-02-PLAN.md — Phase 8 complete
+Last session: 2026-02-10T18:36:56Z
+Stopped at: Completed 09-01-PLAN.md — Phase 9 complete
 Resume file: None
