@@ -19,3 +19,17 @@ class SalesResult(SonnysModel):
     recurring_redemptions_count: int
     retail: float
     retail_count: int
+
+
+class WashResult(SonnysModel):
+    """Wash volume breakdown returned by ``client.stats.total_washes()``.
+
+    Categorizes wash transactions into two types: retail washes
+    (standard single-use transactions of type ``"wash"``) and prepaid
+    washes (transactions of type ``"prepaid-wash"`` redeemed against
+    pre-purchased wash books).  The ``total`` field is the sum of both.
+    """
+
+    total: int
+    wash_count: int
+    prepaid_wash_count: int

@@ -49,7 +49,7 @@ from sonnys_data_client.types._employees import (
 
 from sonnys_data_client.types._sites import Site
 
-from sonnys_data_client.types._stats import SalesResult
+from sonnys_data_client.types._stats import SalesResult, WashResult
 
 __all__ = [
     "SonnysModel",
@@ -83,4 +83,5 @@ __all__ = [
     "Employee",
     "SalesResult",
     "Site",
+    "WashResult",
 ]
