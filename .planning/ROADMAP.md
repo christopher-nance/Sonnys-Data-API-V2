@@ -92,10 +92,10 @@ Plans:
 **Goal**: `client.stats.total_washes()` and `client.stats.retail_wash_count()` from transaction type filtering
 **Depends on**: Phase 20
 **Research**: Unlikely (transaction type filtering)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 22-01: TBD
+- [x] 22-01: Wash Analytics Implementation — completed 2026-02-11
 
 #### Phase 23: Membership Analytics
 
@@ -162,7 +162,7 @@ Plans:
 | 19. Stats Module Foundation | v1.2 | 2/2 | Complete | 2026-02-11 |
 | 20. Data Fetching Layer | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 21. Revenue & Sales Stats | v1.2 | 1/1 | Complete | 2026-02-11 |
-| 22. Wash Analytics | v1.2 | 0/? | Not started | - |
+| 22. Wash Analytics | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 23. Membership Analytics | v1.2 | 0/? | Not started | - |
 | 24. Conversion Rate | v1.2 | 0/? | Not started | - |
 | 25. Stats Report | v1.2 | 0/? | Not started | - |
