@@ -24,18 +24,22 @@ class SalesResult(SonnysModel):
 class WashResult(SonnysModel):
     """Wash volume breakdown returned by ``client.stats.total_washes()``.
 
-    Categorizes wash transactions using v2 transaction flags:
+    Categorizes wash transactions using v2 flags, v1 ``type=wash``,
+    and v1 ``type=recurring``:
 
-    - **retail_wash_count**: Transactions where both
-      ``is_recurring_plan_sale`` and ``is_recurring_plan_redemption``
-      are ``False``.
     - **member_wash_count**: Transactions where
       ``is_recurring_plan_redemption`` is ``True`` (membership washes).
-    - **eligible_wash_count**: Retail washes with ``total > 0``
-      (excludes complimentary washes).  Used as the denominator in
-      conversion rate calculations.
+    - **retail_wash_count**: Non-member car washes — ``type=wash``
+      transactions (excluding plan sales and redemptions) plus
+      unknown non-negative transaction types.
+    - **free_wash_count**: Washes with ``total == 0``.
+    - **eligible_wash_count**: Derived as
+      ``total - member_wash_count - free_wash_count``.  Used as the
+      denominator in conversion rate calculations.  Includes plan sale
+      washes and positive-total unknown types.
 
-    The ``total`` field is the sum of retail and member wash counts.
+    The ``total`` field is ``member + retail + plan_sale_washes``.
+    Negative-total transactions (refunds) are excluded entirely.
     """
 
     total: int
