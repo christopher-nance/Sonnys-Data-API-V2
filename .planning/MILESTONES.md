@@ -1,5 +1,31 @@
 # Project Milestones: Sonny's Data Client
 
+## v1.2 Improvements (Shipped: 2026-02-11)
+
+**Delivered:** Client-side business analytics via `client.stats.*` — six stat methods (total_sales, total_washes, retail_wash_count, new_memberships_sold, conversion_rate, report) with Pydantic result models, efficient shared data fetching, and comprehensive documentation.
+
+**Phases completed:** 19-26 (9 plans total)
+
+**Key accomplishments:**
+- Six stat methods computing business KPIs from raw API data with typed result models
+- `report()` method that computes all KPIs in 4 API calls (vs 7 from individual methods) via shared data fetching
+- Four Pydantic result models: SalesResult, WashResult, ConversionResult, StatsReport
+- TDD-driven date range parsing with full ISO-8601 string and datetime object support
+- Comprehensive stats usage guide with method comparison table, examples, and performance tips
+- Full integration into mkdocs nav, API reference, and README
+
+**Stats:**
+- 35 files created/modified
+- 3,393 lines added (stats module + documentation)
+- 8 phases, 9 plans, ~18 tasks
+- 1 day from start to ship (2026-02-11)
+
+**Git range:** `8eb5daa` → `55fc037`
+
+**What's next:** SDK, documentation, and analytics complete. Future work may include async support, caching layer, or additional API endpoints as needed.
+
+---
+
 ## v1.1 Documentation (Shipped: 2026-02-11)
 
 **Delivered:** Comprehensive documentation suite — expanded README, auto-generated API reference site on GitHub Pages, per-resource usage guides, and complete docstring coverage so any developer or AI agent can use the SDK without reading source code.

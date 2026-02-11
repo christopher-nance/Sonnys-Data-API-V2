@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A Python module (`sonnys-data-client`) that provides a clean, reliable bridge between multiple applications and the Sonny's Carwash Controls Data API. It wraps the REST API with a resource-based interface, Pydantic models, built-in rate limiting, and auto-pagination so consuming applications (analytics, internal tools, automations) can pull car wash data without worrying about HTTP plumbing. Includes comprehensive documentation with auto-generated API reference on GitHub Pages.
+A Python module (`sonnys-data-client`) that provides a clean, reliable bridge between multiple applications and the Sonny's Carwash Controls Data API. It wraps the REST API with a resource-based interface, Pydantic models, built-in rate limiting, and auto-pagination so consuming applications (analytics, internal tools, automations) can pull car wash data without worrying about HTTP plumbing. Includes comprehensive documentation with auto-generated API reference on GitHub Pages, plus client-side business analytics via `client.stats.*` for KPIs like revenue, wash volume, membership conversion, and unified reporting.
 
 ## Core Value
 
@@ -29,16 +29,22 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
 - ✓ Advanced patterns guide (multi-site, rate limiting, performance, integration recipes) — v1.1
 - ✓ Complete Google-style docstrings on all 30 models, 10 exceptions, 8 resource classes — v1.1
 
+- ✓ Client-side business analytics via `client.stats.*` with typed result models — v1.2
+- ✓ Revenue breakdown by category (recurring plan sales, recurring redemptions, retail) — v1.2
+- ✓ Wash volume analytics (retail washes, prepaid washes, total) — v1.2
+- ✓ Membership conversion rate KPI with zero-division safety — v1.2
+- ✓ Unified `report()` method computing all KPIs in 4 API calls (vs 7 individual) — v1.2
+- ✓ Stats usage guide with method comparison, examples, and performance tips — v1.2
+
 ### Active
 
-(None — v1.0 + v1.1 scope fully delivered)
+(None — v1.0 + v1.1 + v1.2 scope fully delivered)
 
 ### Out of Scope
 
 - Caching layer — always hits the API fresh; consuming apps can implement their own caching
 - Sandbox environment support — production only (`trigonapi.sonnyscontrols.com/v1`)
 - Async support — synchronous only; async can be added in a future version if needed
-- Business logic / data transformation — module returns API data as Pydantic models, no domain logic
 
 ## Context
 
@@ -51,7 +57,7 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
 - **Consumers:** Mix of data analytics/BI, internal operational tools, and scheduled automation scripts
 - **API pinned at current spec** — module built against v0.2.0, updated manually when API changes
 - **Documentation:** MkDocs Material site deployed to GitHub Pages at https://christopher-nance.github.io/Sonnys-Data-API-V2/
-- **Codebase:** 3,783 LOC Python (SDK) + 4,068 LOC documentation (15 guide pages + API reference)
+- **Codebase:** 1,939 LOC Python (SDK) + 3,372 LOC documentation (16 guide pages + API reference)
 
 ### API Endpoints Reference
 
@@ -105,6 +111,9 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
 | MkDocs Material + mkdocstrings for docs | Code-heavy docs need good syntax highlighting; autodoc from docstrings | ✓ Validated v1.1 — slate theme, src layout, GitHub Pages deployment |
 | Google docstring style | Industry standard, readable in source, renders well in mkdocstrings | ✓ Validated v1.1 — all 30 models, 10 exceptions, 8 resources documented |
 | Per-resource usage guides | Each resource has different patterns; guides more useful than monolithic reference | ✓ Validated v1.1 — 8 guides with realistic examples and model tables |
+| StatsResource extends BaseResource (not ListableResource) | Stats compute analytics locally, don't wrap REST endpoints | ✓ Validated v1.2 — clean separation from CRUD resources |
+| Shared data fetching in report() | 4 API calls instead of 7 from individual methods | ✓ Validated v1.2 — efficient unified KPI computation |
+| TDD for date range parsing | Testable behavior with clear input/output contract | ✓ Validated v1.2 — 13 tests, zero regressions |
 
 ---
-*Last updated: 2026-02-11 after v1.1 milestone*
+*Last updated: 2026-02-11 after v1.2 milestone*

@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 Initial Release** — [milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md) (Phases 1-10, shipped 2026-02-10)
 - ✅ **v1.1 Documentation** — [milestones/v1.1-ROADMAP.md](milestones/v1.1-ROADMAP.md) (Phases 11-18, shipped 2026-02-11)
-- 🚧 **v1.2 Improvements** — Phases 19-26 (in progress)
+- ✅ **v1.2 Improvements** — [milestones/v1.2-ROADMAP.md](milestones/v1.2-ROADMAP.md) (Phases 19-26, shipped 2026-02-11)
 
 ## Completed Milestones
 
@@ -52,90 +52,26 @@ Comprehensive documentation suite — expanded README, auto-generated API refere
 
 </details>
 
-### 🚧 v1.2 Improvements (In Progress)
+### v1.2: Improvements — SHIPPED 2026-02-11
 
-**Milestone Goal:** Add client-side business analytics via `client.stats.*` — conversion rate, total sales, total washes, retail wash count, and new memberships sold.
+Client-side business analytics via `client.stats.*` — six stat methods with typed result models, efficient shared data fetching, and comprehensive documentation.
 
-#### Phase 19: Stats Module Foundation
+**Stats:** 8 phases, 9 plans, 35 files, 3,393 LOC added
+**Archive:** [.planning/milestones/v1.2-ROADMAP.md](milestones/v1.2-ROADMAP.md)
 
-**Goal**: Create StatsResource class, wire `client.stats` property, date range parameter utilities
-**Depends on**: Previous milestone complete
-**Research**: Unlikely (internal patterns, mirrors existing resource architecture)
-**Plans**: 2/2 complete
+<details>
+<summary>Phases (all complete)</summary>
 
-Plans:
-- [x] 19-01: Date Range Parsing & Validation (TDD) — completed 2026-02-11
-- [x] 19-02: StatsResource Class & Client Wiring — completed 2026-02-11
+- [x] **Phase 19: Stats Module Foundation** (2/2 plans) — completed 2026-02-11
+- [x] **Phase 20: Data Fetching Layer** (1/1 plan) — completed 2026-02-11
+- [x] **Phase 21: Revenue & Sales Stats** (1/1 plan) — completed 2026-02-11
+- [x] **Phase 22: Wash Analytics** (1/1 plan) — completed 2026-02-11
+- [x] **Phase 23: Membership Analytics** (1/1 plan) — completed 2026-02-11
+- [x] **Phase 24: Conversion Rate** (1/1 plan) — completed 2026-02-11
+- [x] **Phase 25: Stats Report** (1/1 plan) — completed 2026-02-11
+- [x] **Phase 26: Stats Documentation & Testing** (1/1 plan) — completed 2026-02-11
 
-#### Phase 20: Data Fetching Layer
-
-**Goal**: Efficient bulk data retrieval for stats computation — fetch transactions and recurring data for a date range without redundant API calls
-**Depends on**: Phase 19
-**Research**: Unlikely (existing SDK pagination and fetching patterns)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 20-01: Data Fetching Methods — completed 2026-02-11
-
-#### Phase 21: Revenue & Sales Stats
-
-**Goal**: `client.stats.total_sales(start, end)` with breakdowns by transaction type
-**Depends on**: Phase 20
-**Research**: Unlikely (aggregation over existing transaction data)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 21-01: Revenue Stats Implementation — completed 2026-02-11
-
-#### Phase 22: Wash Analytics
-
-**Goal**: `client.stats.total_washes()` and `client.stats.retail_wash_count()` from transaction type filtering
-**Depends on**: Phase 20
-**Research**: Unlikely (transaction type filtering)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 22-01: Wash Analytics Implementation — completed 2026-02-11
-
-#### Phase 23: Membership Analytics
-
-**Goal**: `client.stats.new_memberships_sold()` from recurring account status change data
-**Depends on**: Phase 20
-**Research**: Unlikely (recurring status change analysis)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 23-01: Membership Analytics Implementation — completed 2026-02-11
-
-#### Phase 24: Conversion Rate
-
-**Goal**: `client.stats.conversion_rate()` = new_memberships / (new_memberships + retail_washes)
-**Depends on**: Phase 22, Phase 23
-**Research**: Unlikely (composite of prior phase outputs)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 24-01: Conversion Rate Implementation — completed 2026-02-11
-
-#### Phase 25: Stats Report
-
-**Goal**: `client.stats.report(start, end)` returning all KPIs in one call with single data fetch for efficiency
-**Depends on**: Phase 24
-**Research**: Unlikely (combines prior phases into unified interface)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 25-01: Stats Report Implementation — completed 2026-02-11
-
-#### Phase 26: Stats Documentation & Testing
-
-**Goal**: Usage guide, docstrings, unit tests, UAT validation with real data
-**Depends on**: Phase 25
-**Research**: Unlikely (established doc and test patterns from v1.1)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 26-01: Stats Documentation & Integration — completed 2026-02-11
+</details>
 
 ## Progress
 

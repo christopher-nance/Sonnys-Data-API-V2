@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-11)
 
 **Core value:** Dead-simple interface with rock-solid reliability — any developer or AI agent picks it up instantly, and it never crashes your apps.
-**Current focus:** v1.2 Improvements — Business analytics via client.stats.*
+**Current focus:** All milestones complete (v1.0 + v1.1 + v1.2)
 
 ## Current Position
 
-Phase: 26 of 26 (Stats Documentation & Testing)
-Plan: 1 of 1 in current phase
-Status: Phase complete
-Last activity: 2026-02-11 - Completed 26-01-PLAN.md
+Phase: 26 of 26 (all complete)
+Plan: All plans complete
+Status: v1.2 milestone shipped
+Last activity: 2026-02-11 - v1.2 Improvements milestone complete
 
 Progress: ██████████ 100%
 
@@ -61,6 +61,7 @@ Progress: ██████████ 100%
 Decisions are logged in PROJECT.md Key Decisions table.
 - v1.0 decisions validated — see .planning/milestones/v1.0-ROADMAP.md
 - v1.1 decisions validated — see .planning/milestones/v1.1-ROADMAP.md
+- v1.2 decisions validated — see .planning/milestones/v1.2-ROADMAP.md
 
 ### Deferred Issues
 
@@ -74,10 +75,10 @@ None.
 
 - Milestone v1.0 created: Initial SDK release, 10 phases (Phase 1-10) — shipped 2026-02-10
 - Milestone v1.1 created: Documentation suite, 8 phases (Phase 11-18) — shipped 2026-02-11
-- Milestone v1.2 created: Business analytics (client.stats.*), 8 phases (Phase 19-26)
+- Milestone v1.2 created: Business analytics (client.stats.*), 8 phases (Phase 19-26) — shipped 2026-02-11
 
 ## Session Continuity
 
 Last session: 2026-02-11
-Stopped at: Completed 26-01-PLAN.md (Phase 26 complete — v1.2 milestone complete)
+Stopped at: v1.2 milestone complete — all 3 milestones shipped
 Resume file: None
