@@ -122,10 +122,10 @@ Plans:
 **Goal**: `client.stats.report(start, end)` returning all KPIs in one call with single data fetch for efficiency
 **Depends on**: Phase 24
 **Research**: Unlikely (combines prior phases into unified interface)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 25-01: TBD
+- [x] 25-01: Stats Report Implementation — completed 2026-02-11
 
 #### Phase 26: Stats Documentation & Testing
 
@@ -165,5 +165,5 @@ Plans:
 | 22. Wash Analytics | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 23. Membership Analytics | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 24. Conversion Rate | v1.2 | 1/1 | Complete | 2026-02-11 |
-| 25. Stats Report | v1.2 | 0/? | Not started | - |
+| 25. Stats Report | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 26. Stats Documentation & Testing | v1.2 | 0/? | Not started | - |
