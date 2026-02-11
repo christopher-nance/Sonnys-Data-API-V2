@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 from sonnys_data_client._date_utils import parse_date_range
 from sonnys_data_client._resources import BaseResource
 from sonnys_data_client.types._recurring import RecurringStatusChange
+from sonnys_data_client.types._stats import SalesResult
 from sonnys_data_client.types._transactions import (
     TransactionListItem,
     TransactionV2ListItem,
@@ -174,4 +175,72 @@ class StatsResource(BaseResource):
         """
         return self._client.recurring.list_status_changes(
             **self._resolve_dates(start, end)
+        )
+
+    def total_sales(
+        self,
+        start: str | datetime,
+        end: str | datetime,
+    ) -> SalesResult:
+        """Compute revenue breakdown for a date range.
+
+        Fetches all transactions via the enriched v2 endpoint and
+        categorizes them into three buckets: recurring plan sales,
+        recurring redemptions, and retail.  Returns a
+        :class:`~sonnys_data_client.types.SalesResult` with grand totals
+        and per-bucket revenue and count.
+
+        Args:
+            start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
+                or :class:`~datetime.datetime`.
+            end: Range end as an ISO-8601 string or
+                :class:`~datetime.datetime`.
+
+        Returns:
+            A :class:`~sonnys_data_client.types.SalesResult` containing
+            the grand total, transaction count, and per-category
+            breakdowns.
+
+        Raises:
+            ValueError: If *start* is after *end*, or if a string cannot
+                be parsed as a valid ISO-8601 date/datetime.
+
+        Example::
+
+            result = client.stats.total_sales("2026-01-01", "2026-01-31")
+            print(f"Total: ${result.total:.2f}")
+            print(f"Memberships: ${result.recurring_plan_sales:.2f}")
+        """
+        transactions = self._fetch_transactions_v2(start, end)
+
+        recurring_plan_sales = 0.0
+        recurring_plan_sales_count = 0
+        recurring_redemptions = 0.0
+        recurring_redemptions_count = 0
+        retail = 0.0
+        retail_count = 0
+
+        for txn in transactions:
+            if txn.is_recurring_plan_sale:
+                recurring_plan_sales += txn.total
+                recurring_plan_sales_count += 1
+            elif txn.is_recurring_plan_redemption:
+                recurring_redemptions += txn.total
+                recurring_redemptions_count += 1
+            else:
+                retail += txn.total
+                retail_count += 1
+
+        total = recurring_plan_sales + recurring_redemptions + retail
+        count = recurring_plan_sales_count + recurring_redemptions_count + retail_count
+
+        return SalesResult(
+            total=total,
+            count=count,
+            recurring_plan_sales=recurring_plan_sales,
+            recurring_plan_sales_count=recurring_plan_sales_count,
+            recurring_redemptions=recurring_redemptions,
+            recurring_redemptions_count=recurring_redemptions_count,
+            retail=retail,
+            retail_count=retail_count,
         )
