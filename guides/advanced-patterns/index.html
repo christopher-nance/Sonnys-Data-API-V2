@@ -1551,7 +1551,7 @@ you need a quick cross-site total.</p>
 code. This is the standard pattern for daily dashboards and scheduled reports:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;ROMEOVILLE&quot;</span><span class="p">,</span> <span class="s2">&quot;PLAINFIELD&quot;</span><span class="p">,</span> <span class="s2">&quot;SHOREWOOD&quot;</span><span class="p">]</span>
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
 <span class="n">daily_counts</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -1622,7 +1622,7 @@ rate limit (20 req/15s per API ID). They will not interfere with each other.</p>
 pattern collects revenue per site for a date range and produces a summary:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;ROMEOVILLE&quot;</span><span class="p">,</span> <span class="s2">&quot;PLAINFIELD&quot;</span><span class="p">,</span> <span class="s2">&quot;SHOREWOOD&quot;</span><span class="p">]</span>
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
 <span class="n">revenue_by_site</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -1651,12 +1651,11 @@ pattern collects revenue per site for a date range and produces a summary:</p>
 <p>Sample output:</p>
 <div class="highlight"><pre><span></span><code>Site                 Revenue
 ----------------------------
-JOLIET          $  45,230.50  (32.1%)
-ROMEOVILLE      $  38,910.25  (27.6%)
-PLAINFIELD      $  31,445.00  (22.3%)
-SHOREWOOD       $  25,310.75  (18.0%)
+JOLIET          $  45,230.50  (39.2%)
+PLNFLD          $  38,910.25  (33.7%)
+NILES           $  31,245.75  (27.1%)
 ----------------------------
-TOTAL           $ 140,896.50
+TOTAL           $ 115,386.50
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -1696,7 +1695,7 @@ combine <code>ExitStack</code> with site-scoped clients:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;ROMEOVILLE&quot;</span><span class="p">,</span> <span class="s2">&quot;PLAINFIELD&quot;</span><span class="p">]</span>
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
 <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
     <span class="n">clients</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1930,7 +1929,7 @@ limits:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;ROMEOVILLE&quot;</span><span class="p">,</span> <span class="s2">&quot;PLAINFIELD&quot;</span><span class="p">,</span> <span class="s2">&quot;SHOREWOOD&quot;</span><span class="p">]</span>
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
 <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">SITES</span><span class="p">:</span>
     <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
@@ -2056,7 +2055,11 @@ detail (tenders, line items, discounts) on every record.</p>
 always prefer <code>load_job()</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="c1"># BAD: 500 requests for 500 transactions</span>
     <span class="c1"># for tid in transaction_ids:</span>
     <span class="c1">#     detail = client.transactions.get(tid)</span>
@@ -2065,6 +2068,7 @@ always prefer <code>load_job()</code>:</p>
     <span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
         <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-15&quot;</span><span class="p">,</span>
         <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-16&quot;</span><span class="p">,</span>
+        <span class="n">site</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div>
 <h3 id="date-range-sizing">Date Range Sizing<a class="headerlink" href="#date-range-sizing" title="Permanent link">&para;</a></h3>
@@ -2104,7 +2108,11 @@ detail. Here is the performance-optimized version with request spacing:</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">start</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">end</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
     <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
@@ -2115,6 +2123,7 @@ detail. Here is the performance-optimized version with request spacing:</p>
         <span class="n">day_results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
             <span class="n">startDate</span><span class="o">=</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
             <span class="n">endDate</span><span class="o">=</span><span class="n">next_day</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="n">site</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">day_results</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">day_results</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
@@ -2164,6 +2173,7 @@ overall than reactive retry.</p>
             <span class="n">day_results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
                 <span class="n">startDate</span><span class="o">=</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
                 <span class="n">endDate</span><span class="o">=</span><span class="n">next_day</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                <span class="n">site</span><span class="o">=</span><span class="n">site_code</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">day_results</span><span class="p">)</span>
             <span class="n">current</span> <span class="o">=</span> <span class="n">next_day</span>
@@ -2189,7 +2199,7 @@ overall than reactive retry.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
 
-<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;ROMEOVILLE&quot;</span><span class="p">,</span> <span class="s2">&quot;PLAINFIELD&quot;</span><span class="p">,</span> <span class="s2">&quot;SHOREWOOD&quot;</span><span class="p">]</span>
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">site</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">SITES</span><span class="p">):</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">export_site_transactions</span><span class="p">(</span>
@@ -2428,7 +2438,7 @@ This example builds a consolidated file.</p>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;ROMEOVILLE&quot;</span><span class="p">,</span> <span class="s2">&quot;PLAINFIELD&quot;</span><span class="p">,</span> <span class="s2">&quot;SHOREWOOD&quot;</span><span class="p">]</span>
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
 <span class="n">yesterday</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>

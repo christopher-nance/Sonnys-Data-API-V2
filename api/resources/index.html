@@ -1058,6 +1058,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#sonnys_data_client.resources.Transactions.list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sonnys_data_client.resources.Transactions.list_by_type" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1438,6 +1449,17 @@
   
     <nav class="md-nav" aria-label="Transactions">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.resources.Transactions.list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#sonnys_data_client.resources.Transactions.list_by_type" class="md-nav__link">
@@ -2545,6 +2567,51 @@ support for large exports.</p>
 <div class="doc doc-object doc-function">
 
 
+<h4 id="sonnys_data_client.resources.Transactions.list" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">list</span>
+
+
+<a href="#sonnys_data_client.resources.Transactions.list" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">list</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">TransactionListItem</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Fetch all transactions, converting date strings to timestamps.</p>
+<p>Accepts <code>startDate</code> / <code>endDate</code> as ISO-8601 strings
+(e.g. <code>"2026-01-15"</code>) or Unix timestamps.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="list (sonnys_data_client.resources._transactions.Transactions.list)" href="#sonnys_data_client.resources.Transactions.list">list</a>[<a class="autorefs autorefs-internal" title="TransactionListItem (sonnys_data_client.types._transactions.TransactionListItem)" href="../models/#sonnys_data_client.types.TransactionListItem">TransactionListItem</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A flat list of :class:<code>TransactionListItem</code> instances.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h4 id="sonnys_data_client.resources.Transactions.list_by_type" class="doc doc-heading">
             <span class="doc doc-object-name doc-function-name">list_by_type</span>
 
@@ -2622,7 +2689,7 @@ parameter.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="list">list</span>[<a class="autorefs autorefs-internal" title="TransactionListItem (sonnys_data_client.types._transactions.TransactionListItem)" href="../models/#sonnys_data_client.types.TransactionListItem">TransactionListItem</a>]</code>
+                  <code><a class="autorefs autorefs-internal" title="list (sonnys_data_client.resources._transactions.Transactions.list)" href="#sonnys_data_client.resources.Transactions.list">list</a>[<a class="autorefs autorefs-internal" title="TransactionListItem (sonnys_data_client.types._transactions.TransactionListItem)" href="../models/#sonnys_data_client.types.TransactionListItem">TransactionListItem</a>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2669,7 +2736,7 @@ parameter.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="list">list</span>[<a class="autorefs autorefs-internal" title="TransactionV2ListItem (sonnys_data_client.types._transactions.TransactionV2ListItem)" href="../models/#sonnys_data_client.types.TransactionV2ListItem">TransactionV2ListItem</a>]</code>
+                  <code><a class="autorefs autorefs-internal" title="list (sonnys_data_client.resources._transactions.Transactions.list)" href="#sonnys_data_client.resources.Transactions.list">list</a>[<a class="autorefs autorefs-internal" title="TransactionV2ListItem (sonnys_data_client.types._transactions.TransactionV2ListItem)" href="../models/#sonnys_data_client.types.TransactionV2ListItem">TransactionV2ListItem</a>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2787,7 +2854,7 @@ range to a maximum of 24 hours.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="list">list</span>[<a class="autorefs autorefs-internal" title="TransactionJobItem (sonnys_data_client.types._transactions.TransactionJobItem)" href="../models/#sonnys_data_client.types.TransactionJobItem">TransactionJobItem</a>]</code>
+                  <code><a class="autorefs autorefs-internal" title="list (sonnys_data_client.resources._transactions.Transactions.list)" href="#sonnys_data_client.resources.Transactions.list">list</a>[<a class="autorefs autorefs-internal" title="TransactionJobItem (sonnys_data_client.types._transactions.TransactionJobItem)" href="../models/#sonnys_data_client.types.TransactionJobItem">TransactionJobItem</a>]</code>
             </td>
             <td>
               <div class="doc-md-description">

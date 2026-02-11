@@ -1804,6 +1804,16 @@ the specific error type:</p>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error type: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Body:       </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Readable error strings</p>
+<p>Printing or logging an <code>APIStatusError</code> directly (e.g., <code>print(e)</code>) produces
+a formatted string with all key details:</p>
+<div class="highlight"><pre><span></span><code>[HTTP 422] (PayloadValidationError) site: Only 1 site can be selected.
+API response body: {&#39;error&#39;: {&#39;type&#39;: &#39;PayloadValidationError&#39;, ...}}
+</code></pre></div>
+<p>This makes tracebacks and log output immediately actionable without needing
+to inspect individual attributes.</p>
+</div>
 <div class="admonition info">
 <p class="admonition-title">API error_type values</p>
 <p>The <code>error_type</code> attribute contains the raw error type string returned by
@@ -1906,7 +1916,7 @@ was provisioned by Sonny's. Use <code>error_type</code> to pinpoint the exact pr
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
     <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
     <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
-    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;SITE01&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">sites</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">sites</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
@@ -1975,32 +1985,36 @@ increase <code>max_retries</code> on the client to allow more backoff time.</p>
 parameters.</p>
 <p><strong>Common causes:</strong></p>
 <ul>
-<li>Date format <code>"06/01/2025"</code> instead of the required <code>"2025-06-01"</code> (ISO 8601) -- this is the most common validation error and triggers <code>InvalidPayloadRequestTimestampError</code></li>
+<li>Date format <code>"06/01/2025"</code> instead of ISO 8601 (<code>"2025-06-01"</code>) -- this is the most common validation error and triggers <code>InvalidPayloadRequestTimestampError</code>. The SDK auto-converts ISO 8601 strings to Unix timestamps, but non-ISO formats like <code>MM/DD/YYYY</code> are not supported.</li>
 <li>Passing a transaction type string that does not exist to <code>list_by_type()</code> (e.g., <code>"membership"</code> instead of <code>"recurring"</code>)</li>
 <li>Sending <code>endDate</code> earlier than <code>startDate</code></li>
-<li>Malformed JSON in the request body (rare with the SDK, but possible if you modify internals)</li>
+<li>Missing the required <code>site</code> parameter on <code>load_job()</code> when the API ID has access to multiple sites</li>
 <li>Missing required parameters on endpoints that enforce them</li>
 </ul>
-<p><strong>Recommended handling:</strong> Do not retry -- fix the request parameters. Check date
-formats (<code>YYYY-MM-DD</code>), parameter names, and allowed values. Use <code>error_type</code> to
-distinguish between timestamp errors and general payload errors.</p>
+<p><strong>Recommended handling:</strong> Do not retry -- fix the request parameters. Use ISO 8601
+date strings (<code>"2025-06-01"</code>) or Unix timestamps. Check parameter names and allowed
+values. Use <code>error_type</code> to distinguish between timestamp errors and general payload
+errors.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
-            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;06/01/2025&quot;</span><span class="p">,</span>  <span class="c1"># Wrong format!</span>
-            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;06/30/2025&quot;</span><span class="p">,</span>
+        <span class="c1"># load_job() requires explicit site= when the API ID has multi-site access</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-15&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-16&quot;</span><span class="p">,</span>
+            <span class="c1"># Missing site= parameter!</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error type: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;InvalidPayloadRequestTimestampError&quot;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fix date format to YYYY-MM-DD&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;PayloadValidationError&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;PayloadValidationError&quot;</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Check parameter names and values&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Full response: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;InvalidPayloadRequestTimestampError&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Use ISO 8601 date format (YYYY-MM-DD) or Unix timestamps&quot;</span><span class="p">)</span>
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
@@ -2330,15 +2344,50 @@ is the fastest way to understand what the SDK is doing under the hood.</p>
 <td>Successful response received</td>
 </tr>
 <tr>
+<td>DEBUG</td>
+<td><code>Error response: {METHOD} {PATH} status={CODE} body={BODY}</code></td>
+<td>HTTP error before exception is raised</td>
+</tr>
+<tr>
 <td>WARNING</td>
 <td><code>Rate limited (429), retry {N}/{MAX} after {DELAY}s</code></td>
 <td>429 received, backing off before retry</td>
 </tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job submit: POST /transaction/load-job params={PARAMS}</code></td>
+<td>Batch job submitted</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job submitted: hash={HASH}</code></td>
+<td>Job hash received from API</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job poll #{N}: hash={HASH}</code></td>
+<td>Polling for job results</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job pending: hash={HASH} status={STATUS}</code></td>
+<td>Job still processing</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job complete: hash={HASH} records={N} polls={N}</code></td>
+<td>Job finished with record count</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td><code>Job failed: hash={HASH}</code></td>
+<td>Batch job returned failure status</td>
+</tr>
 </tbody>
 </table>
 <h3 id="reading-debug-output">Reading Debug Output<a class="headerlink" href="#reading-debug-output" title="Permanent link">&para;</a></h3>
-<p>Here is an annotated example of a typical debug session. Two requests are made:
-the first hits the rate limiter and succeeds, the second gets a 429 and retries.</p>
+<p>Here is an annotated example of a typical debug session showing a successful
+request, a 429 retry, and an error response:</p>
 <div class="highlight"><pre><span></span><code>2025-06-15 10:00:00,100 DEBUG sonnys_data_client: Rate limiter: waiting 0.450s
 # ^ Rate limiter detected we&#39;re near the 20 req/15s limit. Sleeping 450ms.
 
@@ -2348,17 +2397,46 @@ the first hits the rate limiter and succeeds, the second gets a 429 and retries.
 2025-06-15 10:00:01,200 DEBUG sonnys_data_client: Response: GET /sites status=200 elapsed=0.650s
 # ^ Success! The API responded in 650ms with HTTP 200.
 
-2025-06-15 10:00:01,210 DEBUG sonnys_data_client: Request: GET /transactions params={&#39;startDate&#39;: &#39;2025-06-01&#39;, &#39;endDate&#39;: &#39;2025-06-15&#39;}
-# ^ Second request -- fetching transactions with date range parameters.
+2025-06-15 10:00:01,210 DEBUG sonnys_data_client: Request: GET /transaction params={&#39;startDate&#39;: 1717200000, &#39;endDate&#39;: 1718409600, &#39;limit&#39;: 100, &#39;offset&#39;: 1}
+# ^ Fetching transactions. Dates were auto-converted from ISO strings to Unix timestamps.
 
 2025-06-15 10:00:01,800 WARNING sonnys_data_client: Rate limited (429), retry 1/3 after 1.0s
 # ^ API returned 429. SDK will wait 1 second then retry (attempt 1 of 3).
 
-2025-06-15 10:00:02,810 DEBUG sonnys_data_client: Request: GET /transactions params={&#39;startDate&#39;: &#39;2025-06-01&#39;, &#39;endDate&#39;: &#39;2025-06-15&#39;}
+2025-06-15 10:00:02,810 DEBUG sonnys_data_client: Request: GET /transaction params={&#39;startDate&#39;: 1717200000, &#39;endDate&#39;: 1718409600, &#39;limit&#39;: 100, &#39;offset&#39;: 1}
 # ^ Retry request sent after the 1-second backoff.
 
-2025-06-15 10:00:03,500 DEBUG sonnys_data_client: Response: GET /transactions status=200 elapsed=0.690s
+2025-06-15 10:00:03,500 DEBUG sonnys_data_client: Response: GET /transaction status=200 elapsed=0.690s
 # ^ Retry succeeded. The API responded with HTTP 200.
+</code></pre></div>
+<p>And here is an example showing batch job lifecycle logging:</p>
+<div class="highlight"><pre><span></span><code>2025-06-15 10:01:00,100 DEBUG sonnys_data_client: Job submit: POST /transaction/load-job params={&#39;startDate&#39;: 1717200000, &#39;endDate&#39;: 1717286400, &#39;site&#39;: &#39;JOLIET&#39;, &#39;limit&#39;: 100, &#39;offset&#39;: 1}
+# ^ Batch job submitted with date range and site parameters.
+
+2025-06-15 10:01:00,800 DEBUG sonnys_data_client: Job submitted: hash=abc123def456
+# ^ API accepted the job and returned a hash for polling.
+
+2025-06-15 10:01:02,810 DEBUG sonnys_data_client: Job poll #1: hash=abc123def456
+# ^ First poll attempt (after poll_interval delay).
+
+2025-06-15 10:01:03,200 DEBUG sonnys_data_client: Job pending: hash=abc123def456 status=pending
+# ^ Job is still processing. Will poll again after another interval.
+
+2025-06-15 10:01:05,210 DEBUG sonnys_data_client: Job poll #2: hash=abc123def456
+# ^ Second poll attempt.
+
+2025-06-15 10:01:05,900 DEBUG sonnys_data_client: Job complete: hash=abc123def456 records=347 polls=2
+# ^ Job finished! 347 records returned after 2 poll cycles.
+</code></pre></div>
+<p>And an error response example:</p>
+<div class="highlight"><pre><span></span><code>2025-06-15 10:02:00,100 DEBUG sonnys_data_client: Request: GET /transaction params={&#39;startDate&#39;: &#39;06/01/2025&#39;}
+# ^ Request with an invalid date format (not ISO-8601 or Unix timestamp).
+
+2025-06-15 10:02:00,700 DEBUG sonnys_data_client: Error response: GET /transaction status=400 body={&quot;error&quot;:{&quot;type&quot;:&quot;InvalidPayloadRequestTimestampError&quot;,&quot;message&quot;:&quot;Invalid timestamp&quot;}}
+# ^ Full error response body logged before the exception is raised.
+
+# The exception traceback will show:
+# sonnys_data_client._exceptions.ValidationError: [HTTP 400] (InvalidPayloadRequestTimestampError) Invalid timestamp
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -2398,8 +2476,8 @@ Set to DEBUG only when troubleshooting.</p>
 </tr>
 <tr>
 <td><code>ValidationError: PayloadValidationError</code></td>
-<td>Bad date format or invalid parameter</td>
-<td>Use <code>YYYY-MM-DD</code> format, check parameter names</td>
+<td>Invalid parameter or missing <code>site</code> on <code>load_job()</code></td>
+<td>Check parameter names; pass <code>site=</code> to <code>load_job()</code></td>
 </tr>
 <tr>
 <td><code>NotFoundError: EntityNotFoundError</code></td>
@@ -2444,10 +2522,10 @@ Set to DEBUG only when troubleshooting.</p>
 </ol>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The most common mistake is using <code>MM/DD/YYYY</code> date format (e.g., <code>"06/01/2025"</code>)
-instead of the required <code>YYYY-MM-DD</code> format (e.g., <code>"2025-06-01"</code>). The API will
-reject the request with a <code>ValidationError</code> and <code>error_type</code> of
-<code>InvalidPayloadRequestTimestampError</code>. Always use ISO 8601 dates.</p>
+<p>The SDK auto-converts ISO 8601 date strings (e.g., <code>"2025-06-01"</code>) to Unix
+timestamps for the API. However, non-ISO formats like <code>"06/01/2025"</code> are <strong>not</strong>
+recognized and will cause an <code>InvalidPayloadRequestTimestampError</code>. Always use
+<code>YYYY-MM-DD</code> format or pass Unix timestamps directly.</p>
 </div>
 <h2 id="quick-reference">Quick Reference<a class="headerlink" href="#quick-reference" title="Permanent link">&para;</a></h2>
 <p>A scannable cheat sheet mapping HTTP status codes to SDK exceptions, typical
