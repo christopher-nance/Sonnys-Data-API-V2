@@ -129,7 +129,7 @@ Plans:
 
 Plans:
 - [x] 18-01: Exceptions & Core Infrastructure (exception docstrings, SonnysModel, module docstrings, resource enrichment)
-- [ ] 18-02: Standard & Account Model Docstrings (22 Pydantic model docstrings)
+- [x] 18-02: Standard & Account Model Docstrings (22 Pydantic model docstrings)
 - [ ] 18-03: Transaction Models + Final Verification & Deploy (7 transaction models, mkdocs build, gh-pages deploy)
 
 ## Progress
@@ -146,4 +146,4 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | 15. Account Resources | v1.1 | 1/1 | Complete | 2026-02-11 |
 | 16. Error & Troubleshoot | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 17. Advanced Patterns | v1.1 | 2/2 | Complete | 2026-02-11 |
-| 18. Docstring Audit | v1.1 | 1/3 | In progress | - |
+| 18. Docstring Audit | v1.1 | 2/3 | In progress | - |
