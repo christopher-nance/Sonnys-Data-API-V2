@@ -90,10 +90,10 @@ Plans:
 **Goal**: Guide for giftcards, washbooks, and recurring accounts covering status tracking, modification history, and the relationship between account types
 **Depends on**: Phase 14
 **Research**: Unlikely (internal documentation based on existing code)
-**Plans**: TBD
+**Plans**: 1
 
 Plans:
-- [ ] 15-01: TBD (run /gsd:plan-phase 15 to break down)
+- [ ] 15-01: Advanced Account Patterns & Deploy (recurring method comparison, churn analysis, billing report, giftcard liability tracking)
 
 #### Phase 16: Error Handling & Troubleshooting
 
@@ -136,7 +136,7 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | 12. API Reference Setup | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 13. Resource Guides | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 14. Transaction Deep Dive | v1.1 | 2/2 | Complete | 2026-02-11 |
-| 15. Account Resources | v1.1 | 0/? | Not started | - |
+| 15. Account Resources | v1.1 | 0/1 | Not started | - |
 | 16. Error & Troubleshoot | v1.1 | 0/? | Not started | - |
 | 17. Advanced Patterns | v1.1 | 0/? | Not started | - |
 | 18. Docstring Audit | v1.1 | 0/? | Not started | - |
