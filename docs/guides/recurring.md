@@ -296,6 +296,6 @@ Nested inside `RecurringModification`.
     and `list_details()`) automatically fetch all pages of results. You do not
     need to handle pagination manually.
 
-!!! tip "Advanced patterns"
-    Phase 15 will cover advanced account resource patterns including
-    cross-resource analysis and reporting workflows.
+!!! tip "See also"
+    For patterns combining recurring accounts with transaction data, see the
+    [Transactions](transactions.md#cross-resource-lookups) guide.

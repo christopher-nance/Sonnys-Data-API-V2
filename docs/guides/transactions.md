@@ -478,11 +478,101 @@ Nested inside `Transaction` and `TransactionJobItem`.
 | `discount_amount`      | `float`        | Amount discounted              |
 | `discount_code`        | `str`          | Discount code                  |
 
+## Advanced Patterns
+
+### Multi-Day Exports
+
+Since `load_job()` is limited to a 24-hour date range per call, use a loop to
+export multiple days:
+
+```python
+from datetime import date, timedelta
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    start = date(2025, 6, 1)
+    end = date(2025, 6, 30)
+    all_results = []
+
+    current = start
+    while current < end:
+        next_day = current + timedelta(days=1)
+        day_results = client.transactions.load_job(
+            startDate=current.isoformat(),
+            endDate=next_day.isoformat(),
+        )
+        all_results.extend(day_results)
+        current = next_day
+
+    print(f"Exported {len(all_results)} transactions over {(end - start).days} days")
+```
+
+!!! tip "Spacing requests for large exports"
+    For very large exports, consider adding a small `time.sleep()` between days
+    to stay well within the rate limit. The client handles 429 retries
+    automatically, but spacing requests reduces retry churn.
+
+### Error Handling
+
+Transaction-specific error handling patterns:
+
+```python
+from sonnys_data_client import SonnysClient
+from sonnys_data_client._exceptions import (
+    APIError,
+    APITimeoutError,
+    RateLimitError,
+    ValidationError,
+)
+
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    try:
+        results = client.transactions.load_job(
+            startDate="2025-06-15",
+            endDate="2025-06-16",
+            timeout=600.0,
+        )
+    except APITimeoutError:
+        print("Job timed out — try a shorter date range or increase timeout")
+    except APIError as e:
+        print(f"Job failed: {e}")
+    except RateLimitError:
+        print("Rate limit exceeded after max retries")
+```
+
+!!! note "`ValidationError`"
+    `ValidationError` is raised when date format is invalid or parameters fail
+    API validation. This is caught before the request is sent, so it does not
+    count against the rate limit.
+
+### Cross-Resource Lookups
+
+Enrich transaction data by combining with other resources:
+
+```python
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    # Get enriched transactions with customer_id
+    transactions = client.transactions.list_v2(
+        startDate="2025-06-01",
+        endDate="2025-06-30",
+    )
+
+    # Build customer lookup from customer_ids found in transactions
+    customer_ids = {t.customer_id for t in transactions if t.customer_id}
+    customers = {
+        c.customer_id: c
+        for c in client.customers.list()
+        if c.customer_id in customer_ids
+    }
+
+    # Enrich transactions with customer names
+    for txn in transactions:
+        if txn.customer_id and txn.customer_id in customers:
+            customer = customers[txn.customer_id]
+            print(f"#{txn.trans_number}: ${txn.total:.2f} — {customer.first_name} {customer.last_name}")
+```
+
 !!! note "Auto-pagination"
     The `list()`, `list_by_type()`, and `list_v2()` methods automatically fetch
     all pages of results. The `load_job()` method handles pagination at the job
     submission level, submitting multiple jobs as needed.
-
-!!! tip "Transaction deep dive"
-    Phase 14 will cover advanced transaction patterns including batch job
-    workflows, date range strategies, and cross-resource analysis.
