@@ -505,3 +505,259 @@ simultaneously will compete for the same 20 req/15s budget.
     covers what happens when rate limits are exceeded despite these
     precautions -- the SDK retries 429s with exponential backoff before
     raising `RateLimitError`.
+
+---
+
+## Performance Optimization
+
+Getting data out of the API efficiently means choosing the right method,
+sizing your date ranges, and spacing your requests. This section provides
+practical guidance for minimizing wall-clock time and request budget usage
+in production pipelines.
+
+### Choosing the Right Method
+
+The Transactions resource offers five methods, each with different performance
+characteristics. The [Transactions guide](transactions.md#choosing-the-right-method)
+has a full comparison table. Here is the decision from a **performance**
+perspective:
+
+| Priority | Method | Speed | Request Cost | Best For |
+|:--------:|--------|-------|--------------|----------|
+| 1 | `list()` | Fastest | 1 req per 100 records | Daily counts, revenue totals, date range summaries |
+| 2 | `list_by_type()` | Fast | 1 req per 100 records | Type-filtered queries (fewer records = fewer pages) |
+| 3 | `list_v2()` | Fast | 1 req per 100 records | When you need `customer_id` or recurring flags |
+| 4 | `get()` | Per-record | 1 req per record | Single transaction detail lookup |
+| 5 | `load_job()` | Slowest | Submit + poll + paginate | Bulk full-detail exports |
+
+!!! tip "Default to `list()` unless you need specific fields"
+    `list()` has no server-side caching layer and returns results immediately.
+    It is the fastest method for most reporting use cases. Only switch to
+    `list_v2()` when you specifically need `customer_id`,
+    `is_recurring_plan_sale`, `is_recurring_plan_redemption`, or
+    `transaction_status`. Only use `load_job()` when you need full transaction
+    detail (tenders, line items, discounts) on every record.
+
+**Avoid `get()` in loops.** Fetching 500 transactions one at a time with
+`get()` costs 500 requests. The same data from `load_job()` costs roughly
+5 job submissions + polling. If you need full detail on many transactions,
+always prefer `load_job()`:
+
+```python
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    # BAD: 500 requests for 500 transactions
+    # for tid in transaction_ids:
+    #     detail = client.transactions.get(tid)
+
+    # GOOD: ~5 requests for 500 transactions with full detail
+    results = client.transactions.load_job(
+        startDate="2025-06-15",
+        endDate="2025-06-16",
+    )
+```
+
+### Date Range Sizing
+
+Narrower date ranges mean fewer records per query, which means fewer pages and
+fewer requests. The tradeoff is more iterations if you need a wide range.
+
+**Guidelines by method:**
+
+| Method | Recommended Range | Reason |
+|--------|-------------------|--------|
+| `list()` | Up to 30 days | Fast pagination, no caching complications |
+| `list_v2()` | Up to 30 days | 10-min cache; repeated calls within cache window return stale data |
+| `load_job()` | Exactly 1 day | **Required** -- max 24-hour range per call |
+
+For `load_job()` exports spanning multiple days, iterate day by day. The
+[Transactions guide](transactions.md#multi-day-exports) shows this pattern in
+detail. Here is the performance-optimized version with request spacing:
+
+```python
+import time
+from datetime import date, timedelta
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    start = date(2025, 6, 1)
+    end = date(2025, 6, 30)
+    all_results = []
+    current = start
+
+    while current < end:
+        next_day = current + timedelta(days=1)
+        day_results = client.transactions.load_job(
+            startDate=current.isoformat(),
+            endDate=next_day.isoformat(),
+        )
+        all_results.extend(day_results)
+        print(f"{current}: {len(day_results)} transactions")
+        current = next_day
+
+        # Pause between days to stay well within rate limits
+        time.sleep(1)
+
+    print(f"Total: {len(all_results)} transactions over {(end - start).days} days")
+```
+
+!!! note
+    For `list()` and `list_v2()`, wider date ranges are fine if you only need
+    summary data. A 30-day `list()` query on a site with 800 transactions/day
+    returns ~24,000 records across ~240 pages -- about 3 minutes of wall time
+    with a single client.
+
+### Request Spacing for Bulk Operations
+
+Even though the SDK handles 429 retries automatically, each retry adds
+latency. A request that gets a 429, waits 1 second, retries, and succeeds
+takes ~1.7 seconds instead of ~0.7 seconds. Proactive spacing is faster
+overall than reactive retry.
+
+Here is a configurable pattern for bulk operations with built-in spacing:
+
+```python
+import time
+from datetime import date, timedelta
+from sonnys_data_client import SonnysClient
+
+def export_site_transactions(
+    api_id: str,
+    api_key: str,
+    site_code: str,
+    start: date,
+    end: date,
+    delay_between_days: float = 1.0,
+) -> list:
+    """Export transactions for a site with configurable request spacing."""
+    all_results = []
+
+    with SonnysClient(
+        api_id=api_id,
+        api_key=api_key,
+        site_code=site_code,
+    ) as client:
+        current = start
+        while current < end:
+            next_day = current + timedelta(days=1)
+            day_results = client.transactions.load_job(
+                startDate=current.isoformat(),
+                endDate=next_day.isoformat(),
+            )
+            all_results.extend(day_results)
+            current = next_day
+
+            if current < end:
+                time.sleep(delay_between_days)
+
+    return all_results
+
+
+# Usage: export June for Joliet with 2-second spacing
+results = export_site_transactions(
+    api_id="your-api-id",
+    api_key="your-api-key",
+    site_code="JOLIET",
+    start=date(2025, 6, 1),
+    end=date(2025, 6, 30),
+    delay_between_days=2.0,
+)
+print(f"Exported {len(results)} transactions")
+```
+
+For multi-site exports, add an additional delay between sites:
+
+```python
+import time
+from datetime import date
+
+SITES = ["JOLIET", "ROMEOVILLE", "PLAINFIELD", "SHOREWOOD"]
+
+for i, site in enumerate(SITES):
+    results = export_site_transactions(
+        api_id="your-api-id",
+        api_key="your-api-key",
+        site_code=site,
+        start=date(2025, 6, 1),
+        end=date(2025, 6, 30),
+        delay_between_days=1.0,
+    )
+    print(f"{site}: {len(results)} transactions")
+
+    # Pause between sites (skip after the last one)
+    if i < len(SITES) - 1:
+        time.sleep(5)
+```
+
+!!! warning
+    Do not set `delay_between_days` to 0 for large exports. While the SDK
+    will handle the resulting 429s gracefully, the exponential backoff delays
+    (1s, 2s, 4s per retry) will make the total run time **longer** than a
+    small proactive delay would.
+
+### Batch Jobs vs Paginated Lists
+
+The choice between `load_job()` and `list()` is the most impactful performance
+decision. Here is when to use each:
+
+**Use `list()` when:**
+
+- You need summary fields only (transaction number, total, date)
+- You are building dashboards or real-time reports
+- Speed matters more than data completeness
+- You are querying across wide date ranges (up to 30 days)
+
+**Use `load_job()` when:**
+
+- You need full transaction detail (tenders, line items, discounts) on every
+  record
+- You need v2 enrichment fields (`customer_id`, `transaction_status`) combined
+  with full detail
+- You are building a data warehouse or archival export
+- You can tolerate longer run times (polling overhead)
+
+**Performance comparison for 1,000 transactions:**
+
+| Aspect | `list()` | `load_job()` |
+|--------|----------|--------------|
+| Requests | 10 (paginated) | ~10 job submissions + ~10 poll cycles |
+| Wall time | ~8 seconds | ~30-60 seconds (includes polling) |
+| Data depth | Summary only | Full detail + v2 fields |
+| Caching | None | 20-min server cache |
+
+!!! note "Leveraging the `load_job()` cache"
+    Job results are cached by the API for **20 minutes**. If you call
+    `load_job()` with the same parameters within that window, the API returns
+    cached results without re-processing the job. This means repeated calls
+    are fast -- useful for retry-after-failure scenarios. See the
+    [Transactions guide](transactions.md#batch-job-workflow) for details on the
+    job lifecycle.
+
+**Hybrid approach:** Use `list()` to get transaction counts and summaries,
+then use `load_job()` only for the specific date ranges where you need full
+detail:
+
+```python
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    # Step 1: Quick summary scan with list()
+    summary = client.transactions.list(
+        startDate="2025-06-01",
+        endDate="2025-06-30",
+    )
+    print(f"Found {len(summary)} transactions in June")
+
+    # Step 2: Full detail export only for high-value days
+    high_value_txns = [t for t in summary if t.total > 500]
+    print(f"{len(high_value_txns)} high-value transactions to inspect")
+
+    # Step 3: Get full detail for specific transactions
+    for txn in high_value_txns[:10]:  # Limit to first 10
+        detail = client.transactions.get(txn.trans_id)
+        print(
+            f"#{detail.number}: ${detail.total:.2f} - "
+            f"{len(detail.items)} items, {len(detail.tenders)} tenders"
+        )
+```
