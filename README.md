@@ -36,7 +36,7 @@ with exponential-backoff retry keeps your application within the API's
 ## Installation
 
 ```bash
-pip install git+https://github.com/WashU-CarWash/sonnys-data-client.git
+pip install git+https://github.com/christopher-nance/Sonnys-Data-API-V2.git
 ```
 
 ## Quick Start
