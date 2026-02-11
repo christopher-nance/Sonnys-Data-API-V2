@@ -280,6 +280,92 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     )
 ```
 
+## Batch Job Workflow
+
+The `load_job()` method is the most complex operation in the SDK. Under the
+hood, it orchestrates a multi-step batch job workflow against two API endpoints.
+This section explains how it works so you can understand the timing, error
+handling, and pagination behavior.
+
+### How It Works
+
+Each call to `load_job()` follows a three-phase workflow: submit the job, poll
+for completion, and return the results.
+
+```text
+  ┌─────────────┐     ┌──────────────┐     ┌─────────────┐
+  │  Submit Job  │────>│  Poll Status  │────>│   Return    │
+  │  POST        │     │  GET          │     │   Results   │
+  │  /load-job   │     │  /get-job-data│     │             │
+  └─────────────┘     └──────┬───────┘     └─────────────┘
+                             │
+                        ┌────▼────┐
+                        │ Status? │
+                        └────┬────┘
+                    ┌────────┼────────┐
+                    ▼        ▼        ▼
+                 "pass"  "working"  "fail"
+                   │        │        │
+                   │     sleep &     │
+                   │     retry ──┐   │
+                   │        ^    │   │
+                   │        └────┘   │
+                   ▼                 ▼
+               Return data     Raise APIError
+```
+
+1. **Submit** -- The client sends a `POST` request to `/transaction/load-job`
+   with your query parameters. The API returns a `hash` identifier for the job.
+2. **Poll** -- The client sends `GET` requests to `/transaction/get-job-data`
+   with the job hash, sleeping `poll_interval` seconds between attempts.
+3. **Return** -- When the status reaches `"pass"`, the response contains the
+   transaction data. The client validates each record into a
+   `TransactionJobItem` model and returns the full list.
+
+### Job Status Lifecycle
+
+Each polling response includes a `status` field with one of three values:
+
+- **`"working"`** -- The job is still processing. The client sleeps for
+  `poll_interval` seconds (default 2.0) and sends another poll request.
+- **`"pass"`** -- The job completed successfully. Transaction data is available
+  in the response body.
+- **`"fail"`** -- The job failed on the server side. The client raises an
+  `APIError` with the message `"Batch job failed"`.
+
+### Multi-Page Jobs
+
+Pagination for `load_job()` happens at the job submission level, not within a
+single job response. Each `POST /transaction/load-job` with a different `offset`
+value submits a separate batch job. The client handles this automatically:
+
+1. The first job is submitted with `offset=1` (or your custom starting offset).
+2. The response includes a `total` field indicating the total number of records.
+3. The client calculates how many additional pages are needed based on `total`
+   and the `limit` (default 100 records per page).
+4. Each remaining page submits a new job and goes through its own submit, poll,
+   and return cycle.
+
+All results are collected and returned as a single flat list.
+
+### Timeouts and Errors
+
+Two error conditions can occur during the batch job workflow:
+
+- **`APIError("Batch job failed")`** -- Raised when the API returns a job
+  status of `"fail"`. This indicates a server-side error processing your
+  request. Retry with the same parameters or narrow your date range.
+- **`APITimeoutError`** -- Raised when a single job does not reach `"pass"` or
+  `"fail"` within the `timeout` period (default 300 seconds / 5 minutes).
+  Increase the `timeout` parameter if you expect slow processing.
+
+!!! warning "Timeout applies per job page"
+    The `timeout` parameter applies to **each individual job page**, not to the
+    entire `load_job()` call. For example, a query returning 500 records with
+    the default limit of 100 submits 5 separate jobs. Each job has its own
+    300-second timeout, so the theoretical maximum wall time is
+    5 x 300 = 1,500 seconds (25 minutes).
+
 ## Models
 
 ### `TransactionListItem`
