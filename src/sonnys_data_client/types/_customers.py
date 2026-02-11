@@ -4,6 +4,8 @@ from sonnys_data_client.types._base import SonnysModel
 
 
 class Address(SonnysModel):
+    """Mailing address for a customer."""
+
     address1: str | None = None
     address2: str | None = None
     city: str | None = None
@@ -13,6 +15,11 @@ class Address(SonnysModel):
 
 
 class CustomerListItem(SonnysModel):
+    """Summary customer record returned by ``client.customers.list()``.
+
+    Contains identifiers, name, phone, and active status.
+    """
+
     customer_id: str
     first_name: str
     last_name: str
@@ -24,6 +31,11 @@ class CustomerListItem(SonnysModel):
 
 
 class Customer(SonnysModel):
+    """Full customer profile returned by ``client.customers.get(id)``.
+
+    Includes address, contact details, loyalty info, and SMS opt-in status.
+    """
+
     id: str
     number: str
     first_name: str
