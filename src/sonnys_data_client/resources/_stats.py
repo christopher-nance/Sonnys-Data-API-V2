@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from sonnys_data_client._date_utils import parse_date_range
 from sonnys_data_client._resources import BaseResource
 from sonnys_data_client.types._recurring import RecurringStatusChange
-from sonnys_data_client.types._stats import SalesResult
+from sonnys_data_client.types._stats import SalesResult, WashResult
 from sonnys_data_client.types._transactions import (
     TransactionListItem,
     TransactionV2ListItem,
@@ -177,6 +177,39 @@ class StatsResource(BaseResource):
             **self._resolve_dates(start, end)
         )
 
+    def retail_wash_count(
+        self,
+        start: str | datetime,
+        end: str | datetime,
+    ) -> int:
+        """Count retail wash transactions for a date range.
+
+        Fetches transactions of type ``"wash"`` and returns the count.
+        Retail washes are standard single-use wash transactions (excludes
+        prepaid wash book redemptions).  This value serves as the
+        denominator for conversion rate calculations (Phase 24).
+
+        Args:
+            start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
+                or :class:`~datetime.datetime`.
+            end: Range end as an ISO-8601 string or
+                :class:`~datetime.datetime`.
+
+        Returns:
+            The number of retail wash transactions in the date range.
+
+        Raises:
+            ValueError: If *start* is after *end*, or if a string cannot
+                be parsed as a valid ISO-8601 date/datetime.
+
+        Example::
+
+            count = client.stats.retail_wash_count("2026-01-01", "2026-01-31")
+            print(f"Retail washes: {count}")
+        """
+        transactions = self._fetch_transactions_by_type(start, end, "wash")
+        return len(transactions)
+
     def total_sales(
         self,
         start: str | datetime,
@@ -243,4 +276,48 @@ class StatsResource(BaseResource):
             recurring_redemptions_count=recurring_redemptions_count,
             retail=retail,
             retail_count=retail_count,
+        )
+
+    def total_washes(
+        self,
+        start: str | datetime,
+        end: str | datetime,
+    ) -> WashResult:
+        """Compute wash volume breakdown for a date range.
+
+        Fetches transactions of type ``"wash"`` (retail) and
+        ``"prepaid-wash"`` (wash book redemptions) separately and returns
+        a :class:`~sonnys_data_client.types.WashResult` with per-category
+        counts and a combined total.
+
+        Args:
+            start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
+                or :class:`~datetime.datetime`.
+            end: Range end as an ISO-8601 string or
+                :class:`~datetime.datetime`.
+
+        Returns:
+            A :class:`~sonnys_data_client.types.WashResult` containing the
+            total wash count and per-category breakdowns.
+
+        Raises:
+            ValueError: If *start* is after *end*, or if a string cannot
+                be parsed as a valid ISO-8601 date/datetime.
+
+        Example::
+
+            result = client.stats.total_washes("2026-01-01", "2026-01-31")
+            print(f"Total washes: {result.total}")
+            print(f"Retail: {result.wash_count}, Prepaid: {result.prepaid_wash_count}")
+        """
+        wash_transactions = self._fetch_transactions_by_type(start, end, "wash")
+        prepaid_transactions = self._fetch_transactions_by_type(start, end, "prepaid-wash")
+
+        wash_count = len(wash_transactions)
+        prepaid_wash_count = len(prepaid_transactions)
+
+        return WashResult(
+            total=wash_count + prepaid_wash_count,
+            wash_count=wash_count,
+            prepaid_wash_count=prepaid_wash_count,
         )
