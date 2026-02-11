@@ -7,7 +7,19 @@ from sonnys_data_client.types._employees import ClockEntry, Employee, EmployeeLi
 
 
 class Employees(ListableResource, GettableResource):
-    """Access the /employee list and detail endpoints."""
+    """Access the /employee list and detail endpoints.
+
+    Provides paginated employee search, individual employee lookup, and
+    time-tracking data.
+
+    - ``list()`` returns :class:`~sonnys_data_client.types.EmployeeListItem`
+      summaries. Supports ``startDate`` and ``endDate`` filters.
+    - ``get(id)`` returns a full :class:`~sonnys_data_client.types.Employee`
+      record with contact info and employment dates.
+    - ``get_clock_entries(id)`` fetches
+      :class:`~sonnys_data_client.types.ClockEntry` time-tracking records
+      for a specific employee.
+    """
 
     _path = "/employee"
     _items_key = "employees"

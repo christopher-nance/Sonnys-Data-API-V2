@@ -13,7 +13,19 @@ from sonnys_data_client.types._recurring import (
 
 
 class RecurringAccounts(ListableResource, GettableResource):
-    """Access the /recurring/account list, detail, and custom endpoints."""
+    """Access the /recurring/account list, detail, and custom endpoints.
+
+    The most feature-rich resource, providing paginated account search,
+    individual account lookup, and specialized reporting endpoints.
+
+    - ``list()`` returns :class:`~sonnys_data_client.types.RecurringListItem`
+      summaries with status and billing site info.
+    - ``get(id)`` returns a full :class:`~sonnys_data_client.types.Recurring`
+      record with billing history, tags, vehicles, and customer details.
+    - ``list_status_changes()`` fetches status transition history.
+    - ``list_modifications()`` fetches account modification audit logs.
+    - ``list_details()`` fetches all accounts with full detail in bulk.
+    """
 
     _path = "/recurring/account/list"
     _items_key = "accounts"

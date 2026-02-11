@@ -16,7 +16,21 @@ from sonnys_data_client.types._transactions import (
 
 
 class Transactions(ListableResource, GettableResource):
-    """Access the /transaction list, detail, and by-type endpoints."""
+    """Access the /transaction list, detail, and by-type endpoints.
+
+    The most complex resource, providing paginated transaction search,
+    individual transaction lookup, type-filtered listing, and batch job
+    support for large exports.
+
+    - ``list()`` returns :class:`~sonnys_data_client.types.TransactionListItem`
+      summaries. Supports ``startDate``, ``endDate``, ``site``, ``region``
+      filters.
+    - ``get(id)`` returns a full :class:`~sonnys_data_client.types.Transaction`
+      record with line items, tenders, and discounts.
+    - ``list_by_type(type)`` filters transactions by type (wash, recurring, etc.).
+    - ``list_v2()`` uses the enriched v2 endpoint with customer and status fields.
+    - ``load_job()`` submits asynchronous batch jobs for large date ranges.
+    """
 
     _path = "/transaction"
     _items_key = "transactions"
