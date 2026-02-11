@@ -5,17 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-11)
 
 **Core value:** Dead-simple interface with rock-solid reliability — any developer or AI agent picks it up instantly, and it never crashes your apps.
-**Current focus:** All milestones complete (v1.0 + v1.1)
+**Current focus:** v1.2 Improvements — Business analytics via client.stats.*
 
 ## Current Position
 
-Phase: 18 of 18 (Docstring Audit) — FINAL
-Plan: 3 of 3 in current phase
-Status: All phases complete — v1.0 + v1.1 milestones shipped
-Last activity: 2026-02-11 - v1.1 Documentation milestone archived
+Phase: 19 of 26 (Stats Module Foundation)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-02-11 - Milestone v1.2 created
 
-Progress: ██████████████████ 18/18 phases (100%)
-Plans:   █████████████████████████████████ 33/33 plans (100%)
+Progress: ░░░░░░░░ 0%
 
 ## Performance Metrics
 
@@ -67,9 +66,10 @@ None.
 
 - Milestone v1.0 created: Initial SDK release, 10 phases (Phase 1-10) — shipped 2026-02-10
 - Milestone v1.1 created: Documentation suite, 8 phases (Phase 11-18) — shipped 2026-02-11
+- Milestone v1.2 created: Business analytics (client.stats.*), 8 phases (Phase 19-26)
 
 ## Session Continuity
 
 Last session: 2026-02-11
-Stopped at: v1.1 Documentation milestone archived. All milestones complete.
+Stopped at: Milestone v1.2 initialization
 Resume file: None

@@ -4,6 +4,7 @@
 
 - ✅ **v1.0 Initial Release** — [milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md) (Phases 1-10, shipped 2026-02-10)
 - ✅ **v1.1 Documentation** — [milestones/v1.1-ROADMAP.md](milestones/v1.1-ROADMAP.md) (Phases 11-18, shipped 2026-02-11)
+- 🚧 **v1.2 Improvements** — Phases 19-26 (in progress)
 
 ## Completed Milestones
 
@@ -51,6 +52,90 @@ Comprehensive documentation suite — expanded README, auto-generated API refere
 
 </details>
 
+### 🚧 v1.2 Improvements (In Progress)
+
+**Milestone Goal:** Add client-side business analytics via `client.stats.*` — conversion rate, total sales, total washes, retail wash count, and new memberships sold.
+
+#### Phase 19: Stats Module Foundation
+
+**Goal**: Create StatsResource class, wire `client.stats` property, date range parameter utilities
+**Depends on**: Previous milestone complete
+**Research**: Unlikely (internal patterns, mirrors existing resource architecture)
+**Plans**: TBD
+
+Plans:
+- [ ] 19-01: TBD (run /gsd:plan-phase 19 to break down)
+
+#### Phase 20: Data Fetching Layer
+
+**Goal**: Efficient bulk data retrieval for stats computation — fetch transactions and recurring data for a date range without redundant API calls
+**Depends on**: Phase 19
+**Research**: Unlikely (existing SDK pagination and fetching patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 20-01: TBD
+
+#### Phase 21: Revenue & Sales Stats
+
+**Goal**: `client.stats.total_sales(start, end)` with breakdowns by transaction type
+**Depends on**: Phase 20
+**Research**: Unlikely (aggregation over existing transaction data)
+**Plans**: TBD
+
+Plans:
+- [ ] 21-01: TBD
+
+#### Phase 22: Wash Analytics
+
+**Goal**: `client.stats.total_washes()` and `client.stats.retail_wash_count()` from transaction type filtering
+**Depends on**: Phase 20
+**Research**: Unlikely (transaction type filtering)
+**Plans**: TBD
+
+Plans:
+- [ ] 22-01: TBD
+
+#### Phase 23: Membership Analytics
+
+**Goal**: `client.stats.new_memberships_sold()` from recurring account status change data
+**Depends on**: Phase 20
+**Research**: Unlikely (recurring status change analysis)
+**Plans**: TBD
+
+Plans:
+- [ ] 23-01: TBD
+
+#### Phase 24: Conversion Rate
+
+**Goal**: `client.stats.conversion_rate()` = new_memberships / (new_memberships + retail_washes)
+**Depends on**: Phase 22, Phase 23
+**Research**: Unlikely (composite of prior phase outputs)
+**Plans**: TBD
+
+Plans:
+- [ ] 24-01: TBD
+
+#### Phase 25: Stats Report
+
+**Goal**: `client.stats.report(start, end)` returning all KPIs in one call with single data fetch for efficiency
+**Depends on**: Phase 24
+**Research**: Unlikely (combines prior phases into unified interface)
+**Plans**: TBD
+
+Plans:
+- [ ] 25-01: TBD
+
+#### Phase 26: Stats Documentation & Testing
+
+**Goal**: Usage guide, docstrings, unit tests, UAT validation with real data
+**Depends on**: Phase 25
+**Research**: Unlikely (established doc and test patterns from v1.1)
+**Plans**: TBD
+
+Plans:
+- [ ] 26-01: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans | Status | Completed |
@@ -73,3 +158,11 @@ Comprehensive documentation suite — expanded README, auto-generated API refere
 | 16. Error & Troubleshoot | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 17. Advanced Patterns | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 18. Docstring Audit | v1.1 | 3/3 | Complete | 2026-02-11 |
+| 19. Stats Module Foundation | v1.2 | 0/? | Not started | - |
+| 20. Data Fetching Layer | v1.2 | 0/? | Not started | - |
+| 21. Revenue & Sales Stats | v1.2 | 0/? | Not started | - |
+| 22. Wash Analytics | v1.2 | 0/? | Not started | - |
+| 23. Membership Analytics | v1.2 | 0/? | Not started | - |
+| 24. Conversion Rate | v1.2 | 0/? | Not started | - |
+| 25. Stats Report | v1.2 | 0/? | Not started | - |
+| 26. Stats Documentation & Testing | v1.2 | 0/? | Not started | - |
