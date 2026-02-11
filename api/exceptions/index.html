@@ -1198,6 +1198,8 @@ fine-grained control:</p>
 
 
 
+        <p>Base exception for all Sonny's Data Client errors.</p>
+
 
 
 
@@ -1227,6 +1229,32 @@ fine-grained control:</p>
               Bases: <code><a class="autorefs autorefs-internal" title="SonnysError (sonnys_data_client._exceptions.SonnysError)" href="#sonnys_data_client.SonnysError">SonnysError</a></code></p>
 
 
+
+        <p>An error returned by the API.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.APIError.message">message</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Human-readable error description.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
 
@@ -1275,6 +1303,8 @@ fine-grained control:</p>
 
 
 
+        <p>Failed to connect to the Sonny's Data API.</p>
+
 
 
 
@@ -1321,6 +1351,8 @@ fine-grained control:</p>
               Bases: <code><a class="autorefs autorefs-internal" title="APIConnectionError (sonnys_data_client._exceptions.APIConnectionError)" href="#sonnys_data_client.APIConnectionError">APIConnectionError</a></code></p>
 
 
+
+        <p>Request to the Sonny's Data API timed out.</p>
 
 
 
@@ -1375,6 +1407,52 @@ fine-grained control:</p>
 
 
 
+        <p>API returned an error HTTP status.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.APIStatusError.status_code">status_code</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The HTTP status code returned by the API.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.APIStatusError.body">body</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The parsed JSON error body, if available.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.APIStatusError.error_type">error_type</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The Sonny's API error type string, if available.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
 
 
 
@@ -1427,6 +1505,9 @@ fine-grained control:</p>
               Bases: <code><a class="autorefs autorefs-internal" title="APIStatusError (sonnys_data_client._exceptions.APIStatusError)" href="#sonnys_data_client.APIStatusError">APIStatusError</a></code></p>
 
 
+
+        <p>Authentication or authorization failed (HTTP 403).</p>
+<p>Raised for invalid/missing API credentials or unauthorized site access.</p>
 
 
 
@@ -1481,6 +1562,10 @@ fine-grained control:</p>
 
 
 
+        <p>Rate limit exceeded (HTTP 429).</p>
+<p>The client auto-retries with backoff, so this is only raised after
+retries are exhausted.</p>
+
 
 
 
@@ -1533,6 +1618,9 @@ fine-grained control:</p>
               Bases: <code><a class="autorefs autorefs-internal" title="APIStatusError (sonnys_data_client._exceptions.APIStatusError)" href="#sonnys_data_client.APIStatusError">APIStatusError</a></code></p>
 
 
+
+        <p>Request validation failed (HTTP 400/422).</p>
+<p>Check <code>error_type</code> and <code>body</code> for details on invalid parameters.</p>
 
 
 
@@ -1587,6 +1675,8 @@ fine-grained control:</p>
 
 
 
+        <p>Requested resource not found (HTTP 404).</p>
+
 
 
 
@@ -1639,6 +1729,8 @@ fine-grained control:</p>
               Bases: <code><a class="autorefs autorefs-internal" title="APIStatusError (sonnys_data_client._exceptions.APIStatusError)" href="#sonnys_data_client.APIStatusError">APIStatusError</a></code></p>
 
 
+
+        <p>Sonny's API server error (HTTP 500+).</p>
 
 
 

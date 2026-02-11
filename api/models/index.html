@@ -1742,6 +1742,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>Summary customer record returned by <code>client.customers.list()</code>.</p>
+<p>Contains identifiers, name, phone, and active status.</p>
+
 
 
 
@@ -1787,6 +1790,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
 
 
+
+        <p>Full customer profile returned by <code>client.customers.get(id)</code>.</p>
+<p>Includes address, contact details, loyalty info, and SMS opt-in status.</p>
 
 
 
@@ -1836,6 +1842,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>A menu item (wash package, product, or service) returned by <code>client.items.list()</code>.</p>
+<p>Includes SKU, pricing, and department info.</p>
+
 
 
 
@@ -1884,6 +1893,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>Summary employee record returned by <code>client.employees.list()</code>.</p>
+<p>Contains name and employee ID.</p>
+
 
 
 
@@ -1930,6 +1942,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>Full employee profile returned by <code>client.employees.get(id)</code>.</p>
+<p>Includes contact info, active status, and start date.</p>
+
 
 
 
@@ -1975,6 +1990,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
 
 
+
+        <p>A single clock-in/clock-out record for an employee.</p>
+<p>Returned by <code>client.employees.get_clock_entries()</code>.</p>
 
 
 
@@ -2024,6 +2042,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>A car wash site/location returned by <code>client.sites.list()</code>.</p>
+<p>Contains the site code, name, and timezone.</p>
+
 
 
 
@@ -2071,6 +2092,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
 
 
+
+        <p>A giftcard liability record returned by <code>client.giftcards.list()</code>.</p>
+<p>Contains card number, value, amount used, and site code.</p>
 
 
 
@@ -2120,6 +2144,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>Summary washbook record returned by <code>client.washbooks.list()</code>.</p>
+<p>Contains ID, balance, status, and sign-up date.</p>
+
 
 
 
@@ -2165,6 +2192,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
 
 
+
+        <p>Full washbook detail returned by <code>client.washbooks.get(id)</code>.</p>
+<p>Includes customer, vehicles, tags, and recurring billing info.</p>
 
 
 
@@ -2212,6 +2242,8 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>An RFID tag or barcode associated with a washbook account.</p>
+
 
 
 
@@ -2257,6 +2289,8 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
 
 
+
+        <p>A vehicle linked to a washbook account.</p>
 
 
 
@@ -2306,6 +2340,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>Summary recurring account returned by <code>client.recurring.list()</code>.</p>
+<p>Contains ID, plan name, status, balance, and billing site.</p>
+
 
 
 
@@ -2351,6 +2388,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
 
 
+
+        <p>Full recurring account detail returned by <code>client.recurring.get(id)</code>.</p>
+<p>Includes customer, vehicles, tags, billing history, and status history.</p>
 
 
 
@@ -2398,6 +2438,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>A status change event returned by <code>client.recurring.list_status_changes()</code>.</p>
+<p>Records old/new status, date, employee, and site.</p>
+
 
 
 
@@ -2443,6 +2486,10 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><a class="autorefs autorefs-internal" title="Recurring (sonnys_data_client.types._recurring.Recurring)" href="#sonnys_data_client.types.Recurring">Recurring</a></code></p>
 
 
+
+        <p>A recurring account with its modification history.</p>
+<p>Extends :class:<code>Recurring</code> with a modifications list.
+Returned by <code>client.recurring.list_modifications()</code>.</p>
 
 
 
@@ -2492,6 +2539,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>Summary transaction record returned by <code>client.transactions.list()</code> and <code>client.transactions.list_by_type()</code>.</p>
+<p>Contains transaction number, ID, total, and date.</p>
+
 
 
 
@@ -2537,6 +2587,10 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><a class="autorefs autorefs-internal" title="TransactionListItem (sonnys_data_client.types._transactions.TransactionListItem)" href="#sonnys_data_client.types.TransactionListItem">TransactionListItem</a></code></p>
 
 
+
+        <p>Enriched transaction summary returned by <code>client.transactions.list_v2()</code>.</p>
+<p>Extends :class:<code>TransactionListItem</code> with customer ID, recurring plan flags,
+and transaction status.</p>
 
 
 
@@ -2584,6 +2638,10 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>Full transaction detail returned by <code>client.transactions.get(id)</code>.</p>
+<p>Includes line items, tenders, discounts, customer/employee info, and
+prepaid/recurring flags.</p>
+
 
 
 
@@ -2629,6 +2687,10 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><a class="autorefs autorefs-internal" title="Transaction (sonnys_data_client.types._transactions.Transaction)" href="#sonnys_data_client.types.Transaction">Transaction</a></code></p>
 
 
+
+        <p>Transaction record returned by <code>client.transactions.load_job()</code>.</p>
+<p>Extends :class:<code>Transaction</code> with additional fields from the batch job
+endpoint.</p>
 
 
 
@@ -2676,6 +2738,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>A payment tender (cash, credit, etc.) within a transaction detail.</p>
+<p>Contains tender type, amount, change, and optional credit card info.</p>
+
 
 
 
@@ -2722,6 +2787,10 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
 
 
 
+        <p>A line item within a transaction detail.</p>
+<p>Contains the item name, SKU, department, quantity, and price breakdown
+(gross, net, discount, tax).</p>
+
 
 
 
@@ -2767,6 +2836,9 @@ subclasses. The API returns <strong>camelCase</strong> field names; each model u
               Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
 
 
+
+        <p>A discount applied within a transaction detail.</p>
+<p>Records the discount name, code, amount, and which item it was applied to.</p>
 
 
 

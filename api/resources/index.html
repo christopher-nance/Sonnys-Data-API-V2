@@ -1852,6 +1852,14 @@ request and returns all items.</p>
 
 
         <p>Access the /customer list and detail endpoints.</p>
+<p>Provides paginated customer search and individual customer lookup.</p>
+<ul>
+<li><code>list()</code> returns :class:<code>~sonnys_data_client.types.CustomerListItem</code>
+  summaries. Supports <code>startDate</code>, <code>endDate</code>, <code>site</code>, and <code>region</code>
+  filters.</li>
+<li><code>get(id)</code> returns a full :class:<code>~sonnys_data_client.types.Customer</code>
+  profile including address, contact info, and SMS preferences.</li>
+</ul>
 
 
 
@@ -1901,6 +1909,13 @@ request and returns all items.</p>
 
 
         <p>Access the /item list endpoint.</p>
+<p>Provides paginated item catalog listing. List-only resource with no
+detail endpoint.</p>
+<ul>
+<li><code>list()</code> returns :class:<code>~sonnys_data_client.types.Item</code> records
+  with SKU, name, department, and pricing info. Supports <code>site</code>
+  filter.</li>
+</ul>
 
 
 
@@ -1950,6 +1965,17 @@ request and returns all items.</p>
 
 
         <p>Access the /employee list and detail endpoints.</p>
+<p>Provides paginated employee search, individual employee lookup, and
+time-tracking data.</p>
+<ul>
+<li><code>list()</code> returns :class:<code>~sonnys_data_client.types.EmployeeListItem</code>
+  summaries. Supports <code>startDate</code> and <code>endDate</code> filters.</li>
+<li><code>get(id)</code> returns a full :class:<code>~sonnys_data_client.types.Employee</code>
+  record with contact info and employment dates.</li>
+<li><code>get_clock_entries(id)</code> fetches
+  :class:<code>~sonnys_data_client.types.ClockEntry</code> time-tracking records
+  for a specific employee.</li>
+</ul>
 
 
 
@@ -2113,6 +2139,12 @@ a single list.</p>
 
 
         <p>Access the /site/list endpoint.</p>
+<p>Provides a complete site listing. Non-paginated resource that returns
+all sites in a single call. No detail endpoint.</p>
+<ul>
+<li><code>list()</code> returns :class:<code>~sonnys_data_client.types.Site</code> records
+  with site ID, code, name, and timezone.</li>
+</ul>
 
 
 
@@ -2162,7 +2194,19 @@ a single list.</p>
 
 
         <p>Access the /giftcard-liablilty list endpoint.</p>
+<p>Provides paginated gift card liability listing. List-only resource
+with no detail endpoint.</p>
+<ul>
+<li><code>list()</code> returns :class:<code>~sonnys_data_client.types.GiftcardListItem</code>
+  records with balance and usage info.</li>
+</ul>
 
+
+<details class="note" open>
+  <summary>Note</summary>
+  <p>The API path contains a typo (<code>giftcard-liablilty</code>) which is
+intentional to match the actual Sonny's API endpoint.</p>
+</details>
 
 
 
@@ -2211,6 +2255,14 @@ a single list.</p>
 
 
         <p>Access the /washbook/account list and detail endpoints.</p>
+<p>Provides paginated washbook account search and individual account
+lookup with full detail.</p>
+<ul>
+<li><code>list()</code> returns :class:<code>~sonnys_data_client.types.WashbookListItem</code>
+  summaries. Supports date and site filters.</li>
+<li><code>get(id)</code> returns a full :class:<code>~sonnys_data_client.types.Washbook</code>
+  record with customer, vehicle, and tag details.</li>
+</ul>
 
 
 
@@ -2260,6 +2312,17 @@ a single list.</p>
 
 
         <p>Access the /recurring/account list, detail, and custom endpoints.</p>
+<p>The most feature-rich resource, providing paginated account search,
+individual account lookup, and specialized reporting endpoints.</p>
+<ul>
+<li><code>list()</code> returns :class:<code>~sonnys_data_client.types.RecurringListItem</code>
+  summaries with status and billing site info.</li>
+<li><code>get(id)</code> returns a full :class:<code>~sonnys_data_client.types.Recurring</code>
+  record with billing history, tags, vehicles, and customer details.</li>
+<li><code>list_status_changes()</code> fetches status transition history.</li>
+<li><code>list_modifications()</code> fetches account modification audit logs.</li>
+<li><code>list_details()</code> fetches all accounts with full detail in bulk.</li>
+</ul>
 
 
 
@@ -2444,6 +2507,19 @@ objects, this method returns full :class:<code>Recurring</code> detail objects.<
 
 
         <p>Access the /transaction list, detail, and by-type endpoints.</p>
+<p>The most complex resource, providing paginated transaction search,
+individual transaction lookup, type-filtered listing, and batch job
+support for large exports.</p>
+<ul>
+<li><code>list()</code> returns :class:<code>~sonnys_data_client.types.TransactionListItem</code>
+  summaries. Supports <code>startDate</code>, <code>endDate</code>, <code>site</code>, <code>region</code>
+  filters.</li>
+<li><code>get(id)</code> returns a full :class:<code>~sonnys_data_client.types.Transaction</code>
+  record with line items, tenders, and discounts.</li>
+<li><code>list_by_type(type)</code> filters transactions by type (wash, recurring, etc.).</li>
+<li><code>list_v2()</code> uses the enriched v2 endpoint with customer and status fields.</li>
+<li><code>load_job()</code> submits asynchronous batch jobs for large date ranges.</li>
+</ul>
 
 
 
