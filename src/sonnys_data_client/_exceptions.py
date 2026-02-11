@@ -6,26 +6,44 @@ import requests
 
 
 class SonnysError(Exception):
-    pass
+    """Base exception for all Sonny's Data Client errors."""
 
 
 class APIError(SonnysError):
+    """An error returned by the API.
+
+    Attributes:
+        message: Human-readable error description.
+    """
+
     def __init__(self, message: str) -> None:
         self.message = message
         super().__init__(message)
 
 
 class APIConnectionError(APIError):
+    """Failed to connect to the Sonny's Data API."""
+
     def __init__(self, message: str = "Connection error.") -> None:
         super().__init__(message)
 
 
 class APITimeoutError(APIConnectionError):
+    """Request to the Sonny's Data API timed out."""
+
     def __init__(self, message: str = "Request timed out.") -> None:
         super().__init__(message)
 
 
 class APIStatusError(APIError):
+    """API returned an error HTTP status.
+
+    Attributes:
+        status_code: The HTTP status code returned by the API.
+        body: The parsed JSON error body, if available.
+        error_type: The Sonny's API error type string, if available.
+    """
+
     def __init__(
         self,
         message: str,
@@ -41,23 +59,33 @@ class APIStatusError(APIError):
 
 
 class AuthError(APIStatusError):
-    pass
+    """Authentication or authorization failed (HTTP 403).
+
+    Raised for invalid/missing API credentials or unauthorized site access.
+    """
 
 
 class RateLimitError(APIStatusError):
-    pass
+    """Rate limit exceeded (HTTP 429).
+
+    The client auto-retries with backoff, so this is only raised after
+    retries are exhausted.
+    """
 
 
 class ValidationError(APIStatusError):
-    pass
+    """Request validation failed (HTTP 400/422).
+
+    Check ``error_type`` and ``body`` for details on invalid parameters.
+    """
 
 
 class NotFoundError(APIStatusError):
-    pass
+    """Requested resource not found (HTTP 404)."""
 
 
 class ServerError(APIStatusError):
-    pass
+    """Sonny's API server error (HTTP 500+)."""
 
 
 # ---------------------------------------------------------------------------

@@ -1,3 +1,5 @@
+"""Public Pydantic models for Sonny's Data API responses."""
+
 from sonnys_data_client.types._base import SonnysModel
 
 from sonnys_data_client.types._transactions import (

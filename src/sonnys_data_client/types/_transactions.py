@@ -1,3 +1,5 @@
+"""Transaction response models."""
+
 from pydantic import Field
 
 from sonnys_data_client.types._base import SonnysModel
