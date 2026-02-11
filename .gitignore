@@ -37,3 +37,6 @@ PRODUCTION_TESTS/
 Thumbs.db
 export_joliet_transactions.py
 test_uat.py
+
+# MkDocs build output
+site/

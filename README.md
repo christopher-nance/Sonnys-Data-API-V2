@@ -305,6 +305,7 @@ transaction detail plus v2 enrichment fields.
 
 Unlike other resources that wrap REST endpoints directly, `client.stats`
 computes business analytics by fetching raw data and aggregating it locally.
+Calculations are designed to match **Rinsed** reporting as closely as possible.
 All methods accept a date range as ISO-8601 strings or `datetime` objects:
 
 ```python
@@ -313,12 +314,12 @@ sales = client.stats.total_sales("2026-01-01", "2026-01-31")
 print(f"Revenue: ${sales.total:.2f}")
 
 washes = client.stats.total_washes("2026-01-01", "2026-01-31")
-print(f"Total washes: {washes.total}")
+print(f"Total washes: {washes.total}, Member: {washes.member_wash_count}")
 
 rate = client.stats.conversion_rate("2026-01-01", "2026-01-31")
 print(f"Conversion: {rate.rate:.1%}")
 
-# All KPIs in one call (4 API calls instead of 7)
+# All KPIs in one call (3 API calls instead of 11)
 rpt = client.stats.report("2026-01-01", "2026-01-31")
 print(f"Revenue: ${rpt.sales.total:.2f}, Washes: {rpt.washes.total}")
 print(f"New members: {rpt.new_memberships}, Conversion: {rpt.conversion.rate:.1%}")
@@ -326,11 +327,12 @@ print(f"New members: {rpt.new_memberships}, Conversion: {rpt.conversion.rate:.1%
 
 **Returns:** `SalesResult` from `total_sales()` -- fields include `total`,
 `count`, `recurring_plan_sales`, `retail`. `WashResult` from `total_washes()`
--- fields include `total`, `wash_count`, `prepaid_wash_count`. `int` from
-`retail_wash_count()` and `new_memberships_sold()`. `ConversionResult` from
-`conversion_rate()` -- fields include `rate`, `new_memberships`,
-`retail_washes`. `StatsReport` from `report()` -- bundles `sales`, `washes`,
-`new_memberships`, `conversion`, `period_start`, `period_end`.
+-- fields include `total`, `retail_wash_count`, `member_wash_count`,
+`eligible_wash_count`, `free_wash_count`. `int` from `retail_wash_count()` and
+`new_memberships_sold()`. `ConversionResult` from `conversion_rate()` -- fields
+include `rate`, `new_memberships`, `eligible_washes`. `StatsReport` from
+`report()` -- bundles `sales`, `washes`, `new_memberships`, `conversion`,
+`period_start`, `period_end`.
 
 ## Error Handling
 
