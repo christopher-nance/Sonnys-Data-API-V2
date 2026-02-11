@@ -78,10 +78,11 @@ Plans:
 **Goal**: Detailed guide for the most complex resource — list, list_by_type, list_v2, get, and load_job with parameter tables, response examples, and batch job workflow diagrams
 **Depends on**: Phase 13
 **Research**: Unlikely (internal documentation based on existing code)
-**Plans**: TBD
+**Plans**: 2
 
 Plans:
-- [ ] 14-01: TBD (run /gsd:plan-phase 14 to break down)
+- [x] 14-01: Method Comparison & Batch Job Workflow (comparison table, parameter tables, batch job deep dive)
+- [ ] 14-02: TBD
 
 #### Phase 15: Account Resources Guide
 
@@ -133,7 +134,7 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | 11. README Overhaul | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 12. API Reference Setup | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 13. Resource Guides | v1.1 | 2/2 | Complete | 2026-02-10 |
-| 14. Transaction Deep Dive | v1.1 | 0/? | Not started | - |
+| 14. Transaction Deep Dive | v1.1 | 1/2 | In progress | - |
 | 15. Account Resources | v1.1 | 0/? | Not started | - |
 | 16. Error & Troubleshoot | v1.1 | 0/? | Not started | - |
 | 17. Advanced Patterns | v1.1 | 0/? | Not started | - |
