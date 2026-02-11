@@ -1007,7 +1007,7 @@ logger.info("Output: %s", output_file)
 
 !!! tip
     For production pipelines, reference the
-    [Error Handling guide](error-handling.md#retry-strategies) for more
+    [Error Handling guide](error-handling.md#custom-retry-patterns) for more
     granular exception handling. You can wrap each pipeline stage in its own
     try/except to handle partial failures gracefully.
 
@@ -1065,5 +1065,5 @@ else:
     - **Slack webhooks:** Use `urllib.request` to POST a JSON payload to a
       Slack incoming webhook URL.
     - **Integration with the logging config** from the
-      [Error Handling guide](error-handling.md#logging-configuration) to route
+      [Error Handling guide](error-handling.md#logging-debugging) to route
       warnings to a file or external logging service.

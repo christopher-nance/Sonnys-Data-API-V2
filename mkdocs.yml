@@ -55,6 +55,7 @@ nav:
       - Recurring Accounts: guides/recurring.md
       - Transactions: guides/transactions.md
       - Error Handling: guides/error-handling.md
+      - Advanced Patterns: guides/advanced-patterns.md
   - API Reference:
       - Client: api/client.md
       - Resources: api/resources.md
