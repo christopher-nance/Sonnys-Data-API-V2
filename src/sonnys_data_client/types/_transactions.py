@@ -6,6 +6,11 @@ from sonnys_data_client.types._base import SonnysModel
 
 
 class TransactionTender(SonnysModel):
+    """A payment tender (cash, credit, etc.) within a transaction detail.
+
+    Contains tender type, amount, change, and optional credit card info.
+    """
+
     tender: str
     tender_sub_type: str | None = None
     amount: float
@@ -17,6 +22,12 @@ class TransactionTender(SonnysModel):
 
 
 class TransactionItem(SonnysModel):
+    """A line item within a transaction detail.
+
+    Contains the item name, SKU, department, quantity, and price breakdown
+    (gross, net, discount, tax).
+    """
+
     name: str
     sku: str | None = None
     department: str
@@ -30,6 +41,11 @@ class TransactionItem(SonnysModel):
 
 
 class TransactionDiscount(SonnysModel):
+    """A discount applied within a transaction detail.
+
+    Records the discount name, code, amount, and which item it was applied to.
+    """
+
     discount_name: str
     discount_sku: str | None = None
     applied_to_item_name: str
@@ -38,6 +54,11 @@ class TransactionDiscount(SonnysModel):
 
 
 class TransactionListItem(SonnysModel):
+    """Summary transaction record returned by ``client.transactions.list()`` and ``client.transactions.list_by_type()``.
+
+    Contains transaction number, ID, total, and date.
+    """
+
     trans_number: int
     trans_id: str
     total: float
@@ -45,6 +66,12 @@ class TransactionListItem(SonnysModel):
 
 
 class TransactionV2ListItem(TransactionListItem):
+    """Enriched transaction summary returned by ``client.transactions.list_v2()``.
+
+    Extends :class:`TransactionListItem` with customer ID, recurring plan flags,
+    and transaction status.
+    """
+
     customer_id: str | None = None
     is_recurring_plan_sale: bool
     is_recurring_plan_redemption: bool
@@ -52,6 +79,12 @@ class TransactionV2ListItem(TransactionListItem):
 
 
 class Transaction(SonnysModel):
+    """Full transaction detail returned by ``client.transactions.get(id)``.
+
+    Includes line items, tenders, discounts, customer/employee info, and
+    prepaid/recurring flags.
+    """
+
     id: str
     number: int
     type: str
@@ -75,6 +108,12 @@ class Transaction(SonnysModel):
 
 
 class TransactionJobItem(Transaction):
+    """Transaction record returned by ``client.transactions.load_job()``.
+
+    Extends :class:`Transaction` with additional fields from the batch job
+    endpoint.
+    """
+
     customer_id: str | None = None
     is_recurring_plan_sale: bool | None = None
     is_recurring_plan_redemption: bool | None = None
