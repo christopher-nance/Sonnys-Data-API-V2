@@ -609,6 +609,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../guides/stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../guides/error-handling/" class="md-nav__link">
         
   
@@ -1233,6 +1261,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.types.SalesResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SalesResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.types.WashResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WashResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.types.ConversionResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConversionResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.types.StatsReport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StatsReport
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1681,6 +1770,67 @@
     <span class="md-ellipsis">
       
         TransactionDiscount
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stats
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stats">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.types.SalesResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SalesResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.types.WashResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WashResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.types.ConversionResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConversionResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.types.StatsReport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StatsReport
       
     </span>
   </a>
@@ -2839,6 +2989,305 @@ endpoint.</p>
 
         <p>A discount applied within a transaction detail.</p>
 <p>Records the discount name, code, amount, and which item it was applied to.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div><hr />
+<h2 id="stats">Stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sonnys_data_client.types.SalesResult" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">SalesResult</span>
+
+
+<a href="#sonnys_data_client.types.SalesResult" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
+
+
+
+        <p>Revenue breakdown returned by <code>client.stats.total_sales()</code>.</p>
+<p>Categorizes total revenue into three buckets based on transaction
+flags: recurring plan sales, recurring redemptions, and retail.
+Each bucket includes both a revenue total and a transaction count.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sonnys_data_client.types.WashResult" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">WashResult</span>
+
+
+<a href="#sonnys_data_client.types.WashResult" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
+
+
+
+        <p>Wash volume breakdown returned by <code>client.stats.total_washes()</code>.</p>
+<p>Categorizes wash transactions into two types: retail washes
+(standard single-use transactions of type <code>"wash"</code>) and prepaid
+washes (transactions of type <code>"prepaid-wash"</code> redeemed against
+pre-purchased wash books).  The <code>total</code> field is the sum of both.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sonnys_data_client.types.ConversionResult" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">ConversionResult</span>
+
+
+<a href="#sonnys_data_client.types.ConversionResult" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
+
+
+
+        <p>Membership conversion KPI returned by <code>client.stats.conversion_rate()</code>.</p>
+<p>Measures how effectively a site converts retail wash customers into
+membership sign-ups.  The <code>rate</code> is computed as
+<code>new_memberships / total_opportunities</code> where total opportunities
+is the sum of new membership activations and retail wash transactions.</p>
+<p>A rate of <code>0.15</code> means 15 % of wash-or-membership interactions
+resulted in a new membership activation.  When there are zero
+opportunities the rate is <code>0.0</code> (division-by-zero safe).</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="sonnys_data_client.types.StatsReport" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">StatsReport</span>
+
+
+<a href="#sonnys_data_client.types.StatsReport" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="sonnys_data_client.types._base.SonnysModel">SonnysModel</span></code></p>
+
+
+
+        <p>Unified analytics report returned by <code>client.stats.report()</code>.</p>
+<p>Bundles all KPIs into a single result object, computed from shared
+data fetches for efficiency.  Calling <code>report()</code> makes <strong>4 API
+calls</strong> instead of the <strong>7</strong> that would result from calling
+<code>total_sales()</code>, <code>total_washes()</code>, <code>new_memberships_sold()</code>,
+and <code>conversion_rate()</code> individually.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.types.StatsReport.sales">sales</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="SalesResult (sonnys_data_client.types._stats.SalesResult)" href="#sonnys_data_client.types.SalesResult">SalesResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Revenue breakdown (recurring plan sales, recurring
+redemptions, and retail) as a :class:<code>SalesResult</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.types.StatsReport.washes">washes</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="WashResult (sonnys_data_client.types._stats.WashResult)" href="#sonnys_data_client.types.WashResult">WashResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Wash volume breakdown (retail washes and prepaid washes)
+as a :class:<code>WashResult</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.types.StatsReport.new_memberships">new_memberships</span></code></td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Count of membership activations (transitions to
+<code>"Active"</code> status) during the report period.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.types.StatsReport.conversion">conversion</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="ConversionResult (sonnys_data_client.types._stats.ConversionResult)" href="#sonnys_data_client.types.ConversionResult">ConversionResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Membership conversion rate KPI as a
+:class:<code>ConversionResult</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.types.StatsReport.period_start">period_start</span></code></td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>ISO-8601 date string for the start of the report
+range (e.g. <code>"2026-01-01"</code>).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="sonnys_data_client.types.StatsReport.period_end">period_end</span></code></td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>ISO-8601 date string for the end of the report
+range (e.g. <code>"2026-01-31"</code>).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
 
