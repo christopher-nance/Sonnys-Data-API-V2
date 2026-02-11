@@ -120,15 +120,17 @@ Plans:
 - [x] 17-01: Multi-Site & Performance Patterns (multi-site operations, rate limiting deep dive, performance optimization)
 - [x] 17-02: Integration Recipes & Deploy (integration recipes, mkdocs nav update, gh-pages deploy)
 
-#### Phase 18: Docstring Audit
+#### Phase 18: Docstring Audit -- IN PROGRESS
 
 **Goal**: Audit and complete all public API docstrings for consistency — ensure every class, method, and model has complete, accurate documentation matching the guides
 **Depends on**: Phase 17
 **Research**: Unlikely (internal code review)
-**Plans**: TBD
+**Plans**: 3
 
 Plans:
-- [ ] 18-01: TBD (run /gsd:plan-phase 18 to break down)
+- [x] 18-01: Exceptions & Core Infrastructure (exception docstrings, SonnysModel, module docstrings, resource enrichment)
+- [ ] 18-02: Standard & Account Model Docstrings (22 Pydantic model docstrings)
+- [ ] 18-03: Transaction Models + Final Verification & Deploy (7 transaction models, mkdocs build, gh-pages deploy)
 
 ## Progress
 
@@ -144,4 +146,4 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | 15. Account Resources | v1.1 | 1/1 | Complete | 2026-02-11 |
 | 16. Error & Troubleshoot | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 17. Advanced Patterns | v1.1 | 2/2 | Complete | 2026-02-11 |
-| 18. Docstring Audit | v1.1 | 0/? | Not started | - |
+| 18. Docstring Audit | v1.1 | 1/3 | In progress | - |
