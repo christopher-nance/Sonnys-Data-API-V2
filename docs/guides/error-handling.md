@@ -164,14 +164,15 @@ authorization problem.
 
 **Common causes:**
 
-- Wrong `api_id` or `api_key` values
-- `site_code` not authorized for the given API ID
-- Missing credentials (headers not sent)
-- API ID does not have permission for the requested resource
+- Wrong `api_id` or `api_key` values (e.g., copied from the wrong environment or database)
+- `site_code` not authorized for the given API ID -- each API ID is provisioned for specific sites, and using a site code from a different organization triggers `NotAuthorizedSiteCredentialsError`
+- Missing credentials -- forgetting to pass `api_id` or `api_key` to the constructor
+- API ID/key pair mismatch -- using the API ID from one database (e.g., WashU) with the API key from another (e.g., Icon)
+- Passing `site` as a query parameter instead of using the `site_code` constructor argument
 
 **Recommended handling:** Do not retry -- fix your credentials or site code
 configuration. Check that your `api_id`, `api_key`, and `site_code` match what
-was provisioned by Sonny's.
+was provisioned by Sonny's. Use `error_type` to pinpoint the exact problem.
 
 ```python
 from sonnys_data_client import SonnysClient
@@ -187,22 +188,35 @@ with SonnysClient(
     except AuthError as e:
         print(f"Auth failed: {e.message}")
         print(f"Error type: {e.error_type}")
-        # Common error_type values:
-        #   BadClientCredentialsError -- wrong api_id or api_key
-        #   NotAuthorizedSiteCredentialsError -- site_code not authorized
-        #   MissingClientCredentialsError -- credentials not provided
+
+        # Branch on the specific auth failure
+        if e.error_type == "BadClientCredentialsError":
+            print("Check your api_id and api_key values")
+        elif e.error_type == "NotAuthorizedSiteCredentialsError":
+            print("This site_code is not authorized for your API ID")
+        elif e.error_type == "MissingClientCredentialsError":
+            print("Credentials were not provided")
+        elif e.error_type == "MismatchCredentialsError":
+            print("API ID and key do not belong to the same account")
 ```
+
+!!! warning
+    If you operate multiple databases (e.g., WashU and Icon) with separate
+    credentials, double-check that you are not mixing API IDs and keys across
+    client instances. A `MismatchCredentialsError` means the ID and key belong
+    to different accounts.
 
 ### RateLimitError
 
 **When it is raised:** The API returns HTTP 429 and all built-in retries have
-been exhausted.
+been exhausted (default: 3 attempts with exponential backoff).
 
 **Common causes:**
 
-- Running multiple scripts against the same API ID simultaneously
-- Burst traffic exceeding 20 requests per 15-second window
-- Bulk export without rate awareness alongside scheduled automation
+- Running an analytics script while a scheduled cron job is also pulling data against the same API ID
+- Bulk-exporting transactions for multiple sites in a tight loop without pausing between sites
+- Multiple `SonnysClient` instances sharing the same `api_id` -- each instance has its own rate limiter, but the API enforces a single 20 req/15s limit per API ID
+- Burst traffic from a loop that calls `client.transactions.get()` for hundreds of individual transaction IDs
 
 **Recommended handling:** The SDK already retries 429 responses with exponential
 backoff (see [Built-in Retry Behavior](#built-in-retry-behavior)). If this
@@ -211,8 +225,12 @@ period before retrying, or stagger your scripts.
 
 ```python
 import time
+import logging
 from sonnys_data_client import SonnysClient
 from sonnys_data_client._exceptions import RateLimitError
+
+# Enable logging to see when 429 retries happen internally
+logging.basicConfig(level=logging.WARNING)
 
 with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     try:
@@ -222,9 +240,14 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
         )
     except RateLimitError as e:
         print(f"Rate limited after retries: {e.message}")
-        # Back off and retry manually
+        # All 3 built-in retries failed -- back off for 30 seconds
         time.sleep(30)
 ```
+
+!!! tip
+    If you regularly hit rate limits, check whether multiple processes share
+    the same API ID. Stagger scheduled jobs by at least 60 seconds, or
+    increase `max_retries` on the client to allow more backoff time.
 
 ### ValidationError
 
@@ -233,13 +256,15 @@ parameters.
 
 **Common causes:**
 
-- Incorrect date format (e.g., `"06/01/2025"` instead of `"2025-06-01"`)
-- Invalid or unrecognized query parameter values
-- Missing required parameters
-- Requesting a transaction type that does not exist
+- Date format `"06/01/2025"` instead of the required `"2025-06-01"` (ISO 8601) -- this is the most common validation error and triggers `InvalidPayloadRequestTimestampError`
+- Passing a transaction type string that does not exist to `list_by_type()` (e.g., `"membership"` instead of `"recurring"`)
+- Sending `endDate` earlier than `startDate`
+- Malformed JSON in the request body (rare with the SDK, but possible if you modify internals)
+- Missing required parameters on endpoints that enforce them
 
 **Recommended handling:** Do not retry -- fix the request parameters. Check date
-formats (`YYYY-MM-DD`), parameter names, and allowed values.
+formats (`YYYY-MM-DD`), parameter names, and allowed values. Use `error_type` to
+distinguish between timestamp errors and general payload errors.
 
 ```python
 from sonnys_data_client import SonnysClient
@@ -254,10 +279,18 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     except ValidationError as e:
         print(f"Validation error: {e.message}")
         print(f"Error type: {e.error_type}")
-        # Fix: use YYYY-MM-DD format
-        # e.error_type will be "InvalidPayloadRequestTimestampError"
-        # or "PayloadValidationError"
+
+        if e.error_type == "InvalidPayloadRequestTimestampError":
+            print("Fix date format to YYYY-MM-DD")
+        elif e.error_type == "PayloadValidationError":
+            print("Check parameter names and values")
 ```
+
+!!! info
+    The `PayloadValidationError` type may return multiple error messages in the
+    response body. The SDK joins them into a single `message` string separated
+    by semicolons. Check `e.body` for the original `"messages"` array if you
+    need to inspect each validation failure individually.
 
 ### NotFoundError
 
@@ -266,23 +299,34 @@ not exist.
 
 **Common causes:**
 
-- Transaction ID, customer ID, or account ID does not exist
-- ID belongs to a different site than the one configured
-- Record was deleted or never existed
+- Transaction ID from a different site than the one configured via `site_code` -- IDs are scoped per site
+- Customer ID that was valid in one database but does not exist in another (e.g., looking up a WashU customer ID against the Icon database)
+- Deleted recurring account or gift card that no longer exists in the system
+- Typo or truncated ID string
 
 **Recommended handling:** Verify the ID is correct and belongs to the configured
-site. Consider handling this gracefully in loops where some IDs may be stale.
+site. In batch workflows where you iterate over a list of IDs, catch
+`NotFoundError` and skip or log the missing record rather than aborting the
+entire loop.
 
 ```python
 from sonnys_data_client import SonnysClient
 from sonnys_data_client._exceptions import NotFoundError
 
 with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
-    try:
-        customer = client.customers.get("99999")
-    except NotFoundError as e:
-        print(f"Customer not found: {e.message}")
-        # e.error_type will be "EntityNotFoundError"
+    # Gracefully handle missing records in a batch lookup
+    customer_ids = ["12345", "99999", "67890"]
+    found = []
+
+    for cid in customer_ids:
+        try:
+            customer = client.customers.get(cid)
+            found.append(customer)
+        except NotFoundError:
+            print(f"Customer {cid} not found, skipping")
+            # e.error_type will be "EntityNotFoundError"
+
+    print(f"Found {len(found)} of {len(customer_ids)} customers")
 ```
 
 ### ServerError
@@ -292,12 +336,15 @@ failure.
 
 **Common causes:**
 
-- Sonny's API maintenance window
-- Intermittent 500 errors on large or complex queries
-- Temporary infrastructure issues
+- Sonny's API scheduled maintenance window -- the API may return 500 or 503 during planned updates
+- Intermittent 500 errors on large date-range queries or `load_job()` requests that stress the backend
+- `ServerUnexpectedFailure` -- an unexpected crash on the API side
+- 502/503 responses from upstream infrastructure (load balancer, gateway)
 
 **Recommended handling:** Retry after a delay. Server errors are often transient.
-If they persist, contact Sonny's support.
+If they persist beyond a few minutes, check with Sonny's support for known
+outages. For automated pipelines, implement retry with backoff (see
+[Custom Retry Patterns](#custom-retry-patterns)).
 
 ```python
 import time
@@ -305,15 +352,23 @@ from sonnys_data_client import SonnysClient
 from sonnys_data_client._exceptions import ServerError
 
 with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
-    try:
-        transactions = client.transactions.list(
-            startDate="2025-06-01",
-            endDate="2025-06-30",
-        )
-    except ServerError as e:
-        print(f"Server error ({e.status_code}): {e.message}")
-        # Retry after a delay
-        time.sleep(10)
+    max_attempts = 3
+    for attempt in range(max_attempts):
+        try:
+            transactions = client.transactions.list(
+                startDate="2025-06-01",
+                endDate="2025-06-30",
+            )
+            break  # Success
+        except ServerError as e:
+            print(f"Server error ({e.status_code}): {e.message}")
+            if attempt < max_attempts - 1:
+                delay = 5 * (2 ** attempt)
+                print(f"Retrying in {delay}s...")
+                time.sleep(delay)
+            else:
+                print("All retries exhausted")
+                raise
 ```
 
 ### APIConnectionError
@@ -323,15 +378,19 @@ no response is received.
 
 **Common causes:**
 
-- No internet connection
-- DNS resolution failure for `trigonapi.sonnyscontrols.com`
-- Corporate firewall blocking outbound HTTPS traffic
-- Proxy misconfiguration
+- No internet connection on the machine running the script
+- DNS resolution failure for `trigonapi.sonnyscontrols.com` -- common on new server deployments where DNS is not yet configured
+- Corporate firewall or proxy blocking outbound HTTPS traffic to the Sonny's API domain
+- VPN disconnection mid-request
+- Running inside a Docker container or CI environment without outbound network access
 
 **Recommended handling:** Check network connectivity. This error does not have
-`status_code` or `body` attributes since no HTTP response was received.
+`status_code` or `body` attributes since no HTTP response was received. For
+automated pipelines, retry a few times with a delay -- the network issue may be
+transient.
 
 ```python
+import time
 from sonnys_data_client import SonnysClient
 from sonnys_data_client._exceptions import APIConnectionError
 
@@ -340,23 +399,29 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
         sites = client.sites.list()
     except APIConnectionError as e:
         print(f"Connection failed: {e.message}")
-        # Check network, DNS, firewall settings
+        print("Troubleshooting steps:")
+        print("  1. Check internet connectivity")
+        print("  2. Verify DNS resolves: nslookup trigonapi.sonnyscontrols.com")
+        print("  3. Check firewall allows HTTPS to trigonapi.sonnyscontrols.com")
+        print("  4. If behind a proxy, configure requests proxy settings")
 ```
 
 ### APITimeoutError
 
 **When it is raised:** The HTTP request was sent but no response arrived within
-the timeout period.
+the timeout period. Also raised when `load_job()` polling exceeds the configured
+`timeout`.
 
 **Common causes:**
 
-- Slow API response under heavy load
-- Very large query result sets
-- `load_job()` polling exceeding the configured timeout
-- Network congestion or high latency
+- `load_job()` on a high-volume site with a full day of transactions -- the batch job takes longer than the default 300-second timeout to complete
+- Very large `list()` or `list_v2()` queries spanning months of data at a busy site
+- Network congestion or high latency between your server and `trigonapi.sonnyscontrols.com`
+- API under heavy load from other consumers during peak hours
 
-**Recommended handling:** Retry with a shorter date range or increase the timeout.
-For `load_job()`, use a shorter date range or increase the `timeout` parameter.
+**Recommended handling:** For `load_job()`, increase the `timeout` parameter or
+use a shorter date range. For list methods, narrow the date range. Consider
+splitting multi-month queries into smaller chunks.
 
 ```python
 from sonnys_data_client import SonnysClient
@@ -364,14 +429,27 @@ from sonnys_data_client._exceptions import APITimeoutError
 
 with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     try:
+        # Large export that may time out
         results = client.transactions.load_job(
             startDate="2025-06-01",
             endDate="2025-06-02",
-            timeout=600.0,
+            timeout=600.0,  # 10 minutes instead of default 5
         )
     except APITimeoutError:
-        print("Request timed out -- try a shorter date range")
+        print("Job timed out -- try a shorter date range or increase timeout")
+        # Fallback: split into smaller chunks
+        from datetime import date, timedelta
+        start = date(2025, 6, 1)
+        end = date(2025, 6, 2)
+        midpoint = start + (end - start) / 2
+        print(f"Try splitting: {start} to {midpoint} and {midpoint} to {end}")
 ```
+
+!!! note
+    `APITimeoutError` is a subclass of `APIConnectionError`. If you catch
+    `APIConnectionError`, it will also catch timeouts. Use the specific
+    `APITimeoutError` class when you need to distinguish timeouts from other
+    connection failures.
 
 ## Built-in Retry Behavior
 
@@ -509,3 +587,20 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     Never retry `AuthError` or `ValidationError` -- these indicate a code or
     configuration problem, not a transient failure. Retrying them wastes time
     and rate limit budget without any chance of success.
+
+## Quick Reference
+
+A scannable cheat sheet mapping HTTP status codes to SDK exceptions, typical
+causes, and recommended actions.
+
+| HTTP Status | SDK Exception        | Typical Cause                                      | Recommended Action                          |
+|-------------|----------------------|----------------------------------------------------|---------------------------------------------|
+| --          | `APIConnectionError` | Network down, DNS failure, firewall blocking        | Check connectivity; retry with delay        |
+| --          | `APITimeoutError`    | Slow response, large query, job polling timeout     | Shorten date range; increase timeout        |
+| 400         | `ValidationError`    | Bad date format, invalid parameters                 | Fix request parameters; do not retry        |
+| 403         | `AuthError`          | Wrong credentials, unauthorized site code           | Fix credentials or site_code; do not retry  |
+| 404         | `NotFoundError`      | ID does not exist, wrong site, deleted record       | Verify ID and site; skip in batch loops     |
+| 422         | `ValidationError`    | Payload validation failure                          | Check parameter values; do not retry        |
+| 429         | `RateLimitError`     | Rate limit exceeded after built-in retries          | Back off 30s+; stagger concurrent scripts   |
+| 500         | `ServerError`        | API crash, maintenance, `ServerUnexpectedFailure`   | Retry with backoff; contact support if persistent |
+| 502/503     | `ServerError`        | Gateway/infrastructure error                        | Retry with backoff; usually transient       |
