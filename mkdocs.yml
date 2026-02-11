@@ -1,6 +1,6 @@
 site_name: "Sonny's Data Client"
 site_description: "Python client for the Sonny's Carwash Controls Data API"
-repo_url: "https://github.com/washu-carwash/sonnys-data-client"
+repo_url: "https://github.com/christopher-nance/Sonnys-Data-API-V2"
 
 theme:
   name: material
