@@ -11,11 +11,18 @@ from sonnys_data_client.types._washbooks import (
 
 
 class RecurringStatus(SonnysModel):
+    """A status entry (status name + date) in a recurring account's history."""
+
     status: str
     date: str
 
 
 class RecurringBilling(SonnysModel):
+    """A billing entry in a recurring account's payment history.
+
+    Contains charge amount, date, and last four digits of the credit card.
+    """
+
     amount_charged: float
     date: str
     last_four_cc: str = Field(alias="lastFourCC")
@@ -23,6 +30,11 @@ class RecurringBilling(SonnysModel):
 
 
 class RecurringListItem(SonnysModel):
+    """Summary recurring account returned by ``client.recurring.list()``.
+
+    Contains ID, plan name, status, balance, and billing site.
+    """
+
     id: str
     name: str | None = None
     balance: float | None = None
@@ -36,6 +48,11 @@ class RecurringListItem(SonnysModel):
 
 
 class Recurring(SonnysModel):
+    """Full recurring account detail returned by ``client.recurring.get(id)``.
+
+    Includes customer, vehicles, tags, billing history, and status history.
+    """
+
     id: str
     is_on_trial: bool
     trial_amount: float
@@ -57,6 +74,11 @@ class Recurring(SonnysModel):
 
 
 class RecurringStatusChange(SonnysModel):
+    """A status change event returned by ``client.recurring.list_status_changes()``.
+
+    Records old/new status, date, employee, and site.
+    """
+
     model_config = ConfigDict(populate_by_name=True, alias_generator=None)
 
     washbook_account_id: str
@@ -69,10 +91,18 @@ class RecurringStatusChange(SonnysModel):
 
 
 class RecurringModificationEntry(SonnysModel):
+    """A single modification entry with name, date, and optional comment."""
+
     name: str
     date: str
     comment: str | None = None
 
 
 class RecurringModification(Recurring):
+    """A recurring account with its modification history.
+
+    Extends :class:`Recurring` with a modifications list.
+    Returned by ``client.recurring.list_modifications()``.
+    """
+
     modifications: list[RecurringModificationEntry]
