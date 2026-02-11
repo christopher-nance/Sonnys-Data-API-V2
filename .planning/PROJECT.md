@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A Python module (`sonnys-data-client`) that provides a clean, reliable bridge between multiple applications and the Sonny's Carwash Controls Data API. It wraps the REST API with a resource-based interface, Pydantic models, built-in rate limiting, and auto-pagination so consuming applications (analytics, internal tools, automations) can pull car wash data without worrying about HTTP plumbing.
+A Python module (`sonnys-data-client`) that provides a clean, reliable bridge between multiple applications and the Sonny's Carwash Controls Data API. It wraps the REST API with a resource-based interface, Pydantic models, built-in rate limiting, and auto-pagination so consuming applications (analytics, internal tools, automations) can pull car wash data without worrying about HTTP plumbing. Includes comprehensive documentation with auto-generated API reference on GitHub Pages.
 
 ## Core Value
 
@@ -12,28 +12,26 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
 
 ### Validated
 
-- [x] Class-based client with per-instance credentials (`SonnysClient(api_id=..., api_key=..., site_code=...)`) — v1.0
-- [x] Resource-based call pattern (`client.transactions.list()`, `client.customers.get(id)`) — v1.0
-- [x] Pydantic models for all API response types (transactions, customers, items, prepaid accounts, employees, sites) — v1.0
-- [x] Built-in rate limiting (20 requests per 15-second window, automatic backoff on 429s) — v1.0
-- [x] Auto-pagination — list methods fetch all pages transparently, return complete results — v1.0
-- [x] Auto-polling for batch job endpoints (load-job → poll get-job-data → return final results) — v1.0
-- [x] Custom exception hierarchy mapped to API error types (AuthError, RateLimitError, ValidationError, NotFoundError, ServerError) — v1.0
-- [x] Python standard logging (debug level shows requests/responses, configurable by caller) — v1.0
-- [x] pip-installable from GitHub (`pip install git+https://github.com/...`) — v1.0
-- [x] Full endpoint coverage for all API resources — v1.0:
-  - Transactions (list, list by type, get detail, v2 list, batch job)
-  - Customers (list, get detail)
-  - Items (list)
-  - Giftcards (list, get detail)
-  - Washbooks (list, get detail)
-  - Recurring accounts (list, get detail, status history)
-  - Employees (list, get detail with clock entries)
-  - Sites (list)
+- ✓ Class-based client with per-instance credentials (`SonnysClient(api_id=..., api_key=..., site_code=...)`) — v1.0
+- ✓ Resource-based call pattern (`client.transactions.list()`, `client.customers.get(id)`) — v1.0
+- ✓ Pydantic models for all API response types (transactions, customers, items, prepaid accounts, employees, sites) — v1.0
+- ✓ Built-in rate limiting (20 requests per 15-second window, automatic backoff on 429s) — v1.0
+- ✓ Auto-pagination — list methods fetch all pages transparently, return complete results — v1.0
+- ✓ Auto-polling for batch job endpoints (load-job → poll get-job-data → return final results) — v1.0
+- ✓ Custom exception hierarchy mapped to API error types (AuthError, RateLimitError, ValidationError, NotFoundError, ServerError) — v1.0
+- ✓ Python standard logging (debug level shows requests/responses, configurable by caller) — v1.0
+- ✓ pip-installable from GitHub (`pip install git+https://github.com/...`) — v1.0
+- ✓ Full endpoint coverage for all API resources — v1.0
+- ✓ Comprehensive README with badges, ToC, constructor docs, per-resource examples — v1.1
+- ✓ Auto-generated API reference site with MkDocs Material + mkdocstrings on GitHub Pages — v1.1
+- ✓ Per-resource usage guides with realistic examples and model field tables — v1.1
+- ✓ Error handling & troubleshooting guide with per-exception guidance and retry recipes — v1.1
+- ✓ Advanced patterns guide (multi-site, rate limiting, performance, integration recipes) — v1.1
+- ✓ Complete Google-style docstrings on all 30 models, 10 exceptions, 8 resource classes — v1.1
 
 ### Active
 
-(None — v1.0 scope fully delivered)
+(None — v1.0 + v1.1 scope fully delivered)
 
 ### Out of Scope
 
@@ -52,6 +50,8 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
 - **Multi-credential use case:** User operates two databases (WashU and Icon) with separate API credentials — a single application may instantiate multiple clients
 - **Consumers:** Mix of data analytics/BI, internal operational tools, and scheduled automation scripts
 - **API pinned at current spec** — module built against v0.2.0, updated manually when API changes
+- **Documentation:** MkDocs Material site deployed to GitHub Pages at https://christopher-nance.github.io/Sonnys-Data-API-V2/
+- **Codebase:** 3,783 LOC Python (SDK) + 4,068 LOC documentation (15 guide pages + API reference)
 
 ### API Endpoints Reference
 
@@ -95,13 +95,16 @@ Dead-simple interface with rock-solid reliability — any developer or AI agent 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Resource-based API (`client.transactions.list()`) | Intuitive, discoverable, mirrors API structure | Validated v1.0 — 8 resource classes, clean `client.resource.method()` pattern |
-| Pydantic v2 models for responses | Typed, validated, autocomplete support in IDEs | Validated v1.0 — 30 models with camelCase aliases, live API tested |
-| Per-instance rate limiting | Multiple clients with different API IDs have independent rate limits | Validated v1.0 — sliding window 20 req/15s with exponential backoff |
-| Auto-pagination by default | Callers shouldn't manage offset/limit loops for common operations | Validated v1.0 — transparent offset/limit loop with null-safe total handling |
-| Auto-poll batch jobs | load-job → poll → return simplifies the most complex API pattern | Validated v1.0 — status-driven polling with configurable timeout/interval |
-| Production only (no sandbox toggle) | Simplifies client, sandbox not needed for current use case | Validated v1.0 — single base URL, no environment switching |
-| `requests` over `httpx` | Simpler, synchronous-only scope, widely understood | Validated v1.0 — requests + persistent session with auth headers |
+| Resource-based API (`client.transactions.list()`) | Intuitive, discoverable, mirrors API structure | ✓ Validated v1.0 — 8 resource classes, clean `client.resource.method()` pattern |
+| Pydantic v2 models for responses | Typed, validated, autocomplete support in IDEs | ✓ Validated v1.0 — 30 models with camelCase aliases, live API tested |
+| Per-instance rate limiting | Multiple clients with different API IDs have independent rate limits | ✓ Validated v1.0 — sliding window 20 req/15s with exponential backoff |
+| Auto-pagination by default | Callers shouldn't manage offset/limit loops for common operations | ✓ Validated v1.0 — transparent offset/limit loop with null-safe total handling |
+| Auto-poll batch jobs | load-job → poll → return simplifies the most complex API pattern | ✓ Validated v1.0 — status-driven polling with configurable timeout/interval |
+| Production only (no sandbox toggle) | Simplifies client, sandbox not needed for current use case | ✓ Validated v1.0 — single base URL, no environment switching |
+| `requests` over `httpx` | Simpler, synchronous-only scope, widely understood | ✓ Validated v1.0 — requests + persistent session with auth headers |
+| MkDocs Material + mkdocstrings for docs | Code-heavy docs need good syntax highlighting; autodoc from docstrings | ✓ Validated v1.1 — slate theme, src layout, GitHub Pages deployment |
+| Google docstring style | Industry standard, readable in source, renders well in mkdocstrings | ✓ Validated v1.1 — all 30 models, 10 exceptions, 8 resources documented |
+| Per-resource usage guides | Each resource has different patterns; guides more useful than monolithic reference | ✓ Validated v1.1 — 8 guides with realistic examples and model tables |
 
 ---
-*Last updated: 2026-02-10 — v1.0 shipped (3,783 LOC Python, 30 Pydantic models, 8 resource classes, 110 unit tests)*
+*Last updated: 2026-02-11 after v1.1 milestone*

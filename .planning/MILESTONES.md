@@ -1,5 +1,32 @@
 # Project Milestones: Sonny's Data Client
 
+## v1.1 Documentation (Shipped: 2026-02-11)
+
+**Delivered:** Comprehensive documentation suite — expanded README, auto-generated API reference site on GitHub Pages, per-resource usage guides, and complete docstring coverage so any developer or AI agent can use the SDK without reading source code.
+
+**Phases completed:** 11-18 (16 plans total)
+
+**Key accomplishments:**
+- Expanded README with badges, table of contents, constructor documentation, and per-resource examples for all 8 SDK resources
+- MkDocs Material documentation site with auto-generated API reference deployed to GitHub Pages
+- 8 per-resource usage guides with realistic examples, method signatures, and model field tables
+- Deep dive guides for transactions (method comparison, batch workflow, multi-day exports) and account resources (churn analysis, billing reports, liability tracking)
+- Error handling & troubleshooting guide with per-exception guidance, retry recipes, logging configuration, and diagnostic checklist
+- Complete docstring audit — all 30 models, 10 exceptions, 8 resource classes with Google-style docstrings for mkdocstrings rendering
+
+**Stats:**
+- 72 files created/modified
+- 4,068 lines of documentation (15 docs pages)
+- 8,469 lines added (docs + docstrings)
+- 8 phases, 16 plans, ~34 tasks
+- 2 days from start to ship (2026-02-10 → 2026-02-11)
+
+**Git range:** `1d6139e` → `48d4715`
+
+**What's next:** SDK and documentation complete. Future work may include async support, caching layer, or additional API endpoints as needed.
+
+---
+
 ## v1.0 Initial Release (Shipped: 2026-02-10)
 
 **Delivered:** Complete Python SDK wrapping the Sonny's Carwash Controls Data API with 8 resource types, auto-pagination, rate limiting, batch jobs, and pip-installable distribution.
