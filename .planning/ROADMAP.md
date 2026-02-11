@@ -72,10 +72,10 @@ Plans:
 **Goal**: Efficient bulk data retrieval for stats computation — fetch transactions and recurring data for a date range without redundant API calls
 **Depends on**: Phase 19
 **Research**: Unlikely (existing SDK pagination and fetching patterns)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 20-01: TBD
+- [x] 20-01: Data Fetching Methods — completed 2026-02-11
 
 #### Phase 21: Revenue & Sales Stats
 
@@ -160,7 +160,7 @@ Plans:
 | 17. Advanced Patterns | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 18. Docstring Audit | v1.1 | 3/3 | Complete | 2026-02-11 |
 | 19. Stats Module Foundation | v1.2 | 2/2 | Complete | 2026-02-11 |
-| 20. Data Fetching Layer | v1.2 | 0/? | Not started | - |
+| 20. Data Fetching Layer | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 21. Revenue & Sales Stats | v1.2 | 0/? | Not started | - |
 | 22. Wash Analytics | v1.2 | 0/? | Not started | - |
 | 23. Membership Analytics | v1.2 | 0/? | Not started | - |
