@@ -112,10 +112,10 @@ Plans:
 **Goal**: `client.stats.conversion_rate()` = new_memberships / (new_memberships + retail_washes)
 **Depends on**: Phase 22, Phase 23
 **Research**: Unlikely (composite of prior phase outputs)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 24-01: TBD
+- [x] 24-01: Conversion Rate Implementation — completed 2026-02-11
 
 #### Phase 25: Stats Report
 
@@ -164,6 +164,6 @@ Plans:
 | 21. Revenue & Sales Stats | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 22. Wash Analytics | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 23. Membership Analytics | v1.2 | 1/1 | Complete | 2026-02-11 |
-| 24. Conversion Rate | v1.2 | 0/? | Not started | - |
+| 24. Conversion Rate | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 25. Stats Report | v1.2 | 0/? | Not started | - |
 | 26. Stats Documentation & Testing | v1.2 | 0/? | Not started | - |
