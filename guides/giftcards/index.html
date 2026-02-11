@@ -665,6 +665,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#advanced-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#liability-tracking-with-transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Liability Tracking with Transactions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1070,6 +1098,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#advanced-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#liability-tracking-with-transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Liability Tracking with Transactions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1195,16 +1251,31 @@ the remaining balance by subtracting <code>amount_used</code> from <code>value</
 </tr>
 </tbody>
 </table>
+<h2 id="advanced-patterns">Advanced Patterns<a class="headerlink" href="#advanced-patterns" title="Permanent link">&para;</a></h2>
+<h3 id="liability-tracking-with-transactions">Liability Tracking with Transactions<a class="headerlink" href="#liability-tracking-with-transactions" title="Permanent link">&para;</a></h3>
+<p>Combine gift card records with gift card transaction data to track redemptions
+and calculate outstanding liability:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">giftcards</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">giftcards</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+    <span class="n">gc_txns</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list_by_type</span><span class="p">(</span>
+        <span class="s2">&quot;giftcard&quot;</span><span class="p">,</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Outstanding liability</span>
+    <span class="n">total_liability</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">gc</span><span class="o">.</span><span class="n">value</span> <span class="o">-</span> <span class="n">gc</span><span class="o">.</span><span class="n">amount_used</span> <span class="k">for</span> <span class="n">gc</span> <span class="ow">in</span> <span class="n">giftcards</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total outstanding liability: $</span><span class="si">{</span><span class="n">total_liability</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gift card transactions this month: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gc_txns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Active cards: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">gc</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">giftcards</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">gc</span><span class="o">.</span><span class="n">value</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">gc</span><span class="o">.</span><span class="n">amount_used</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Auto-pagination</p>
 <p>The <code>list()</code> method automatically fetches all pages of results. You do not
 need to handle pagination manually -- the client will continue requesting
 pages until all records have been retrieved.</p>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Advanced patterns</p>
-<p>Phase 15 will cover advanced account resource patterns including
-cross-resource analysis and reporting workflows.</p>
 </div>
 
 

@@ -616,6 +616,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#choosing-the-right-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing the Right Method
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#methods" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -842,6 +853,45 @@
     <span class="md-ellipsis">
       
         RecurringModificationEntry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#churn-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Churn Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#billing-history-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Billing History Report
       
     </span>
   </a>
@@ -1097,6 +1147,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#choosing-the-right-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing the Right Method
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#methods" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1334,6 +1395,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#advanced-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#churn-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Churn Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#billing-history-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Billing History Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1360,6 +1460,60 @@ car wash accounts. This is the richest standard resource in the client, offering
 five methods for listing accounts, fetching full details, tracking status
 changes, and reviewing modification history. Each account includes billing
 information, plan details, associated tags, vehicles, and customer data.</p>
+<h2 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h2>
+<p>The recurring resource offers five methods. Pick the one that matches your use
+case to avoid fetching more data than you need:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Use When</th>
+<th>Pagination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list()</code></td>
+<td><code>RecurringListItem</code></td>
+<td>Quick summaries, filtering by date/site</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>get()</code></td>
+<td><code>Recurring</code></td>
+<td>Full detail for a single account</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><code>list_status_changes()</code></td>
+<td><code>RecurringStatusChange</code></td>
+<td>Tracking cancellations, reactivations</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>list_modifications()</code></td>
+<td><code>RecurringModification</code></td>
+<td>Audit trail, plan changes, account edits</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>list_details()</code></td>
+<td><code>Recurring</code></td>
+<td>Bulk export with full detail (heavier)</td>
+<td>Auto</td>
+</tr>
+</tbody>
+</table>
+<p>Start with <code>list()</code> for lightweight summaries and filtering by date range or
+site. Use <code>get()</code> when you need a single-account deep dive with nested billing
+history, tags, vehicles, and customer data. Reach for
+<code>list_status_changes()</code> when analyzing churn and retention trends, and
+<code>list_modifications()</code> when you need an audit trail of plan changes or account
+edits. Reserve <code>list_details()</code> for cases where you need the full nested data
+(tags, vehicles, billing history) in bulk -- it returns the same rich
+<code>Recurring</code> objects as <code>get()</code> but for every account, so it is significantly
+heavier.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="listparams-listrecurringlistitem"><code>list(**params) -&gt; list[RecurringListItem]</code><a class="headerlink" href="#listparams-listrecurringlistitem" title="Permanent link">&para;</a></h3>
 <p>Fetch all recurring accounts. Returns a list of <code>RecurringListItem</code> objects with
@@ -1817,6 +1971,62 @@ modifications list.</p>
 </tr>
 </tbody>
 </table>
+<h2 id="advanced-patterns">Advanced Patterns<a class="headerlink" href="#advanced-patterns" title="Permanent link">&para;</a></h2>
+<h3 id="churn-analysis">Churn Analysis<a class="headerlink" href="#churn-analysis" title="Permanent link">&para;</a></h3>
+<p>Use <code>list_status_changes()</code> to analyze account churn over a date range. Each
+status change includes the old and new status, the date, and the employee and
+site responsible:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">changes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_status_changes</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Count transitions by type</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">old_status</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">new_status</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">changes</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">transition</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">transitions</span><span class="o">.</span><span class="n">most_common</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">transition</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Find cancellations</span>
+    <span class="n">cancellations</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">new_status</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;cancelled&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cancellations</span><span class="p">)</span><span class="si">}</span><span class="s2"> cancellations this month&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cancellations</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Account </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">recurring_id</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">site_code</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">status_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="billing-history-report">Billing History Report<a class="headerlink" href="#billing-history-report" title="Permanent link">&para;</a></h3>
+<p>Use <code>list_details()</code> to build a billing summary across all accounts. Each
+<code>Recurring</code> object includes a <code>recurring_billings</code> list with individual charge
+records:</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">accounts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_details</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">total_revenue</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">acct</span> <span class="ow">in</span> <span class="n">accounts</span><span class="p">:</span>
+        <span class="n">acct_total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">amount_charged</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">acct</span><span class="o">.</span><span class="n">recurring_billings</span><span class="p">)</span>
+        <span class="n">total_revenue</span> <span class="o">+=</span> <span class="n">acct_total</span>
+        <span class="k">if</span> <span class="n">acct_total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Account </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">plan_name</span><span class="si">}</span><span class="s2">): &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">acct_total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> over </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">acct</span><span class="o">.</span><span class="n">recurring_billings</span><span class="p">)</span><span class="si">}</span><span class="s2"> billings&quot;</span>
+            <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total recurring revenue: $</span><span class="si">{</span><span class="n">total_revenue</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Use <code>list_details()</code> only when needed</p>
+<p><code>list_details()</code> returns full <code>Recurring</code> objects for every account,
+including nested tags, vehicles, and billing history. This is significantly
+heavier than <code>list()</code>. Use it only when you need billing or status history
+data in bulk.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Shared nested types</p>
 <p>The <code>Recurring</code> model reuses <code>WashbookCustomer</code>, <code>WashbookTag</code>, and
