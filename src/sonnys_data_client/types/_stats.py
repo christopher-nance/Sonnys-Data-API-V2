@@ -52,3 +52,35 @@ class ConversionResult(SonnysModel):
     new_memberships: int
     retail_washes: int
     total_opportunities: int
+
+
+class StatsReport(SonnysModel):
+    """Unified analytics report returned by ``client.stats.report()``.
+
+    Bundles all KPIs into a single result object, computed from shared
+    data fetches for efficiency.  Calling ``report()`` makes **4 API
+    calls** instead of the **7** that would result from calling
+    ``total_sales()``, ``total_washes()``, ``new_memberships_sold()``,
+    and ``conversion_rate()`` individually.
+
+    Attributes:
+        sales: Revenue breakdown (recurring plan sales, recurring
+            redemptions, and retail) as a :class:`SalesResult`.
+        washes: Wash volume breakdown (retail washes and prepaid washes)
+            as a :class:`WashResult`.
+        new_memberships: Count of membership activations (transitions to
+            ``"Active"`` status) during the report period.
+        conversion: Membership conversion rate KPI as a
+            :class:`ConversionResult`.
+        period_start: ISO-8601 date string for the start of the report
+            range (e.g. ``"2026-01-01"``).
+        period_end: ISO-8601 date string for the end of the report
+            range (e.g. ``"2026-01-31"``).
+    """
+
+    sales: SalesResult
+    washes: WashResult
+    new_memberships: int
+    conversion: ConversionResult
+    period_start: str
+    period_end: str
