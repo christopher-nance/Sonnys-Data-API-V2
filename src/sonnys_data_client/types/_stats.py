@@ -42,6 +42,7 @@ class WashResult(SonnysModel):
     retail_wash_count: int
     member_wash_count: int
     eligible_wash_count: int
+    free_wash_count: int
 
 
 class ConversionResult(SonnysModel):
@@ -49,19 +50,16 @@ class ConversionResult(SonnysModel):
 
     Measures how effectively a site converts eligible wash customers
     into membership sign-ups.  The ``rate`` is computed as
-    ``new_memberships / total_opportunities`` where total opportunities
-    is the sum of new memberships sold and eligible washes (retail
-    washes with ``total > 0``).
+    ``new_memberships / eligible_washes``.
 
-    A rate of ``0.15`` means 15 % of eligible-wash-or-membership
-    interactions resulted in a new membership sale.  When there are
-    zero opportunities the rate is ``0.0`` (division-by-zero safe).
+    A rate of ``0.15`` means 15 % of eligible washes resulted in a
+    new membership sale.  When there are zero eligible washes the rate
+    is ``0.0`` (division-by-zero safe).
     """
 
     rate: float
     new_memberships: int
     eligible_washes: int
-    total_opportunities: int
 
 
 class StatsReport(SonnysModel):

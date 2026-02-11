@@ -190,9 +190,8 @@ class StatsResource(BaseResource):
     ) -> int:
         """Count retail wash transactions for a date range.
 
-        Fetches v2 transactions and counts those where both
-        ``is_recurring_plan_sale`` and ``is_recurring_plan_redemption``
-        are ``False``.
+        A retail wash is a ``type=wash`` transaction (v1) that is neither
+        a recurring plan sale nor a recurring redemption (v2 flags).
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
@@ -212,10 +211,15 @@ class StatsResource(BaseResource):
             count = client.stats.retail_wash_count("2026-01-01", "2026-01-31")
             print(f"Retail washes: {count}")
         """
-        transactions = self._fetch_transactions_v2(start, end)
+        wash_ids = {
+            t.trans_id
+            for t in self._fetch_transactions_by_type(start, end, "wash")
+        }
         return sum(
-            1 for t in transactions
-            if not t.is_recurring_plan_sale and not t.is_recurring_plan_redemption
+            1 for t in self._fetch_transactions_v2(start, end)
+            if t.trans_id in wash_ids
+            and not t.is_recurring_plan_sale
+            and not t.is_recurring_plan_redemption
         )
 
     def new_memberships_sold(
@@ -327,10 +331,13 @@ class StatsResource(BaseResource):
     ) -> WashResult:
         """Compute wash volume breakdown for a date range.
 
-        Fetches v2 transactions and classifies them using the
-        ``is_recurring_plan_sale`` and ``is_recurring_plan_redemption``
-        flags.  Returns a :class:`~sonnys_data_client.types.WashResult`
-        with retail, member, eligible, and total wash counts.
+        Fetches v2 transactions (for membership flags) and v1
+        ``type=wash`` transactions (to identify actual car washes).
+        A transaction is a "car" if it is ``type=wash`` in v1 **or**
+        ``is_recurring_plan_redemption`` in v2.
+
+        Returns a :class:`~sonnys_data_client.types.WashResult` with
+        retail, member, eligible, free, and total wash counts.
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
@@ -353,28 +360,35 @@ class StatsResource(BaseResource):
             print(f"Retail: {result.retail_wash_count}")
             print(f"Member: {result.member_wash_count}")
             print(f"Eligible: {result.eligible_wash_count}")
+            print(f"Free: {result.free_wash_count}")
         """
-        transactions = self._fetch_transactions_v2(start, end)
+        wash_ids = {
+            t.trans_id
+            for t in self._fetch_transactions_by_type(start, end, "wash")
+        }
+        v2_transactions = self._fetch_transactions_v2(start, end)
 
-        retail_wash_count = 0
         member_wash_count = 0
+        retail_wash_count = 0
         eligible_wash_count = 0
+        free_wash_count = 0
 
-        for txn in transactions:
-            if txn.is_recurring_plan_sale:
-                continue
-            elif txn.is_recurring_plan_redemption:
+        for txn in v2_transactions:
+            if txn.is_recurring_plan_redemption:
                 member_wash_count += 1
-            else:
+            elif txn.trans_id in wash_ids and not txn.is_recurring_plan_sale:
                 retail_wash_count += 1
                 if txn.total > 0:
                     eligible_wash_count += 1
+                elif txn.total == 0:
+                    free_wash_count += 1
 
         return WashResult(
-            total=retail_wash_count + member_wash_count,
+            total=member_wash_count + retail_wash_count,
             retail_wash_count=retail_wash_count,
             member_wash_count=member_wash_count,
             eligible_wash_count=eligible_wash_count,
+            free_wash_count=free_wash_count,
         )
 
     def conversion_rate(
@@ -386,12 +400,12 @@ class StatsResource(BaseResource):
 
         Measures how effectively a site converts eligible wash customers
         into membership sign-ups.  The rate is computed as
-        ``new_memberships / total_opportunities`` where total
-        opportunities is the sum of new memberships sold and eligible
-        washes (retail washes with ``total > 0``).
+        ``new_memberships / eligible_washes``.
 
-        Uses a single v2 fetch to derive both components.  When there
-        are zero opportunities the rate is ``0.0`` (division-by-zero safe).
+        Eligible washes are ``type=wash`` (v1) transactions that are
+        not recurring plan sales, not recurring redemptions, and have
+        ``total > 0``.  When there are zero eligible washes the rate
+        is ``0.0`` (division-by-zero safe).
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
@@ -401,7 +415,7 @@ class StatsResource(BaseResource):
 
         Returns:
             A :class:`~sonnys_data_client.types.ConversionResult` containing
-            the conversion rate, component counts, and total opportunities.
+            the conversion rate and component counts.
 
         Raises:
             ValueError: If *start* is after *end*, or if a string cannot
@@ -414,25 +428,27 @@ class StatsResource(BaseResource):
             print(f"Memberships: {result.new_memberships}")
             print(f"Eligible washes: {result.eligible_washes}")
         """
-        transactions = self._fetch_transactions_v2(start, end)
+        wash_ids = {
+            t.trans_id
+            for t in self._fetch_transactions_by_type(start, end, "wash")
+        }
+        v2_transactions = self._fetch_transactions_v2(start, end)
 
         new_memberships = 0
         eligible_washes = 0
 
-        for txn in transactions:
+        for txn in v2_transactions:
             if txn.is_recurring_plan_sale:
                 new_memberships += 1
-            elif not txn.is_recurring_plan_redemption and txn.total > 0:
+            elif txn.trans_id in wash_ids and not txn.is_recurring_plan_redemption and txn.total > 0:
                 eligible_washes += 1
 
-        total_opportunities = new_memberships + eligible_washes
-        rate = new_memberships / total_opportunities if total_opportunities > 0 else 0.0
+        rate = new_memberships / eligible_washes if eligible_washes > 0 else 0.0
 
         return ConversionResult(
             rate=rate,
             new_memberships=new_memberships,
             eligible_washes=eligible_washes,
-            total_opportunities=total_opportunities,
         )
 
     def report(
@@ -442,9 +458,10 @@ class StatsResource(BaseResource):
     ) -> StatsReport:
         """Compute all KPIs for a date range in a single call.
 
-        Fetches v2 transactions with **1 API call** and computes every
-        KPI locally, compared to the **4 API calls** that would result
-        from calling :meth:`total_sales`, :meth:`total_washes`,
+        Fetches v2 transactions and v1 ``type=wash`` transactions with
+        **2 API calls** and computes every KPI locally, compared to the
+        **8 API calls** that would result from calling
+        :meth:`total_sales`, :meth:`total_washes`,
         :meth:`new_memberships_sold`, and :meth:`conversion_rate`
         individually.
 
@@ -471,8 +488,12 @@ class StatsResource(BaseResource):
             print(f"New members: {rpt.new_memberships}")
             print(f"Conversion: {rpt.conversion.rate:.1%}")
         """
-        # --- 1. Fetch data (1 API call) ---
+        # --- 1. Fetch data (2 API calls) ---
         v2_transactions = self._fetch_transactions_v2(start, end)
+        wash_ids = {
+            t.trans_id
+            for t in self._fetch_transactions_by_type(start, end, "wash")
+        }
 
         # --- 2. Single-pass classification ---
         recurring_plan_sales = 0.0
@@ -481,7 +502,9 @@ class StatsResource(BaseResource):
         recurring_redemptions_count = 0
         retail = 0.0
         retail_count = 0
+        retail_wash_count = 0
         eligible_wash_count = 0
+        free_wash_count = 0
 
         for txn in v2_transactions:
             if txn.is_recurring_plan_sale:
@@ -493,8 +516,12 @@ class StatsResource(BaseResource):
             else:
                 retail += txn.total
                 retail_count += 1
-                if txn.total > 0:
-                    eligible_wash_count += 1
+                if txn.trans_id in wash_ids:
+                    retail_wash_count += 1
+                    if txn.total > 0:
+                        eligible_wash_count += 1
+                    elif txn.total == 0:
+                        free_wash_count += 1
 
         sales_total = recurring_plan_sales + recurring_redemptions + retail
         sales_count = (
@@ -514,19 +541,20 @@ class StatsResource(BaseResource):
         )
 
         # --- 4. WashResult ---
+        member_wash_count = recurring_redemptions_count
         washes = WashResult(
-            total=retail_count + recurring_redemptions_count,
-            retail_wash_count=retail_count,
-            member_wash_count=recurring_redemptions_count,
+            total=member_wash_count + retail_wash_count,
+            retail_wash_count=retail_wash_count,
+            member_wash_count=member_wash_count,
             eligible_wash_count=eligible_wash_count,
+            free_wash_count=free_wash_count,
         )
 
         # --- 5. New memberships & ConversionResult ---
         new_memberships = recurring_plan_sales_count
-        total_opportunities = new_memberships + eligible_wash_count
         rate = (
-            new_memberships / total_opportunities
-            if total_opportunities > 0
+            new_memberships / eligible_wash_count
+            if eligible_wash_count > 0
             else 0.0
         )
 
@@ -534,7 +562,6 @@ class StatsResource(BaseResource):
             rate=rate,
             new_memberships=new_memberships,
             eligible_washes=eligible_wash_count,
-            total_opportunities=total_opportunities,
         )
 
         # --- 6. Resolve period dates from original inputs ---
