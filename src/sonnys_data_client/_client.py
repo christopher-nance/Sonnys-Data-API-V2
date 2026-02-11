@@ -22,6 +22,7 @@ from sonnys_data_client.resources._giftcards import Giftcards
 from sonnys_data_client.resources._items import Items
 from sonnys_data_client.resources._recurring import RecurringAccounts
 from sonnys_data_client.resources._sites import Sites
+from sonnys_data_client.resources._stats import StatsResource
 from sonnys_data_client.resources._transactions import Transactions
 from sonnys_data_client.resources._washbooks import Washbooks
 
@@ -89,6 +90,11 @@ class SonnysClient:
     def sites(self) -> Sites:
         """Access the Sites resource."""
         return Sites(self)
+
+    @functools.cached_property
+    def stats(self) -> StatsResource:
+        """Access the Stats resource for business analytics."""
+        return StatsResource(self)
 
     @functools.cached_property
     def transactions(self) -> Transactions:
@@ -159,7 +165,13 @@ class SonnysClient:
                 )
                 return response
 
-            # Step 5: Handle 429
+            # Step 5: Log error response details
+            logger.debug(
+                "Error response: %s %s status=%d body=%s",
+                method, path, response.status_code, response.text,
+            )
+
+            # Step 6: Handle 429
             if response.status_code == 429:
                 if attempt < self._max_retries:
                     logger.warning(
@@ -171,7 +183,7 @@ class SonnysClient:
                     continue
                 raise make_status_error(response)
 
-            # Step 6: Handle other errors
+            # Step 7: Handle other errors
             raise make_status_error(response)
 
         # Should never reach here, but satisfy type checker
