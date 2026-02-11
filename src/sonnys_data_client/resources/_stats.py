@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from sonnys_data_client._date_utils import parse_date_range
 from sonnys_data_client._resources import BaseResource
 from sonnys_data_client.types._recurring import RecurringStatusChange
-from sonnys_data_client.types._stats import SalesResult, WashResult
+from sonnys_data_client.types._stats import ConversionResult, SalesResult, WashResult
 from sonnys_data_client.types._transactions import (
     TransactionListItem,
     TransactionV2ListItem,
@@ -355,4 +355,55 @@ class StatsResource(BaseResource):
             total=wash_count + prepaid_wash_count,
             wash_count=wash_count,
             prepaid_wash_count=prepaid_wash_count,
+        )
+
+    def conversion_rate(
+        self,
+        start: str | datetime,
+        end: str | datetime,
+    ) -> ConversionResult:
+        """Compute the membership conversion rate for a date range.
+
+        Measures how effectively a site converts retail wash customers
+        into membership sign-ups.  The rate is computed as
+        ``new_memberships / total_opportunities`` where total
+        opportunities is the sum of new membership activations and
+        retail wash transactions.
+
+        Composes :meth:`new_memberships_sold` (numerator) and
+        :meth:`retail_wash_count` (denominator component) into a single
+        KPI.  When there are zero opportunities the rate is ``0.0``
+        (division-by-zero safe).
+
+        Args:
+            start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
+                or :class:`~datetime.datetime`.
+            end: Range end as an ISO-8601 string or
+                :class:`~datetime.datetime`.
+
+        Returns:
+            A :class:`~sonnys_data_client.types.ConversionResult` containing
+            the conversion rate, component counts, and total opportunities.
+
+        Raises:
+            ValueError: If *start* is after *end*, or if a string cannot
+                be parsed as a valid ISO-8601 date/datetime.
+
+        Example::
+
+            result = client.stats.conversion_rate("2026-01-01", "2026-01-31")
+            print(f"Conversion rate: {result.rate:.1%}")
+            print(f"Memberships: {result.new_memberships}")
+            print(f"Retail washes: {result.retail_washes}")
+        """
+        new_memberships = self.new_memberships_sold(start, end)
+        retail_washes = self.retail_wash_count(start, end)
+        total_opportunities = new_memberships + retail_washes
+        rate = new_memberships / total_opportunities if total_opportunities > 0 else 0.0
+
+        return ConversionResult(
+            rate=rate,
+            new_memberships=new_memberships,
+            retail_washes=retail_washes,
+            total_opportunities=total_opportunities,
         )
