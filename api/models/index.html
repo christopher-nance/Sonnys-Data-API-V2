@@ -3090,10 +3090,22 @@ Each bucket includes both a revenue total and a transaction count.</p>
 
 
         <p>Wash volume breakdown returned by <code>client.stats.total_washes()</code>.</p>
-<p>Categorizes wash transactions into two types: retail washes
-(standard single-use transactions of type <code>"wash"</code>) and prepaid
-washes (transactions of type <code>"prepaid-wash"</code> redeemed against
-pre-purchased wash books).  The <code>total</code> field is the sum of both.</p>
+<p>Categorizes wash transactions using v2 flags, v1 <code>type=wash</code>,
+and v1 <code>type=recurring</code>:</p>
+<ul>
+<li><strong>member_wash_count</strong>: Transactions where
+  <code>is_recurring_plan_redemption</code> is <code>True</code> (membership washes).</li>
+<li><strong>retail_wash_count</strong>: Non-member car washes — <code>type=wash</code>
+  transactions (excluding plan sales and redemptions) plus
+  unknown non-negative transaction types.</li>
+<li><strong>free_wash_count</strong>: Washes with <code>total == 0</code>.</li>
+<li><strong>eligible_wash_count</strong>: Derived as
+  <code>total - member_wash_count - free_wash_count</code>.  Used as the
+  denominator in conversion rate calculations.  Includes plan sale
+  washes and positive-total unknown types.</li>
+</ul>
+<p>The <code>total</code> field is <code>member + retail + plan_sale_washes</code>.
+Negative-total transactions (refunds) are excluded entirely.</p>
 
 
 
@@ -3142,13 +3154,12 @@ pre-purchased wash books).  The <code>total</code> field is the sum of both.</p>
 
 
         <p>Membership conversion KPI returned by <code>client.stats.conversion_rate()</code>.</p>
-<p>Measures how effectively a site converts retail wash customers into
-membership sign-ups.  The <code>rate</code> is computed as
-<code>new_memberships / total_opportunities</code> where total opportunities
-is the sum of new membership activations and retail wash transactions.</p>
-<p>A rate of <code>0.15</code> means 15 % of wash-or-membership interactions
-resulted in a new membership activation.  When there are zero
-opportunities the rate is <code>0.0</code> (division-by-zero safe).</p>
+<p>Measures how effectively a site converts eligible wash customers
+into membership sign-ups.  The <code>rate</code> is computed as
+<code>new_memberships / eligible_washes</code>.</p>
+<p>A rate of <code>0.15</code> means 15 % of eligible washes resulted in a
+new membership sale.  When there are zero eligible washes the rate
+is <code>0.0</code> (division-by-zero safe).</p>
 
 
 
@@ -3197,11 +3208,8 @@ opportunities the rate is <code>0.0</code> (division-by-zero safe).</p>
 
 
         <p>Unified analytics report returned by <code>client.stats.report()</code>.</p>
-<p>Bundles all KPIs into a single result object, computed from shared
-data fetches for efficiency.  Calling <code>report()</code> makes <strong>4 API
-calls</strong> instead of the <strong>7</strong> that would result from calling
-<code>total_sales()</code>, <code>total_washes()</code>, <code>new_memberships_sold()</code>,
-and <code>conversion_rate()</code> individually.</p>
+<p>Bundles all KPIs into a single result object, computed from a
+single v2 transaction fetch for efficiency.</p>
 
 
 <p><span class="doc-section-title">Attributes:</span></p>
@@ -3233,8 +3241,8 @@ redemptions, and retail) as a :class:<code>SalesResult</code>.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Wash volume breakdown (retail washes and prepaid washes)
-as a :class:<code>WashResult</code>.</p>
+                <p>Wash volume breakdown (retail, member, and eligible
+washes) as a :class:<code>WashResult</code>.</p>
               </div>
             </td>
           </tr>
@@ -3245,8 +3253,8 @@ as a :class:<code>WashResult</code>.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Count of membership activations (transitions to
-<code>"Active"</code> status) during the report period.</p>
+                <p>Count of recurring plan sales during the
+report period.</p>
               </div>
             </td>
           </tr>

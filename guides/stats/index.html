@@ -1296,11 +1296,21 @@
 
 <h1 id="stats">Stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h1>
 <p>The <strong>Stats</strong> resource provides computed business analytics and KPIs derived
-from transaction and recurring account data. Unlike other resources that wrap
-REST endpoints directly, <code>client.stats</code> fetches raw data from the API and
-aggregates it locally, giving you ready-to-use metrics like total sales, wash
-volume, new memberships, and conversion rates without writing any aggregation
-logic yourself.</p>
+from transaction data. Unlike other resources that wrap REST endpoints
+directly, <code>client.stats</code> fetches raw data from the API and aggregates it
+locally, giving you ready-to-use metrics like total sales, wash volume, new
+memberships, and conversion rates without writing any aggregation logic
+yourself.</p>
+<div class="admonition note">
+<p class="admonition-title">Rinsed alignment</p>
+<p>Stats calculations are designed to match <strong>Rinsed</strong> reporting as closely
+as possible.  Wash classification uses a combination of v2 transaction
+flags (<code>is_recurring_plan_sale</code>, <code>is_recurring_plan_redemption</code>) and v1
+type endpoints (<code>type=wash</code>, <code>type=recurring</code>) to accurately distinguish
+car washes from recharges and refunds.  In validation testing across 10
+days of JOLIET data, <strong>7/10 days matched Rinsed exactly</strong> on all wash
+metrics, with remaining days off by only 1-2 counts.</p>
+</div>
 <h2 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h2>
 <p>The stats resource offers six methods. Pick the one that matches your use case:</p>
 <table>
@@ -1322,38 +1332,38 @@ logic yourself.</p>
 <tr>
 <td><code>total_washes(start, end)</code></td>
 <td><code>WashResult</code></td>
-<td>Wash volume breakdown (retail, prepaid)</td>
-<td>2</td>
+<td>Wash volume breakdown (member, retail, eligible, free)</td>
+<td>3</td>
 </tr>
 <tr>
 <td><code>retail_wash_count(start, end)</code></td>
 <td><code>int</code></td>
 <td>Count of retail wash transactions</td>
-<td>1</td>
+<td>2</td>
 </tr>
 <tr>
 <td><code>new_memberships_sold(start, end)</code></td>
 <td><code>int</code></td>
-<td>Count of membership activations</td>
+<td>Count of recurring plan sales</td>
 <td>1</td>
 </tr>
 <tr>
 <td><code>conversion_rate(start, end)</code></td>
 <td><code>ConversionResult</code></td>
 <td>Membership conversion rate KPI</td>
-<td>2</td>
+<td>4</td>
 </tr>
 <tr>
 <td><code>report(start, end)</code></td>
 <td><code>StatsReport</code></td>
 <td>All KPIs in a single call (most efficient)</td>
-<td>4</td>
+<td>3</td>
 </tr>
 </tbody>
 </table>
 <p>Use individual methods when you need a single metric. Use <code>report()</code> when you
-need multiple KPIs -- it makes <strong>4 API calls</strong> instead of the <strong>7</strong> that would
-result from calling the individual methods separately.</p>
+need multiple KPIs -- it makes <strong>3 API calls</strong> instead of the <strong>11</strong> that
+would result from calling the individual methods separately.</p>
 <h2 id="date-range-input">Date Range Input<a class="headerlink" href="#date-range-input" title="Permanent link">&para;</a></h2>
 <p>All stats methods accept a <code>start</code> and <code>end</code> parameter for the date range. You
 can pass either an ISO-8601 date string or a Python <code>datetime</code> object:</p>
@@ -1367,8 +1377,10 @@ can pass either an ISO-8601 date string or a Python <code>datetime</code> object
     <span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>Naive datetime objects are assumed to be UTC. Timezone-aware datetimes are
-preserved as-is. If <code>start</code> is after <code>end</code>, a <code>ValueError</code> is raised.</p>
+<p>Date-only strings automatically get boundary times applied (<code>00:00:01</code> start,
+<code>23:59:59</code> end) in the site's local timezone, then converted to UTC.  Naive
+datetime objects are assumed to be UTC.  Timezone-aware datetimes are converted
+to UTC.  If <code>start</code> is after <code>end</code>, a <code>ValueError</code> is raised.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="total_salesstart-end-salesresult"><code>total_sales(start, end) -&gt; SalesResult</code><a class="headerlink" href="#total_salesstart-end-salesresult" title="Permanent link">&para;</a></h3>
 <p>Compute a revenue breakdown for a date range. Fetches all transactions via the
@@ -1434,14 +1446,23 @@ sales, recurring redemptions, and retail.</p>
 </tbody>
 </table>
 <h3 id="total_washesstart-end-washresult"><code>total_washes(start, end) -&gt; WashResult</code><a class="headerlink" href="#total_washesstart-end-washresult" title="Permanent link">&para;</a></h3>
-<p>Compute wash volume for a date range. Fetches transactions of type <code>"wash"</code>
-(retail) and <code>"prepaid-wash"</code> (wash book redemptions) separately and returns
-per-category counts and a combined total.</p>
+<p>Compute wash volume for a date range. Uses three data sources to classify
+transactions accurately:</p>
+<ul>
+<li><strong>v2 endpoint</strong> -- provides <code>is_recurring_plan_sale</code> and <code>is_recurring_plan_redemption</code> flags</li>
+<li><strong>v1 <code>type=wash</code></strong> -- identifies actual car wash transactions</li>
+<li><strong>v1 <code>type=recurring</code></strong> -- identifies recharges (monthly billing) to exclude</li>
+</ul>
+<p>Classification priority: redemption &gt; plan sale &gt; wash &gt; recharge &gt; unknown.
+Transactions in both <code>type=wash</code> and <code>type=recurring</code> are treated as washes.
+Negative-total transactions (refunds) are excluded entirely.</p>
 <div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">total_washes</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retail washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">wash_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prepaid washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">prepaid_wash_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Member washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">member_wash_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retail washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">retail_wash_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Eligible washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">eligible_wash_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Free washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">free_wash_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p><strong><code>WashResult</code> fields:</strong></p>
 <table>
@@ -1456,49 +1477,57 @@ per-category counts and a combined total.</p>
 <tr>
 <td><code>total</code></td>
 <td><code>int</code></td>
-<td>Combined wash count (retail + prepaid)</td>
+<td>Total wash count (member + retail + plan sale washes)</td>
 </tr>
 <tr>
-<td><code>wash_count</code></td>
+<td><code>member_wash_count</code></td>
 <td><code>int</code></td>
-<td>Retail wash transaction count</td>
+<td>Membership redemption washes</td>
 </tr>
 <tr>
-<td><code>prepaid_wash_count</code></td>
+<td><code>retail_wash_count</code></td>
 <td><code>int</code></td>
-<td>Prepaid wash redemption count</td>
+<td>Non-member washes (includes unknown non-negative types)</td>
+</tr>
+<tr>
+<td><code>eligible_wash_count</code></td>
+<td><code>int</code></td>
+<td>Derived: <code>total - member - free</code>. Denominator for conversion rate</td>
+</tr>
+<tr>
+<td><code>free_wash_count</code></td>
+<td><code>int</code></td>
+<td>Washes with <code>total == 0</code> (complimentary)</td>
 </tr>
 </tbody>
 </table>
 <h3 id="retail_wash_countstart-end-int"><code>retail_wash_count(start, end) -&gt; int</code><a class="headerlink" href="#retail_wash_countstart-end-int" title="Permanent link">&para;</a></h3>
-<p>Count retail wash transactions for a date range. Returns the number of
-standard single-use wash transactions (excludes prepaid wash book
-redemptions).</p>
+<p>Count retail wash transactions for a date range. A retail wash is a <code>type=wash</code>
+transaction that is neither a recurring plan sale nor a recurring redemption.</p>
 <div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">retail_wash_count</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retail washes: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="new_memberships_soldstart-end-int"><code>new_memberships_sold(start, end) -&gt; int</code><a class="headerlink" href="#new_memberships_soldstart-end-int" title="Permanent link">&para;</a></h3>
-<p>Count new membership activations for a date range. Fetches recurring account
-status changes and counts transitions where the new status is <code>"Active"</code>. This
-includes both brand-new sign-ups and reactivations of previously cancelled or
-suspended memberships.</p>
+<p>Count new membership sales for a date range. Fetches v2 transactions and counts
+those flagged as <code>is_recurring_plan_sale</code>. This captures both brand-new
+sign-ups and reactivations -- any transaction where a recurring plan was sold.</p>
 <div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">new_memberships_sold</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New memberships sold: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="conversion_ratestart-end-conversionresult"><code>conversion_rate(start, end) -&gt; ConversionResult</code><a class="headerlink" href="#conversion_ratestart-end-conversionresult" title="Permanent link">&para;</a></h3>
 <p>Compute the membership conversion rate for a date range. Measures how
-effectively a site converts retail wash customers into membership sign-ups. The
-rate is computed as <code>new_memberships / total_opportunities</code> where total
-opportunities is the sum of new membership activations and retail wash
-transactions.</p>
+effectively a site converts eligible wash customers into membership sign-ups.
+The rate is computed as <code>new_memberships / eligible_washes</code>.</p>
+<p>Eligible washes are derived from total washes: <code>total - member - free</code>. This
+includes retail washes with <code>total &gt; 0</code>, plan sale washes, and unknown
+non-negative transaction types.</p>
 <div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">conversion_rate</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conversion rate: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">rate</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New memberships: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">new_memberships</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retail washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">retail_washes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total opportunities: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_opportunities</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Eligible washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">eligible_washes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>When there are zero opportunities the rate is <code>0.0</code> (division-by-zero safe).</p>
+<p>When there are zero eligible washes the rate is <code>0.0</code> (division-by-zero safe).</p>
 <p><strong><code>ConversionResult</code> fields:</strong></p>
 <table>
 <thead>
@@ -1517,31 +1546,27 @@ transactions.</p>
 <tr>
 <td><code>new_memberships</code></td>
 <td><code>int</code></td>
-<td>Number of membership activations</td>
+<td>Number of recurring plan sales</td>
 </tr>
 <tr>
-<td><code>retail_washes</code></td>
+<td><code>eligible_washes</code></td>
 <td><code>int</code></td>
-<td>Number of retail wash transactions</td>
-</tr>
-<tr>
-<td><code>total_opportunities</code></td>
-<td><code>int</code></td>
-<td>Sum of new memberships and retail washes</td>
+<td>Eligible washes (denominator)</td>
 </tr>
 </tbody>
 </table>
 <h3 id="reportstart-end-statsreport"><code>report(start, end) -&gt; StatsReport</code><a class="headerlink" href="#reportstart-end-statsreport" title="Permanent link">&para;</a></h3>
 <p>Compute all KPIs for a date range in a single call. This is the most efficient
-way to retrieve multiple stats -- it makes <strong>4 API calls</strong> and computes every
-KPI locally, compared to the <strong>7 API calls</strong> that would result from calling
+way to retrieve multiple stats -- it makes <strong>3 API calls</strong> and computes every
+KPI locally, compared to the <strong>11 API calls</strong> that would result from calling
 <code>total_sales()</code>, <code>total_washes()</code>, <code>new_memberships_sold()</code>, and
 <code>conversion_rate()</code> individually.</p>
 <div class="highlight"><pre><span></span><code><span class="n">rpt</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Period: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">period_start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">period_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Revenue: $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">sales</span><span class="o">.</span><span class="n">total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">sales</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2"> transactions)&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Washes: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">total</span><span class="si">}</span><span class="s2"> (retail: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">wash_count</span><span class="si">}</span><span class="s2">, prepaid: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">prepaid_wash_count</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Washes: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">total</span><span class="si">}</span><span class="s2"> (member: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">member_wash_count</span><span class="si">}</span><span class="s2">, retail: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">retail_wash_count</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Eligible: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">eligible_wash_count</span><span class="si">}</span><span class="s2">, Free: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">free_wash_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New memberships: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">new_memberships</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conversion rate: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">conversion</span><span class="o">.</span><span class="n">rate</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -1568,7 +1593,7 @@ KPI locally, compared to the <strong>7 API calls</strong> that would result from
 <tr>
 <td><code>new_memberships</code></td>
 <td><code>int</code></td>
-<td>Count of membership activations</td>
+<td>Count of recurring plan sales</td>
 </tr>
 <tr>
 <td><code>conversion</code></td>
@@ -1591,7 +1616,8 @@ KPI locally, compared to the <strong>7 API calls</strong> that would result from
 <h3 id="monthly-performance-snapshot">Monthly performance snapshot<a class="headerlink" href="#monthly-performance-snapshot" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+                   <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">rpt</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;January 2026 Performance&quot;</span><span class="p">)</span>
@@ -1600,13 +1626,17 @@ KPI locally, compared to the <strong>7 API calls</strong> that would result from
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Memberships: $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">sales</span><span class="o">.</span><span class="n">recurring_plan_sales</span><span class="si">:</span><span class="s2">&gt;10,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Retail:      $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">sales</span><span class="o">.</span><span class="n">retail</span><span class="si">:</span><span class="s2">&gt;10,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Washes:        </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">total</span><span class="si">:</span><span class="s2">&gt;10,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Member:      </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">member_wash_count</span><span class="si">:</span><span class="s2">&gt;10,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Eligible:    </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">eligible_wash_count</span><span class="si">:</span><span class="s2">&gt;10,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Free:        </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">free_wash_count</span><span class="si">:</span><span class="s2">&gt;10,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New members:   </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">new_memberships</span><span class="si">:</span><span class="s2">&gt;10,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conversion:    </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">conversion</span><span class="o">.</span><span class="n">rate</span><span class="si">:</span><span class="s2">&gt;9.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="compare-two-periods">Compare two periods<a class="headerlink" href="#compare-two-periods" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+                   <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">jan</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
     <span class="n">feb</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;2026-02-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-02-28&quot;</span><span class="p">)</span>
 
@@ -1622,12 +1652,13 @@ KPI locally, compared to the <strong>7 API calls</strong> that would result from
 calls:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+                   <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="c1"># Just need revenue? 1 API call</span>
     <span class="n">sales</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">total_sales</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Revenue: $</span><span class="si">{</span><span class="n">sales</span><span class="o">.</span><span class="n">total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Just need wash count? 2 API calls</span>
+    <span class="c1"># Just need wash count? 3 API calls</span>
     <span class="n">washes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">total_washes</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Washes: </span><span class="si">{</span><span class="n">washes</span><span class="o">.</span><span class="n">total</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -1635,21 +1666,20 @@ calls:</p>
 <div class="admonition tip">
 <p class="admonition-title">Use <code>report()</code> when you need multiple KPIs</p>
 <p>Calling <code>total_sales()</code>, <code>total_washes()</code>, <code>new_memberships_sold()</code>, and
-<code>conversion_rate()</code> individually results in <strong>7 API calls</strong> because some
+<code>conversion_rate()</code> individually results in <strong>11 API calls</strong> because some
 underlying data fetches overlap. The <code>report()</code> method shares data fetches
-across KPIs and computes everything in just <strong>4 API calls</strong>:</p>
+across KPIs and computes everything in just <strong>3 API calls</strong>:</p>
 <ol>
-<li><code>transactions.list_v2()</code> -- used for sales breakdown</li>
-<li><code>transactions.list_by_type("wash")</code> -- used for wash count and conversion rate</li>
-<li><code>transactions.list_by_type("prepaid-wash")</code> -- used for prepaid wash count</li>
-<li><code>recurring.list_status_changes()</code> -- used for new memberships and conversion rate</li>
+<li><code>transactions.list_v2()</code> -- enriched transactions with membership flags</li>
+<li><code>transactions.list_by_type("wash")</code> -- identifies actual car washes</li>
+<li><code>transactions.list_by_type("recurring")</code> -- identifies recharges to exclude</li>
 </ol>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Use individual methods for single metrics</p>
 <p>If you only need one stat, calling the individual method is more efficient
-than <code>report()</code>. For example, <code>retail_wash_count()</code> makes just <strong>1 API
-call</strong>, while <code>report()</code> always makes 4.</p>
+than <code>report()</code>. For example, <code>total_sales()</code> makes just <strong>1 API call</strong>,
+while <code>report()</code> always makes 3.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">No caching between calls</p>

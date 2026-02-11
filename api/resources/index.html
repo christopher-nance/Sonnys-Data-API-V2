@@ -3168,10 +3168,8 @@ total washes, conversion rate, etc.) will be added in Phases 21-25.</p>
     <div class="doc doc-contents ">
 
         <p>Count retail wash transactions for a date range.</p>
-<p>Fetches transactions of type <code>"wash"</code> and returns the count.
-Retail washes are standard single-use wash transactions (excludes
-prepaid wash book redemptions).  This value serves as the
-denominator for conversion rate calculations (Phase 24).</p>
+<p>A retail wash is a <code>type=wash</code> transaction (v1) that is neither
+a recurring plan sale nor a recurring redemption (v2 flags).</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3293,12 +3291,12 @@ print(f&quot;Retail washes: {count}&quot;)
 
     <div class="doc doc-contents ">
 
-        <p>Count new membership activations for a date range.</p>
-<p>Fetches recurring account status changes and counts transitions
-where <code>new_status</code> is <code>"Active"</code>.  This includes both brand-new
-sign-ups and reactivations of previously cancelled or suspended
-memberships.  The returned count serves as the numerator for
-conversion rate calculations (Phase 24).</p>
+        <p>Count new membership sales for a date range.</p>
+<p>Fetches enriched v2 transactions and counts those flagged as
+<code>is_recurring_plan_sale</code>.  This captures both brand-new sign-ups
+and reactivations — any transaction where a recurring plan was sold.
+The returned count serves as the numerator for conversion rate
+calculations.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3365,7 +3363,7 @@ or :class:<code>~datetime.datetime</code>.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The number of membership activations in the date range.</p>
+                <p>The number of recurring plan sales in the date range.</p>
               </div>
             </td>
           </tr>
@@ -3569,10 +3567,12 @@ print(f&quot;Memberships: ${result.recurring_plan_sales:.2f}&quot;)
     <div class="doc doc-contents ">
 
         <p>Compute wash volume breakdown for a date range.</p>
-<p>Fetches transactions of type <code>"wash"</code> (retail) and
-<code>"prepaid-wash"</code> (wash book redemptions) separately and returns
-a :class:<code>~sonnys_data_client.types.WashResult</code> with per-category
-counts and a combined total.</p>
+<p>Fetches v2 transactions (for membership flags), v1 <code>type=wash</code>
+(to identify car washes), and v1 <code>type=recurring</code> (to identify
+recharges).  Classification priority: redemption &gt; plan sale &gt;
+wash &gt; recharge &gt; unknown.</p>
+<p><code>eligible_wash_count</code> is derived as
+<code>total - member_wash_count - free_wash_count</code>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3682,7 +3682,10 @@ be parsed as a valid ISO-8601 date/datetime.</p>
         <p>Example::</p>
 <div class="highlight"><pre><span></span><code>result = client.stats.total_washes(&quot;2026-01-01&quot;, &quot;2026-01-31&quot;)
 print(f&quot;Total washes: {result.total}&quot;)
-print(f&quot;Retail: {result.wash_count}, Prepaid: {result.prepaid_wash_count}&quot;)
+print(f&quot;Retail: {result.retail_wash_count}&quot;)
+print(f&quot;Member: {result.member_wash_count}&quot;)
+print(f&quot;Eligible: {result.eligible_wash_count}&quot;)
+print(f&quot;Free: {result.free_wash_count}&quot;)
 </code></pre></div>
 
 
@@ -3706,15 +3709,14 @@ print(f&quot;Retail: {result.wash_count}, Prepaid: {result.prepaid_wash_count}&q
     <div class="doc doc-contents ">
 
         <p>Compute the membership conversion rate for a date range.</p>
-<p>Measures how effectively a site converts retail wash customers
+<p>Measures how effectively a site converts eligible wash customers
 into membership sign-ups.  The rate is computed as
-<code>new_memberships / total_opportunities</code> where total
-opportunities is the sum of new membership activations and
-retail wash transactions.</p>
-<p>Composes :meth:<code>new_memberships_sold</code> (numerator) and
-:meth:<code>retail_wash_count</code> (denominator component) into a single
-KPI.  When there are zero opportunities the rate is <code>0.0</code>
-(division-by-zero safe).</p>
+<code>new_memberships / eligible_washes</code>.</p>
+<p>Eligible washes are derived from the total wash count:
+<code>total_washes - member_washes - free_washes</code>.  This includes
+retail washes with <code>total &gt; 0</code>, plan sale washes, and unknown
+non-negative transaction types.  When there are zero eligible
+washes the rate is <code>0.0</code> (division-by-zero safe).</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3791,7 +3793,7 @@ or :class:<code>~datetime.datetime</code>.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>the conversion rate, component counts, and total opportunities.</p>
+                <p>the conversion rate and component counts.</p>
               </div>
             </td>
           </tr>
@@ -3825,7 +3827,7 @@ be parsed as a valid ISO-8601 date/datetime.</p>
 <div class="highlight"><pre><span></span><code>result = client.stats.conversion_rate(&quot;2026-01-01&quot;, &quot;2026-01-31&quot;)
 print(f&quot;Conversion rate: {result.rate:.1%}&quot;)
 print(f&quot;Memberships: {result.new_memberships}&quot;)
-print(f&quot;Retail washes: {result.retail_washes}&quot;)
+print(f&quot;Eligible washes: {result.eligible_washes}&quot;)
 </code></pre></div>
 
 
@@ -3849,14 +3851,12 @@ print(f&quot;Retail washes: {result.retail_washes}&quot;)
     <div class="doc doc-contents ">
 
         <p>Compute all KPIs for a date range in a single call.</p>
-<p>Fetches raw data with <strong>4 API calls</strong> and computes every KPI
-locally, compared to the <strong>7 API calls</strong> that would result from
-calling :meth:<code>total_sales</code>, :meth:<code>total_washes</code>,
+<p>Fetches v2 transactions, v1 <code>type=wash</code>, and v1 <code>type=recurring</code>
+with <strong>3 API calls</strong> and computes every KPI locally, compared to the
+<strong>12 API calls</strong> that would result from calling
+:meth:<code>total_sales</code>, :meth:<code>total_washes</code>,
 :meth:<code>new_memberships_sold</code>, and :meth:<code>conversion_rate</code>
-individually.  The savings come from reusing the <code>"wash"</code>
-transaction fetch (shared by wash count and conversion rate) and
-the recurring status-change fetch (shared by new-memberships
-and conversion rate).</p>
+individually.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
