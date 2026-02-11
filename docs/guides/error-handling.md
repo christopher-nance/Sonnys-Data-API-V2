@@ -588,6 +588,120 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     configuration problem, not a transient failure. Retrying them wastes time
     and rate limit budget without any chance of success.
 
+## Logging & Debugging
+
+The SDK logs every request, response, and retry through Python's built-in
+`logging` module under the `sonnys_data_client` logger. Enabling debug logging
+is the fastest way to understand what the SDK is doing under the hood.
+
+### Enabling Debug Logging
+
+**Log everything** (SDK + all other libraries):
+
+```python
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+```
+
+**Log only the SDK** (recommended for most debugging):
+
+```python
+import logging
+
+logging.getLogger("sonnys_data_client").setLevel(logging.DEBUG)
+```
+
+**Add a StreamHandler for scripts** that don't already configure logging:
+
+```python
+import logging
+
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
+
+sdk_logger = logging.getLogger("sonnys_data_client")
+sdk_logger.addHandler(handler)
+sdk_logger.setLevel(logging.DEBUG)
+```
+
+### What Gets Logged
+
+The SDK emits these log messages at each stage of a request:
+
+| Level   | Message Pattern                                            | Meaning                                  |
+|---------|------------------------------------------------------------|------------------------------------------|
+| DEBUG   | `Rate limiter: waiting {N}s`                               | Pre-request rate limit sleep             |
+| DEBUG   | `Request: {METHOD} {PATH} params={PARAMS}`                 | Outgoing HTTP request                    |
+| DEBUG   | `Response: {METHOD} {PATH} status={CODE} elapsed={TIME}s`  | Successful response received             |
+| WARNING | `Rate limited (429), retry {N}/{MAX} after {DELAY}s`       | 429 received, backing off before retry   |
+
+### Reading Debug Output
+
+Here is an annotated example of a typical debug session. Two requests are made:
+the first hits the rate limiter and succeeds, the second gets a 429 and retries.
+
+```
+2025-06-15 10:00:00,100 DEBUG sonnys_data_client: Rate limiter: waiting 0.450s
+# ^ Rate limiter detected we're near the 20 req/15s limit. Sleeping 450ms.
+
+2025-06-15 10:00:00,550 DEBUG sonnys_data_client: Request: GET /sites params=None
+# ^ Outgoing request to the /sites endpoint with no query parameters.
+
+2025-06-15 10:00:01,200 DEBUG sonnys_data_client: Response: GET /sites status=200 elapsed=0.650s
+# ^ Success! The API responded in 650ms with HTTP 200.
+
+2025-06-15 10:00:01,210 DEBUG sonnys_data_client: Request: GET /transactions params={'startDate': '2025-06-01', 'endDate': '2025-06-15'}
+# ^ Second request -- fetching transactions with date range parameters.
+
+2025-06-15 10:00:01,800 WARNING sonnys_data_client: Rate limited (429), retry 1/3 after 1.0s
+# ^ API returned 429. SDK will wait 1 second then retry (attempt 1 of 3).
+
+2025-06-15 10:00:02,810 DEBUG sonnys_data_client: Request: GET /transactions params={'startDate': '2025-06-01', 'endDate': '2025-06-15'}
+# ^ Retry request sent after the 1-second backoff.
+
+2025-06-15 10:00:03,500 DEBUG sonnys_data_client: Response: GET /transactions status=200 elapsed=0.690s
+# ^ Retry succeeded. The API responded with HTTP 200.
+```
+
+!!! tip
+    In production, leave the SDK logger at WARNING to only see 429 retries.
+    Set to DEBUG only when troubleshooting.
+
+## Common Issues & Troubleshooting
+
+### Troubleshooting Table
+
+| Symptom | Likely Cause | Solution |
+|---------|--------------|----------|
+| `AuthError: MissingClientCredentialsError` | `api_id` or `api_key` not provided or empty | Check `SonnysClient` constructor args |
+| `AuthError: BadClientCredentialsError` | Wrong `api_id` or `api_key` | Verify credentials with Sonny's support |
+| `AuthError: NotAuthorizedSiteCredentialsError` | `site_code` not authorized for this API ID | Use a `site_code` linked to your API credentials |
+| `RateLimitError` after retries exhausted | Too many concurrent requests | Reduce parallelism or increase `max_retries` |
+| `ValidationError: PayloadValidationError` | Bad date format or invalid parameter | Use `YYYY-MM-DD` format, check parameter names |
+| `NotFoundError: EntityNotFoundError` | Resource ID doesn't exist or wrong site | Verify ID and `site_code` match |
+| `ServerError` intermittent 500s | Sonny's API transient issue | Add retry logic for 5xx (see [Custom Retry Patterns](#custom-retry-patterns)) |
+| `APIConnectionError` | Network/DNS failure | Check internet, verify `trigonapi.sonnyscontrols.com` is reachable |
+| `APITimeoutError` | Request took too long | Use smaller date ranges, check network latency |
+| Slow responses but no errors | Rate limiter pre-emptively sleeping | Enable DEBUG logging to see rate limiter waits |
+| `ImportError` on exceptions | Wrong import path | Import from `sonnys_data_client` directly, not `_exceptions` |
+
+### Diagnostic Checklist
+
+When something goes wrong, follow these steps in order:
+
+1. **Enable DEBUG logging** -- see [Enabling Debug Logging](#enabling-debug-logging) above
+2. **Check the `error_type` attribute** for the specific API error string (e.g., `"BadClientCredentialsError"`)
+3. **Inspect the `body` attribute** for the full API response JSON -- it often contains additional detail
+4. **Verify credentials** with a simple `client.sites.list()` call -- if this fails with `AuthError`, your credentials are wrong
+5. **Check rate limiter state** with debug logs -- look for `Rate limiter: waiting` messages to see if pre-request throttling is slowing you down
+
+!!! warning
+    The most common mistake is using `MM/DD/YYYY` date format (e.g., `"06/01/2025"`)
+    instead of the required `YYYY-MM-DD` format (e.g., `"2025-06-01"`). The API will
+    reject the request with a `ValidationError` and `error_type` of
+    `InvalidPayloadRequestTimestampError`. Always use ISO 8601 dates.
+
 ## Quick Reference
 
 A scannable cheat sheet mapping HTTP status codes to SDK exceptions, typical
