@@ -6,6 +6,53 @@ methods including type-filtered listing, an enriched v2 endpoint, and a batch
 job system for large exports. Use this resource to retrieve transaction
 summaries, full details with tenders and line items, and bulk data exports.
 
+## Choosing the Right Method
+
+The Transactions resource exposes five methods. Use this table to pick the
+right one for your use case:
+
+| Method | Returns | Use When | Caching | Pagination |
+|--------|---------|----------|---------|------------|
+| `list()` | `TransactionListItem` | Quick summaries, date range queries | None | Auto |
+| `list_by_type()` | `TransactionListItem` | Filtering by wash/prepaid/recurring/etc. | None | Auto |
+| `list_v2()` | `TransactionV2ListItem` | Need customer_id, recurring flags, status | 10-min cache | Auto |
+| `get()` | `Transaction` | Full detail for a single transaction | None | N/A |
+| `load_job()` | `TransactionJobItem` | Bulk exports, full detail + v2 fields | 20-min cache | Auto (job-level) |
+
+For most day-to-day queries, start with **`list()`** -- it is the fastest
+method with no caching layer. Switch to **`list_by_type()`** when you only need
+a specific transaction type (e.g., `"recurring"` or `"giftcard"`). Use
+**`list_v2()`** when your analysis requires the enriched fields like
+`customer_id`, `is_recurring_plan_sale`, or `transaction_status` -- but be aware
+of the 10-minute cache. Call **`get()`** when you need the complete detail for a
+single transaction, including tenders, line items, and discounts. For bulk
+exports where you need full transaction detail on every record, use
+**`load_job()`** -- it combines the depth of `get()` with the enrichment of
+`list_v2()`, at the cost of a slower batch-job workflow and a 20-minute cache.
+
+## Query Parameters
+
+The list methods (`list()`, `list_by_type()`, `list_v2()`) and `load_job()` all
+accept the same query parameters:
+
+| Parameter   | Type  | Description                              |
+|-------------|-------|------------------------------------------|
+| `startDate` | `str` | Start of date range (format: `YYYY-MM-DD`) |
+| `endDate`   | `str` | End of date range (format: `YYYY-MM-DD`)   |
+| `site`      | `str` | Filter by site code                      |
+| `region`    | `str` | Filter by region                         |
+
+!!! note "Pagination is handled automatically"
+    The `limit` and `offset` parameters are managed by the client's
+    auto-pagination logic -- you do not need to set these manually. For
+    `load_job()`, `limit` and `offset` control job-level pagination (default
+    100 records per job page), but the client handles this transparently.
+
+!!! info "`get()` takes no query parameters"
+    The `get()` method accepts only a positional `trans_id` argument and does
+    not support any query parameters. Pass the transaction ID directly:
+    `client.transactions.get("98765")`.
+
 ## Methods
 
 ### `list(**params) -> list[TransactionListItem]`
