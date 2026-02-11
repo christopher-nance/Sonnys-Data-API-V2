@@ -49,6 +49,8 @@ from sonnys_data_client.types._employees import (
 
 from sonnys_data_client.types._sites import Site
 
+from sonnys_data_client.types._stats import SalesResult
+
 __all__ = [
     "SonnysModel",
     "TransactionTender",
@@ -79,5 +81,6 @@ __all__ = [
     "ClockEntry",
     "EmployeeListItem",
     "Employee",
+    "SalesResult",
     "Site",
 ]
