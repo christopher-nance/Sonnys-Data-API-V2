@@ -73,16 +73,17 @@ Plans:
 - [x] 13-01: Standard Resource Guides (Customers, Items, Employees, Sites + Guides nav)
 - [x] 13-02: Account & Transaction Resource Guides (Giftcards, Washbooks, Recurring, Transactions)
 
-#### Phase 14: Transaction Deep Dive
+#### Phase 14: Transaction Deep Dive -- COMPLETE
 
 **Goal**: Detailed guide for the most complex resource — list, list_by_type, list_v2, get, and load_job with parameter tables, response examples, and batch job workflow diagrams
 **Depends on**: Phase 13
 **Research**: Unlikely (internal documentation based on existing code)
 **Plans**: 2
+**Completed**: 2026-02-11
 
 Plans:
 - [x] 14-01: Method Comparison & Batch Job Workflow (comparison table, parameter tables, batch job deep dive)
-- [ ] 14-02: TBD
+- [x] 14-02: Advanced Patterns & Deploy (multi-day exports, error handling, cross-resource lookups, gh-pages deploy)
 
 #### Phase 15: Account Resources Guide
 
@@ -134,7 +135,7 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | 11. README Overhaul | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 12. API Reference Setup | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 13. Resource Guides | v1.1 | 2/2 | Complete | 2026-02-10 |
-| 14. Transaction Deep Dive | v1.1 | 1/2 | In progress | - |
+| 14. Transaction Deep Dive | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 15. Account Resources | v1.1 | 0/? | Not started | - |
 | 16. Error & Troubleshoot | v1.1 | 0/? | Not started | - |
 | 17. Advanced Patterns | v1.1 | 0/? | Not started | - |
