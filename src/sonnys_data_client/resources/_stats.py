@@ -210,6 +210,41 @@ class StatsResource(BaseResource):
         transactions = self._fetch_transactions_by_type(start, end, "wash")
         return len(transactions)
 
+    def new_memberships_sold(
+        self,
+        start: str | datetime,
+        end: str | datetime,
+    ) -> int:
+        """Count new membership activations for a date range.
+
+        Fetches recurring account status changes and counts transitions
+        where ``new_status`` is ``"Active"``.  This includes both brand-new
+        sign-ups and reactivations of previously cancelled or suspended
+        memberships.  The returned count serves as the numerator for
+        conversion rate calculations (Phase 24).
+
+        Args:
+            start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
+                or :class:`~datetime.datetime`.
+            end: Range end as an ISO-8601 string or
+                :class:`~datetime.datetime`.
+
+        Returns:
+            The number of membership activations in the date range.
+
+        Raises:
+            ValueError: If *start* is after *end*, or if a string cannot
+                be parsed as a valid ISO-8601 date/datetime.
+
+        Example::
+
+            count = client.stats.new_memberships_sold("2026-01-01", "2026-01-31")
+            print(f"New memberships sold: {count}")
+        """
+        changes = self._fetch_recurring_status_changes(start, end)
+        activations = [c for c in changes if c.new_status == "Active"]
+        return len(activations)
+
     def total_sales(
         self,
         start: str | datetime,
