@@ -45,6 +45,15 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Guides:
+      - Customers: guides/customers.md
+      - Items: guides/items.md
+      - Employees: guides/employees.md
+      - Sites: guides/sites.md
+      - Giftcards: guides/giftcards.md
+      - Washbooks: guides/washbooks.md
+      - Recurring Accounts: guides/recurring.md
+      - Transactions: guides/transactions.md
   - API Reference:
       - Client: api/client.md
       - Resources: api/resources.md
