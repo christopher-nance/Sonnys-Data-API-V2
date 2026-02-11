@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 Initial Release** - [milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md) (Phases 1-10, shipped 2026-02-10)
-- 🚧 **v1.1 Documentation** - Phases 11-18 (in progress)
+- ✅ **v1.1 Documentation** - Phases 11-18 (shipped 2026-02-11)
 
 ## Completed Milestones
 
@@ -32,7 +32,7 @@ Complete Python SDK wrapping the Sonny's Carwash Controls Data API with 8 resour
 
 ## Phase Details
 
-### 🚧 v1.1 Documentation (In Progress)
+### ✅ v1.1 Documentation (Shipped 2026-02-11)
 
 **Milestone Goal:** Comprehensive documentation suite — expanded README, auto-generated API reference, per-resource guides, and polished docstrings so any developer or AI agent can use the SDK without reading source code.
 
@@ -120,17 +120,18 @@ Plans:
 - [x] 17-01: Multi-Site & Performance Patterns (multi-site operations, rate limiting deep dive, performance optimization)
 - [x] 17-02: Integration Recipes & Deploy (integration recipes, mkdocs nav update, gh-pages deploy)
 
-#### Phase 18: Docstring Audit -- IN PROGRESS
+#### Phase 18: Docstring Audit -- COMPLETE
 
 **Goal**: Audit and complete all public API docstrings for consistency — ensure every class, method, and model has complete, accurate documentation matching the guides
 **Depends on**: Phase 17
 **Research**: Unlikely (internal code review)
 **Plans**: 3
+**Completed**: 2026-02-11
 
 Plans:
 - [x] 18-01: Exceptions & Core Infrastructure (exception docstrings, SonnysModel, module docstrings, resource enrichment)
 - [x] 18-02: Standard & Account Model Docstrings (22 Pydantic model docstrings)
-- [ ] 18-03: Transaction Models + Final Verification & Deploy (7 transaction models, mkdocs build, gh-pages deploy)
+- [x] 18-03: Transaction Models + Final Verification & Deploy (7 transaction models, mkdocs build, gh-pages deploy)
 
 ## Progress
 
@@ -146,4 +147,4 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | 15. Account Resources | v1.1 | 1/1 | Complete | 2026-02-11 |
 | 16. Error & Troubleshoot | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 17. Advanced Patterns | v1.1 | 2/2 | Complete | 2026-02-11 |
-| 18. Docstring Audit | v1.1 | 2/3 | In progress | - |
+| 18. Docstring Audit | v1.1 | 3/3 | Complete | 2026-02-11 |
