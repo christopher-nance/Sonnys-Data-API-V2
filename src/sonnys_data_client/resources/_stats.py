@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 from sonnys_data_client._date_utils import parse_date_range
 from sonnys_data_client._resources import BaseResource
+from sonnys_data_client.types._recurring import RecurringStatusChange
 from sonnys_data_client.types._transactions import (
     TransactionListItem,
     TransactionV2ListItem,
@@ -144,3 +145,33 @@ class StatsResource(BaseResource):
             A list of :class:`TransactionV2ListItem` instances for the range.
         """
         return self._client.transactions.list_v2(**self._resolve_dates(start, end))
+
+    def _fetch_recurring_status_changes(
+        self,
+        start: str | datetime,
+        end: str | datetime,
+    ) -> list[RecurringStatusChange]:
+        """Fetch recurring account status change events within a date range.
+
+        Delegates to
+        :meth:`~sonnys_data_client.resources.RecurringAccounts.list_status_changes`
+        after converting the date range to Unix timestamp query parameters.
+
+        Each status change records a transition from ``old_status`` to
+        ``new_status`` along with the date, employee, and site where the
+        change occurred.  Used by stat methods that analyse membership
+        activity (e.g. new memberships sold by filtering for activation
+        transitions).
+
+        Args:
+            start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
+                or :class:`~datetime.datetime`.
+            end: Range end as an ISO-8601 string or
+                :class:`~datetime.datetime`.
+
+        Returns:
+            A list of :class:`RecurringStatusChange` instances for the range.
+        """
+        return self._client.recurring.list_status_changes(
+            **self._resolve_dates(start, end)
+        )
