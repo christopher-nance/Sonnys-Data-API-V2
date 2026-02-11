@@ -48,17 +48,18 @@ Plans:
 - [x] 11-01: README Structure & Client Docs (badges, ToC, constructor params)
 - [x] 11-02: Complete Resource Documentation (all 8 resources with param tables + examples)
 
-#### Phase 12: API Reference Setup
+#### Phase 12: API Reference Setup -- COMPLETE
 
 **Goal**: Set up auto-generated API reference docs from docstrings using mkdocs or Sphinx, with Pydantic model rendering and GitHub Pages deployment
 **Depends on**: Phase 11
 **Research**: Likely (tooling decision — mkdocs vs Sphinx, theme selection, autodoc config)
 **Research topics**: mkdocs-material vs Sphinx, autodoc plugins for Pydantic models, GitHub Pages deployment
 **Plans**: 2
+**Completed**: 2026-02-10
 
 Plans:
 - [x] 12-01: MkDocs Material Setup (docs dependencies, mkdocs.yml, landing page)
-- [ ] 12-02: TBD
+- [x] 12-02: API Reference Pages & GitHub Pages Deploy
 
 #### Phase 13: Resource Guides
 
@@ -128,7 +129,7 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | Phase | Milestone | Plans | Status | Completed |
 |-------|-----------|-------|--------|-----------|
 | 11. README Overhaul | v1.1 | 2/2 | Complete | 2026-02-10 |
-| 12. API Reference Setup | v1.1 | 1/2 | In progress | - |
+| 12. API Reference Setup | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 13. Resource Guides | v1.1 | 0/? | Not started | - |
 | 14. Transaction Deep Dive | v1.1 | 0/? | Not started | - |
 | 15. Account Resources | v1.1 | 0/? | Not started | - |
