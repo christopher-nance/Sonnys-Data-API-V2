@@ -108,16 +108,17 @@ Plans:
 - [x] 16-01: Error Handling Patterns Guide (hierarchy, catching, attributes, per-type guidance, retry recipes)
 - [x] 16-02: Logging, Troubleshooting & Deploy (logging config, common issues, mkdocs nav, gh-pages deploy)
 
-#### Phase 17: Advanced Patterns
+#### Phase 17: Advanced Patterns -- COMPLETE
 
 **Goal**: Advanced usage documentation — multi-site patterns, rate limiting behavior, logging configuration, integration recipes for analytics/automation pipelines
 **Depends on**: Phase 16
 **Research**: Unlikely (internal documentation based on existing code)
 **Plans**: 2
+**Completed**: 2026-02-11
 
 Plans:
 - [x] 17-01: Multi-Site & Performance Patterns (multi-site operations, rate limiting deep dive, performance optimization)
-- [ ] 17-02: Integration Recipes & Deploy (integration recipes, mkdocs nav update, gh-pages deploy)
+- [x] 17-02: Integration Recipes & Deploy (integration recipes, mkdocs nav update, gh-pages deploy)
 
 #### Phase 18: Docstring Audit
 
@@ -142,5 +143,5 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | 14. Transaction Deep Dive | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 15. Account Resources | v1.1 | 1/1 | Complete | 2026-02-11 |
 | 16. Error & Troubleshoot | v1.1 | 2/2 | Complete | 2026-02-11 |
-| 17. Advanced Patterns | v1.1 | 1/2 | In progress | - |
+| 17. Advanced Patterns | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 18. Docstring Audit | v1.1 | 0/? | Not started | - |
