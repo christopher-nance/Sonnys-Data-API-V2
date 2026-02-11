@@ -28,6 +28,7 @@ with exponential-backoff retry keeps your application within the API's
   - [Washbooks](#washbooks)
   - [Recurring Accounts](#recurring-accounts)
   - [Transactions](#transactions)
+  - [Stats](#stats)
 - [Error Handling](#error-handling)
 - [Logging](#logging)
 - [Multi-Site Usage](#multi-site-usage)
@@ -116,6 +117,7 @@ Credentials are sent as HTTP headers on every request:
 | `client.washbooks` | `list(**params)`, `get(id)` |
 | `client.recurring` | `list(**params)`, `get(id)`, `list_status_changes(**params)`, `list_modifications(**params)`, `list_details(**params)` |
 | `client.transactions` | `list(**params)`, `get(id)`, `list_by_type(item_type, **params)`, `list_v2(**params)`, `load_job(*, poll_interval, timeout, **params)` |
+| `client.stats` | `total_sales(start, end)`, `total_washes(start, end)`, `retail_wash_count(start, end)`, `new_memberships_sold(start, end)`, `conversion_rate(start, end)`, `report(start, end)` |
 
 All `list()` methods auto-paginate by default -- every page is fetched
 transparently and the complete result set is returned. Common query parameters
@@ -297,6 +299,39 @@ fields include `trans_id`, `trans_number`, `total`, `date`.
 `transaction_status`. `list[TransactionJobItem]` from `load_job()` -- full
 transaction detail plus v2 enrichment fields.
 
+### Stats
+
+**Methods:** `total_sales(start, end)` | `total_washes(start, end)` | `retail_wash_count(start, end)` | `new_memberships_sold(start, end)` | `conversion_rate(start, end)` | `report(start, end)`
+
+Unlike other resources that wrap REST endpoints directly, `client.stats`
+computes business analytics by fetching raw data and aggregating it locally.
+All methods accept a date range as ISO-8601 strings or `datetime` objects:
+
+```python
+# Individual metrics
+sales = client.stats.total_sales("2026-01-01", "2026-01-31")
+print(f"Revenue: ${sales.total:.2f}")
+
+washes = client.stats.total_washes("2026-01-01", "2026-01-31")
+print(f"Total washes: {washes.total}")
+
+rate = client.stats.conversion_rate("2026-01-01", "2026-01-31")
+print(f"Conversion: {rate.rate:.1%}")
+
+# All KPIs in one call (4 API calls instead of 7)
+rpt = client.stats.report("2026-01-01", "2026-01-31")
+print(f"Revenue: ${rpt.sales.total:.2f}, Washes: {rpt.washes.total}")
+print(f"New members: {rpt.new_memberships}, Conversion: {rpt.conversion.rate:.1%}")
+```
+
+**Returns:** `SalesResult` from `total_sales()` -- fields include `total`,
+`count`, `recurring_plan_sales`, `retail`. `WashResult` from `total_washes()`
+-- fields include `total`, `wash_count`, `prepaid_wash_count`. `int` from
+`retail_wash_count()` and `new_memberships_sold()`. `ConversionResult` from
+`conversion_rate()` -- fields include `rate`, `new_memberships`,
+`retail_washes`. `StatsReport` from `report()` -- bundles `sales`, `washes`,
+`new_memberships`, `conversion`, `period_start`, `period_end`.
+
 ## Error Handling
 
 All exceptions inherit from `SonnysError`:
@@ -369,7 +404,7 @@ icon.close()
 Use `site_code` to scope a client to a single site:
 
 ```python
-client = SonnysClient(api_id="id", api_key="key", site_code="SITE01")
+client = SonnysClient(api_id="id", api_key="key", site_code="JOLIET")
 ```
 
 ## Requirements

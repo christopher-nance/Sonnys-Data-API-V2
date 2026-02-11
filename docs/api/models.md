@@ -157,3 +157,27 @@ print(customer.model_dump(by_alias=True))  # camelCase dict
     options:
       show_source: false
       heading_level: 3
+
+---
+
+## Stats
+
+::: sonnys_data_client.types.SalesResult
+    options:
+      show_source: false
+      heading_level: 3
+
+::: sonnys_data_client.types.WashResult
+    options:
+      show_source: false
+      heading_level: 3
+
+::: sonnys_data_client.types.ConversionResult
+    options:
+      show_source: false
+      heading_level: 3
+
+::: sonnys_data_client.types.StatsReport
+    options:
+      show_source: false
+      heading_level: 3

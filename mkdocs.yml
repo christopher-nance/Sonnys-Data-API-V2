@@ -54,6 +54,7 @@ nav:
       - Washbooks: guides/washbooks.md
       - Recurring Accounts: guides/recurring.md
       - Transactions: guides/transactions.md
+      - Stats: guides/stats.md
       - Error Handling: guides/error-handling.md
       - Advanced Patterns: guides/advanced-patterns.md
   - API Reference:
