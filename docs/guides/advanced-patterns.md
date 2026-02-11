@@ -761,3 +761,309 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
             f"{len(detail.items)} items, {len(detail.tenders)} tenders"
         )
 ```
+
+---
+
+## Integration Recipes
+
+Ready-to-use patterns for the most common SDK integration scenarios. Each
+recipe is a complete, copy-pasteable script that uses only the standard library
+and the SDK itself -- no extra dependencies required. Change the credentials
+and run.
+
+### Export to CSV
+
+Export transaction data for a date range to a CSV file. Uses `model_dump()`
+to convert each Pydantic model to a dictionary, then writes rows with the
+standard `csv` module.
+
+```python
+import csv
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(
+    api_id="your-api-id",
+    api_key="your-api-key",
+    site_code="JOLIET",
+) as client:
+    transactions = client.transactions.list(
+        startDate="2025-06-01",
+        endDate="2025-06-30",
+    )
+
+if transactions:
+    fieldnames = list(transactions[0].model_dump().keys())
+    with open("joliet_transactions.csv", "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for txn in transactions:
+            writer.writerow(txn.model_dump())
+
+    print(f"Exported {len(transactions)} transactions to joliet_transactions.csv")
+```
+
+!!! tip
+    Use `list_v2()` instead of `list()` when you need enriched CSV exports
+    with `customer_id`, `is_recurring_plan_sale`, `is_recurring_plan_redemption`,
+    and `transaction_status` columns. Use `list()` for lightweight exports
+    with just `trans_number`, `trans_id`, `total`, and `date`.
+
+### Export to JSON
+
+Export transaction data to a JSON file. Use `model_dump(mode="json")` to get
+a JSON-serializable dictionary (handles dates, decimals, etc.).
+
+```python
+import json
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(
+    api_id="your-api-id",
+    api_key="your-api-key",
+    site_code="JOLIET",
+) as client:
+    transactions = client.transactions.list(
+        startDate="2025-06-01",
+        endDate="2025-06-30",
+    )
+
+data = [txn.model_dump(mode="json") for txn in transactions]
+
+with open("joliet_transactions.json", "w") as f:
+    json.dump(data, f, indent=2)
+
+print(f"Exported {len(data)} transactions to joliet_transactions.json")
+```
+
+!!! note
+    Use `model_dump(mode="json", by_alias=True)` if the downstream consumer
+    expects camelCase field names matching the raw API format (e.g.,
+    `transNumber` instead of `trans_number`).
+
+### Scheduled Daily Export
+
+A script designed to run once per day that exports yesterday's transactions to
+a date-stamped CSV file. Ideal for cron jobs or Windows Task Scheduler.
+
+```python
+"""daily_export.py -- Export yesterday's transactions to a date-stamped CSV."""
+import csv
+import logging
+from datetime import date, timedelta
+from pathlib import Path
+
+from sonnys_data_client import SonnysClient
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
+logger = logging.getLogger(__name__)
+
+yesterday = date.today() - timedelta(days=1)
+today = date.today()
+output_dir = Path("exports")
+output_dir.mkdir(exist_ok=True)
+output_file = output_dir / f"transactions_{yesterday.isoformat()}.csv"
+
+with SonnysClient(
+    api_id="your-api-id",
+    api_key="your-api-key",
+    site_code="JOLIET",
+) as client:
+    transactions = client.transactions.list(
+        startDate=yesterday.isoformat(),
+        endDate=today.isoformat(),
+    )
+
+if transactions:
+    fieldnames = list(transactions[0].model_dump().keys())
+    with open(output_file, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for txn in transactions:
+            writer.writerow(txn.model_dump())
+
+logger.info("Exported %d transactions to %s", len(transactions), output_file)
+```
+
+!!! note "Scheduling this script"
+    **Linux/Mac (cron):** Run daily at 6:00 AM:
+
+    ```
+    0 6 * * * python /path/to/daily_export.py
+    ```
+
+    **Windows (Task Scheduler):** Create a Basic Task triggered daily at
+    6:00 AM, with the action "Start a program" pointing to your Python
+    executable and the script path as the argument.
+
+### Multi-Site Daily Report
+
+Combine the multi-site iteration pattern with CSV export to produce either
+per-site CSV files or a single consolidated CSV with a `site_code` column.
+This example builds a consolidated file.
+
+```python
+"""multi_site_report.py -- Consolidated daily report across all sites."""
+import csv
+import time
+from datetime import date, timedelta
+from pathlib import Path
+
+from sonnys_data_client import SonnysClient
+
+SITES = ["JOLIET", "ROMEOVILLE", "PLAINFIELD", "SHOREWOOD"]
+
+yesterday = date.today() - timedelta(days=1)
+today = date.today()
+output_file = Path(f"daily_report_{yesterday.isoformat()}.csv")
+
+all_rows = []
+
+for site in SITES:
+    with SonnysClient(
+        api_id="your-api-id",
+        api_key="your-api-key",
+        site_code=site,
+    ) as client:
+        transactions = client.transactions.list(
+            startDate=yesterday.isoformat(),
+            endDate=today.isoformat(),
+        )
+        for txn in transactions:
+            row = txn.model_dump()
+            row["site_code"] = site
+            all_rows.append(row)
+    time.sleep(2)  # Respect shared rate limit between sites
+
+if all_rows:
+    fieldnames = list(all_rows[0].keys())
+    with open(output_file, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(all_rows)
+
+print(f"Exported {len(all_rows)} transactions across {len(SITES)} sites")
+print(f"Output: {output_file}")
+```
+
+!!! tip
+    For per-site CSV files instead of a consolidated file, move the file
+    writing inside the site loop and use
+    `Path(f"{site}_{yesterday.isoformat()}.csv")` as the output path. See
+    [Iterating Multiple Sites](#iterating-multiple-sites) for the base pattern.
+
+### Data Pipeline Pattern
+
+A structured fetch-validate-transform-load pipeline. This example pulls
+recurring account data, filters to active accounts, calculates key metrics
+(active count, monthly recurring revenue), and writes a summary to JSON.
+
+```python
+"""recurring_pipeline.py -- Recurring account data pipeline."""
+import json
+import logging
+from datetime import date
+from pathlib import Path
+
+from sonnys_data_client import SonnysClient
+from sonnys_data_client._exceptions import APIError
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logger = logging.getLogger(__name__)
+
+# --- Fetch ---
+try:
+    with SonnysClient(
+        api_id="your-api-id",
+        api_key="your-api-key",
+        site_code="JOLIET",
+    ) as client:
+        accounts = client.recurring.list_details()
+except APIError as e:
+    logger.error("Failed to fetch recurring accounts: %s", e)
+    raise SystemExit(1)
+
+logger.info("Fetched %d recurring accounts", len(accounts))
+
+# --- Validate & Transform ---
+active = [a for a in accounts if a.current_recurring_status_name == "Active"]
+mrr = sum(a.billing_amount for a in active if a.billing_amount is not None)
+
+summary = {
+    "date": date.today().isoformat(),
+    "total_accounts": len(accounts),
+    "active_accounts": len(active),
+    "monthly_recurring_revenue": round(mrr, 2),
+    "average_billing": round(mrr / len(active), 2) if active else 0,
+}
+
+# --- Load ---
+output_file = Path(f"recurring_summary_{date.today().isoformat()}.json")
+with open(output_file, "w") as f:
+    json.dump(summary, f, indent=2)
+
+logger.info("Pipeline complete: %d active accounts, MRR=$%.2f", len(active), mrr)
+logger.info("Output: %s", output_file)
+```
+
+!!! tip
+    For production pipelines, reference the
+    [Error Handling guide](error-handling.md#retry-strategies) for more
+    granular exception handling. You can wrap each pipeline stage in its own
+    try/except to handle partial failures gracefully.
+
+### Monitoring & Alerting Recipe
+
+A simple script that checks a KPI (today's transaction count) against a
+threshold and logs a warning when the value is below expected volume. Run this
+on a schedule to catch low-volume days early.
+
+```python
+"""monitor_volume.py -- Check daily transaction volume against threshold."""
+import logging
+from datetime import date, timedelta
+
+from sonnys_data_client import SonnysClient
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logger = logging.getLogger(__name__)
+
+SITE = "JOLIET"
+MIN_EXPECTED_TRANSACTIONS = 200  # Typical daily volume for this site
+
+today = date.today()
+yesterday = today - timedelta(days=1)
+
+with SonnysClient(
+    api_id="your-api-id",
+    api_key="your-api-key",
+    site_code=SITE,
+) as client:
+    transactions = client.transactions.list(
+        startDate=yesterday.isoformat(),
+        endDate=today.isoformat(),
+    )
+
+count = len(transactions)
+revenue = sum(txn.total for txn in transactions)
+
+logger.info("%s: %d transactions, $%.2f revenue", SITE, count, revenue)
+
+if count < MIN_EXPECTED_TRANSACTIONS:
+    logger.warning(
+        "LOW VOLUME ALERT: %s had %d transactions (expected >= %d)",
+        SITE, count, MIN_EXPECTED_TRANSACTIONS,
+    )
+else:
+    logger.info("%s volume is normal (%d >= %d)", SITE, count, MIN_EXPECTED_TRANSACTIONS)
+```
+
+!!! tip "Extending with real alerts"
+    This recipe logs warnings to stdout. In production, extend it with:
+
+    - **Email alerts:** Use `smtplib` from the standard library to send an
+      email when the threshold is breached.
+    - **Slack webhooks:** Use `urllib.request` to POST a JSON payload to a
+      Slack incoming webhook URL.
+    - **Integration with the logging config** from the
+      [Error Handling guide](error-handling.md#logging-configuration) to route
+      warnings to a file or external logging service.
