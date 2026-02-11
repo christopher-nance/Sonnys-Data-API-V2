@@ -61,16 +61,17 @@ Plans:
 - [x] 12-01: MkDocs Material Setup (docs dependencies, mkdocs.yml, landing page)
 - [x] 12-02: API Reference Pages & GitHub Pages Deploy
 
-#### Phase 13: Resource Guides -- IN PROGRESS
+#### Phase 13: Resource Guides -- COMPLETE
 
 **Goal**: Per-resource usage guides with realistic examples for each of the 8 resources (customers, items, employees, sites, giftcards, washbooks, recurring, transactions)
 **Depends on**: Phase 12
 **Research**: Unlikely (internal documentation based on existing code)
 **Plans**: 2
+**Completed**: 2026-02-10
 
 Plans:
 - [x] 13-01: Standard Resource Guides (Customers, Items, Employees, Sites + Guides nav)
-- [ ] 13-02: TBD
+- [x] 13-02: Account & Transaction Resource Guides (Giftcards, Washbooks, Recurring, Transactions)
 
 #### Phase 14: Transaction Deep Dive
 
@@ -131,7 +132,7 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 |-------|-----------|-------|--------|-----------|
 | 11. README Overhaul | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 12. API Reference Setup | v1.1 | 2/2 | Complete | 2026-02-10 |
-| 13. Resource Guides | v1.1 | 1/2 | In progress | - |
+| 13. Resource Guides | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 14. Transaction Deep Dive | v1.1 | 0/? | Not started | - |
 | 15. Account Resources | v1.1 | 0/? | Not started | - |
 | 16. Error & Troubleshoot | v1.1 | 0/? | Not started | - |
