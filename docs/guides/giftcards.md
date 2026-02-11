@@ -94,11 +94,32 @@ Returned by `list()`. Contains the full gift card record.
 | `site_code`     | `str`          | Site where the gift card was sold    |
 | `complete_date` | `str \| None`  | Date the gift card was fully used    |
 
+## Advanced Patterns
+
+### Liability Tracking with Transactions
+
+Combine gift card records with gift card transaction data to track redemptions
+and calculate outstanding liability:
+
+```python
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    giftcards = client.giftcards.list()
+    gc_txns = client.transactions.list_by_type(
+        "giftcard",
+        startDate="2025-06-01",
+        endDate="2025-06-30",
+    )
+
+    # Outstanding liability
+    total_liability = sum(gc.value - gc.amount_used for gc in giftcards)
+    print(f"Total outstanding liability: ${total_liability:.2f}")
+    print(f"Gift card transactions this month: {len(gc_txns)}")
+    print(f"Active cards: {sum(1 for gc in giftcards if gc.value > gc.amount_used)}")
+```
+
 !!! note "Auto-pagination"
     The `list()` method automatically fetches all pages of results. You do not
     need to handle pagination manually -- the client will continue requesting
     pages until all records have been retrieved.
-
-!!! tip "Advanced patterns"
-    Phase 15 will cover advanced account resource patterns including
-    cross-resource analysis and reporting workflows.

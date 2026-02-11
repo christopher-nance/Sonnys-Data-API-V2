@@ -6,6 +6,29 @@ five methods for listing accounts, fetching full details, tracking status
 changes, and reviewing modification history. Each account includes billing
 information, plan details, associated tags, vehicles, and customer data.
 
+## Choosing the Right Method
+
+The recurring resource offers five methods. Pick the one that matches your use
+case to avoid fetching more data than you need:
+
+| Method | Returns | Use When | Pagination |
+|--------|---------|----------|------------|
+| `list()` | `RecurringListItem` | Quick summaries, filtering by date/site | Auto |
+| `get()` | `Recurring` | Full detail for a single account | N/A |
+| `list_status_changes()` | `RecurringStatusChange` | Tracking cancellations, reactivations | Auto |
+| `list_modifications()` | `RecurringModification` | Audit trail, plan changes, account edits | Auto |
+| `list_details()` | `Recurring` | Bulk export with full detail (heavier) | Auto |
+
+Start with `list()` for lightweight summaries and filtering by date range or
+site. Use `get()` when you need a single-account deep dive with nested billing
+history, tags, vehicles, and customer data. Reach for
+`list_status_changes()` when analyzing churn and retention trends, and
+`list_modifications()` when you need an audit trail of plan changes or account
+edits. Reserve `list_details()` for cases where you need the full nested data
+(tags, vehicles, billing history) in bulk -- it returns the same rich
+`Recurring` objects as `get()` but for every account, so it is significantly
+heavier.
+
 ## Methods
 
 ### `list(**params) -> list[RecurringListItem]`
@@ -285,6 +308,70 @@ Nested inside `RecurringModification`.
 | `name`    | `str`          | Modification name        |
 | `date`    | `str`          | Date of the modification |
 | `comment` | `str \| None`  | Optional comment         |
+
+## Advanced Patterns
+
+### Churn Analysis
+
+Use `list_status_changes()` to analyze account churn over a date range. Each
+status change includes the old and new status, the date, and the employee and
+site responsible:
+
+```python
+from collections import Counter
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    changes = client.recurring.list_status_changes(
+        startDate="2025-06-01",
+        endDate="2025-06-30",
+    )
+
+    # Count transitions by type
+    transitions = Counter(
+        f"{c.old_status} → {c.new_status}" for c in changes
+    )
+    for transition, count in transitions.most_common():
+        print(f"{transition}: {count}")
+
+    # Find cancellations
+    cancellations = [c for c in changes if c.new_status.lower() == "cancelled"]
+    print(f"\n{len(cancellations)} cancellations this month")
+    for c in cancellations:
+        print(f"  Account {c.recurring_id} at {c.site_code} on {c.status_date}")
+```
+
+### Billing History Report
+
+Use `list_details()` to build a billing summary across all accounts. Each
+`Recurring` object includes a `recurring_billings` list with individual charge
+records:
+
+```python
+with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+    accounts = client.recurring.list_details(
+        startDate="2025-06-01",
+        endDate="2025-06-30",
+    )
+
+    total_revenue = 0.0
+    for acct in accounts:
+        acct_total = sum(b.amount_charged for b in acct.recurring_billings)
+        total_revenue += acct_total
+        if acct_total > 0:
+            print(
+                f"Account {acct.id} ({acct.plan_name}): "
+                f"${acct_total:.2f} over {len(acct.recurring_billings)} billings"
+            )
+
+    print(f"\nTotal recurring revenue: ${total_revenue:.2f}")
+```
+
+!!! warning "Use `list_details()` only when needed"
+    `list_details()` returns full `Recurring` objects for every account,
+    including nested tags, vehicles, and billing history. This is significantly
+    heavier than `list()`. Use it only when you need billing or status history
+    data in bulk.
 
 !!! note "Shared nested types"
     The `Recurring` model reuses `WashbookCustomer`, `WashbookTag`, and
