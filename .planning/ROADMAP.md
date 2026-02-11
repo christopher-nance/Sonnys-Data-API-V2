@@ -96,16 +96,17 @@ Plans:
 Plans:
 - [x] 15-01: Advanced Account Patterns & Deploy (recurring method comparison, churn analysis, billing report, giftcard liability tracking)
 
-#### Phase 16: Error Handling & Troubleshooting
+#### Phase 16: Error Handling & Troubleshooting -- COMPLETE
 
 **Goal**: Comprehensive error handling patterns guide — exception hierarchy usage, retry strategies, debugging with logging, and common issues with solutions
 **Depends on**: Phase 15
 **Research**: Unlikely (internal documentation based on existing code)
 **Plans**: 2
+**Completed**: 2026-02-11
 
 Plans:
 - [x] 16-01: Error Handling Patterns Guide (hierarchy, catching, attributes, per-type guidance, retry recipes)
-- [ ] 16-02: Logging, Troubleshooting & Deploy (logging config, common issues, mkdocs nav, gh-pages deploy)
+- [x] 16-02: Logging, Troubleshooting & Deploy (logging config, common issues, mkdocs nav, gh-pages deploy)
 
 #### Phase 17: Advanced Patterns
 
@@ -139,6 +140,6 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16 → 17 �
 | 13. Resource Guides | v1.1 | 2/2 | Complete | 2026-02-10 |
 | 14. Transaction Deep Dive | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 15. Account Resources | v1.1 | 1/1 | Complete | 2026-02-11 |
-| 16. Error & Troubleshoot | v1.1 | 1/2 | In progress | - |
+| 16. Error & Troubleshoot | v1.1 | 2/2 | Complete | 2026-02-11 |
 | 17. Advanced Patterns | v1.1 | 0/? | Not started | - |
 | 18. Docstring Audit | v1.1 | 0/? | Not started | - |
