@@ -35,18 +35,23 @@ exports where you need full transaction detail on every record, use
 The list methods (`list()`, `list_by_type()`, `list_v2()`) and `load_job()` all
 accept the same query parameters:
 
-| Parameter   | Type  | Description                              |
-|-------------|-------|------------------------------------------|
-| `startDate` | `str` | Start of date range (format: `YYYY-MM-DD`) |
-| `endDate`   | `str` | End of date range (format: `YYYY-MM-DD`)   |
-| `site`      | `str` | Filter by site code                      |
-| `region`    | `str` | Filter by region                         |
+| Parameter   | Type         | Description                              |
+|-------------|--------------|------------------------------------------|
+| `startDate` | `str \| int` | Start of date range — ISO 8601 string (`"2026-01-15"`) or Unix timestamp (`1736899200`) |
+| `endDate`   | `str \| int` | End of date range — ISO 8601 string (`"2026-01-31"`) or Unix timestamp (`1738281600`) |
+| `site`      | `str`        | Filter by site code                      |
+| `region`    | `str`        | Filter by region                         |
 
 !!! note "Pagination is handled automatically"
     The `limit` and `offset` parameters are managed by the client's
     auto-pagination logic -- you do not need to set these manually. For
     `load_job()`, `limit` and `offset` control job-level pagination (default
     100 records per job page), but the client handles this transparently.
+
+!!! info "Date conversion"
+    The SDK automatically converts ISO 8601 date strings to Unix timestamps
+    before sending them to the API. You can pass either format — the SDK
+    handles the conversion transparently.
 
 !!! info "`get()` takes no query parameters"
     The `get()` method accepts only a positional `trans_id` argument and does
@@ -127,12 +132,16 @@ as many jobs as needed to retrieve all records.
 job_results = client.transactions.load_job(
     startDate="2025-06-15",
     endDate="2025-06-16",
+    site="JOLIET",
 )
 ```
 
-!!! warning "Date range limit"
+!!! warning "Date range limit and site parameter"
     The `load_job()` method is limited to a **maximum 24-hour date range** per
     call. For longer periods, submit multiple jobs with consecutive date ranges.
+
+    The `site` parameter is **required** for `load_job()` — pass it explicitly
+    even if you set `site_code` on the client constructor.
 
 !!! info "Job caching and polling"
     Job data is cached by the API for **20 minutes**. The `poll_interval`
@@ -257,6 +266,7 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     results = client.transactions.load_job(
         startDate="2025-06-15",
         endDate="2025-06-16",
+        site="JOLIET",
     )
 
     print(f"Exported {len(results)} transactions")
@@ -275,6 +285,7 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     results = client.transactions.load_job(
         startDate="2025-06-15",
         endDate="2025-06-16",
+        site="JOLIET",
         poll_interval=5.0,   # Check every 5 seconds
         timeout=600.0,       # Wait up to 10 minutes
     )
@@ -321,6 +332,11 @@ for completion, and return the results.
 3. **Return** -- When the status reaches `"pass"`, the response contains the
    transaction data. The client validates each record into a
    `TransactionJobItem` model and returns the full list.
+
+!!! tip "Debug logging"
+    Enable `DEBUG` logging on `sonnys_data_client` to see the full job
+    lifecycle: job submission with parameters, hash returned, each poll
+    attempt, pending/complete status transitions, and final record count.
 
 ### Job Status Lifecycle
 
@@ -500,6 +516,7 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
         day_results = client.transactions.load_job(
             startDate=current.isoformat(),
             endDate=next_day.isoformat(),
+            site="JOLIET",
         )
         all_results.extend(day_results)
         current = next_day
@@ -530,6 +547,7 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
         results = client.transactions.load_job(
             startDate="2025-06-15",
             endDate="2025-06-16",
+            site="JOLIET",
             timeout=600.0,
         )
     except APITimeoutError:

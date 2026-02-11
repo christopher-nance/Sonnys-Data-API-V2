@@ -60,12 +60,12 @@ class RecurringAccounts(ListableResource, GettableResource):
             A list of validated Pydantic model instances.
         """
         all_items: list[SonnysModel] = []
-        offset = 1
+        page = 1
 
         while True:
             request_params = {
                 "limit": limit,
-                "offset": offset,
+                "offset": page,
                 **params,
             }
             response = self._client._request("GET", path, params=request_params)
@@ -77,8 +77,10 @@ class RecurringAccounts(ListableResource, GettableResource):
             for item in items:
                 all_items.append(model.model_validate(item))
 
-            offset += limit
-            if total is None or offset > total:
+            if len(items) < limit:
+                break
+            page += 1
+            if total is not None and len(all_items) >= total:
                 break
 
         return all_items

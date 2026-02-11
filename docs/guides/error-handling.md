@@ -135,6 +135,18 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
         print(f"Body:       {e.body}")
 ```
 
+!!! tip "Readable error strings"
+    Printing or logging an `APIStatusError` directly (e.g., `print(e)`) produces
+    a formatted string with all key details:
+
+    ```
+    [HTTP 422] (PayloadValidationError) site: Only 1 site can be selected.
+    API response body: {'error': {'type': 'PayloadValidationError', ...}}
+    ```
+
+    This makes tracebacks and log output immediately actionable without needing
+    to inspect individual attributes.
+
 !!! info "API error_type values"
     The `error_type` attribute contains the raw error type string returned by
     the Sonny's API. The SDK maps these to exception classes automatically:
@@ -181,7 +193,7 @@ from sonnys_data_client._exceptions import AuthError
 with SonnysClient(
     api_id="your-api-id",
     api_key="your-api-key",
-    site_code="SITE01",
+    site_code="JOLIET",
 ) as client:
     try:
         sites = client.sites.list()
@@ -256,15 +268,16 @@ parameters.
 
 **Common causes:**
 
-- Date format `"06/01/2025"` instead of the required `"2025-06-01"` (ISO 8601) -- this is the most common validation error and triggers `InvalidPayloadRequestTimestampError`
+- Date format `"06/01/2025"` instead of ISO 8601 (`"2025-06-01"`) -- this is the most common validation error and triggers `InvalidPayloadRequestTimestampError`. The SDK auto-converts ISO 8601 strings to Unix timestamps, but non-ISO formats like `MM/DD/YYYY` are not supported.
 - Passing a transaction type string that does not exist to `list_by_type()` (e.g., `"membership"` instead of `"recurring"`)
 - Sending `endDate` earlier than `startDate`
-- Malformed JSON in the request body (rare with the SDK, but possible if you modify internals)
+- Missing the required `site` parameter on `load_job()` when the API ID has access to multiple sites
 - Missing required parameters on endpoints that enforce them
 
-**Recommended handling:** Do not retry -- fix the request parameters. Check date
-formats (`YYYY-MM-DD`), parameter names, and allowed values. Use `error_type` to
-distinguish between timestamp errors and general payload errors.
+**Recommended handling:** Do not retry -- fix the request parameters. Use ISO 8601
+date strings (`"2025-06-01"`) or Unix timestamps. Check parameter names and allowed
+values. Use `error_type` to distinguish between timestamp errors and general payload
+errors.
 
 ```python
 from sonnys_data_client import SonnysClient
@@ -272,18 +285,21 @@ from sonnys_data_client._exceptions import ValidationError
 
 with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     try:
-        transactions = client.transactions.list(
-            startDate="06/01/2025",  # Wrong format!
-            endDate="06/30/2025",
+        # load_job() requires explicit site= when the API ID has multi-site access
+        results = client.transactions.load_job(
+            startDate="2025-06-15",
+            endDate="2025-06-16",
+            # Missing site= parameter!
         )
     except ValidationError as e:
         print(f"Validation error: {e.message}")
         print(f"Error type: {e.error_type}")
 
-        if e.error_type == "InvalidPayloadRequestTimestampError":
-            print("Fix date format to YYYY-MM-DD")
-        elif e.error_type == "PayloadValidationError":
+        if e.error_type == "PayloadValidationError":
             print("Check parameter names and values")
+            print(f"Full response: {e.body}")
+        elif e.error_type == "InvalidPayloadRequestTimestampError":
+            print("Use ISO 8601 date format (YYYY-MM-DD) or Unix timestamps")
 ```
 
 !!! info
@@ -634,12 +650,19 @@ The SDK emits these log messages at each stage of a request:
 | DEBUG   | `Rate limiter: waiting {N}s`                               | Pre-request rate limit sleep             |
 | DEBUG   | `Request: {METHOD} {PATH} params={PARAMS}`                 | Outgoing HTTP request                    |
 | DEBUG   | `Response: {METHOD} {PATH} status={CODE} elapsed={TIME}s`  | Successful response received             |
+| DEBUG   | `Error response: {METHOD} {PATH} status={CODE} body={BODY}` | HTTP error before exception is raised  |
 | WARNING | `Rate limited (429), retry {N}/{MAX} after {DELAY}s`       | 429 received, backing off before retry   |
+| DEBUG   | `Job submit: POST /transaction/load-job params={PARAMS}`   | Batch job submitted                      |
+| DEBUG   | `Job submitted: hash={HASH}`                               | Job hash received from API               |
+| DEBUG   | `Job poll #{N}: hash={HASH}`                               | Polling for job results                  |
+| DEBUG   | `Job pending: hash={HASH} status={STATUS}`                 | Job still processing                     |
+| DEBUG   | `Job complete: hash={HASH} records={N} polls={N}`          | Job finished with record count           |
+| ERROR   | `Job failed: hash={HASH}`                                  | Batch job returned failure status        |
 
 ### Reading Debug Output
 
-Here is an annotated example of a typical debug session. Two requests are made:
-the first hits the rate limiter and succeeds, the second gets a 429 and retries.
+Here is an annotated example of a typical debug session showing a successful
+request, a 429 retry, and an error response:
 
 ```
 2025-06-15 10:00:00,100 DEBUG sonnys_data_client: Rate limiter: waiting 0.450s
@@ -651,17 +674,52 @@ the first hits the rate limiter and succeeds, the second gets a 429 and retries.
 2025-06-15 10:00:01,200 DEBUG sonnys_data_client: Response: GET /sites status=200 elapsed=0.650s
 # ^ Success! The API responded in 650ms with HTTP 200.
 
-2025-06-15 10:00:01,210 DEBUG sonnys_data_client: Request: GET /transactions params={'startDate': '2025-06-01', 'endDate': '2025-06-15'}
-# ^ Second request -- fetching transactions with date range parameters.
+2025-06-15 10:00:01,210 DEBUG sonnys_data_client: Request: GET /transaction params={'startDate': 1717200000, 'endDate': 1718409600, 'limit': 100, 'offset': 1}
+# ^ Fetching transactions. Dates were auto-converted from ISO strings to Unix timestamps.
 
 2025-06-15 10:00:01,800 WARNING sonnys_data_client: Rate limited (429), retry 1/3 after 1.0s
 # ^ API returned 429. SDK will wait 1 second then retry (attempt 1 of 3).
 
-2025-06-15 10:00:02,810 DEBUG sonnys_data_client: Request: GET /transactions params={'startDate': '2025-06-01', 'endDate': '2025-06-15'}
+2025-06-15 10:00:02,810 DEBUG sonnys_data_client: Request: GET /transaction params={'startDate': 1717200000, 'endDate': 1718409600, 'limit': 100, 'offset': 1}
 # ^ Retry request sent after the 1-second backoff.
 
-2025-06-15 10:00:03,500 DEBUG sonnys_data_client: Response: GET /transactions status=200 elapsed=0.690s
+2025-06-15 10:00:03,500 DEBUG sonnys_data_client: Response: GET /transaction status=200 elapsed=0.690s
 # ^ Retry succeeded. The API responded with HTTP 200.
+```
+
+And here is an example showing batch job lifecycle logging:
+
+```
+2025-06-15 10:01:00,100 DEBUG sonnys_data_client: Job submit: POST /transaction/load-job params={'startDate': 1717200000, 'endDate': 1717286400, 'site': 'JOLIET', 'limit': 100, 'offset': 1}
+# ^ Batch job submitted with date range and site parameters.
+
+2025-06-15 10:01:00,800 DEBUG sonnys_data_client: Job submitted: hash=abc123def456
+# ^ API accepted the job and returned a hash for polling.
+
+2025-06-15 10:01:02,810 DEBUG sonnys_data_client: Job poll #1: hash=abc123def456
+# ^ First poll attempt (after poll_interval delay).
+
+2025-06-15 10:01:03,200 DEBUG sonnys_data_client: Job pending: hash=abc123def456 status=pending
+# ^ Job is still processing. Will poll again after another interval.
+
+2025-06-15 10:01:05,210 DEBUG sonnys_data_client: Job poll #2: hash=abc123def456
+# ^ Second poll attempt.
+
+2025-06-15 10:01:05,900 DEBUG sonnys_data_client: Job complete: hash=abc123def456 records=347 polls=2
+# ^ Job finished! 347 records returned after 2 poll cycles.
+```
+
+And an error response example:
+
+```
+2025-06-15 10:02:00,100 DEBUG sonnys_data_client: Request: GET /transaction params={'startDate': '06/01/2025'}
+# ^ Request with an invalid date format (not ISO-8601 or Unix timestamp).
+
+2025-06-15 10:02:00,700 DEBUG sonnys_data_client: Error response: GET /transaction status=400 body={"error":{"type":"InvalidPayloadRequestTimestampError","message":"Invalid timestamp"}}
+# ^ Full error response body logged before the exception is raised.
+
+# The exception traceback will show:
+# sonnys_data_client._exceptions.ValidationError: [HTTP 400] (InvalidPayloadRequestTimestampError) Invalid timestamp
 ```
 
 !!! tip
@@ -678,7 +736,7 @@ the first hits the rate limiter and succeeds, the second gets a 429 and retries.
 | `AuthError: BadClientCredentialsError` | Wrong `api_id` or `api_key` | Verify credentials with Sonny's support |
 | `AuthError: NotAuthorizedSiteCredentialsError` | `site_code` not authorized for this API ID | Use a `site_code` linked to your API credentials |
 | `RateLimitError` after retries exhausted | Too many concurrent requests | Reduce parallelism or increase `max_retries` |
-| `ValidationError: PayloadValidationError` | Bad date format or invalid parameter | Use `YYYY-MM-DD` format, check parameter names |
+| `ValidationError: PayloadValidationError` | Invalid parameter or missing `site` on `load_job()` | Check parameter names; pass `site=` to `load_job()` |
 | `NotFoundError: EntityNotFoundError` | Resource ID doesn't exist or wrong site | Verify ID and `site_code` match |
 | `ServerError` intermittent 500s | Sonny's API transient issue | Add retry logic for 5xx (see [Custom Retry Patterns](#custom-retry-patterns)) |
 | `APIConnectionError` | Network/DNS failure | Check internet, verify `trigonapi.sonnyscontrols.com` is reachable |
@@ -697,10 +755,10 @@ When something goes wrong, follow these steps in order:
 5. **Check rate limiter state** with debug logs -- look for `Rate limiter: waiting` messages to see if pre-request throttling is slowing you down
 
 !!! warning
-    The most common mistake is using `MM/DD/YYYY` date format (e.g., `"06/01/2025"`)
-    instead of the required `YYYY-MM-DD` format (e.g., `"2025-06-01"`). The API will
-    reject the request with a `ValidationError` and `error_type` of
-    `InvalidPayloadRequestTimestampError`. Always use ISO 8601 dates.
+    The SDK auto-converts ISO 8601 date strings (e.g., `"2025-06-01"`) to Unix
+    timestamps for the API. However, non-ISO formats like `"06/01/2025"` are **not**
+    recognized and will cause an `InvalidPayloadRequestTimestampError`. Always use
+    `YYYY-MM-DD` format or pass Unix timestamps directly.
 
 ## Quick Reference
 

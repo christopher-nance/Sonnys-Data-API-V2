@@ -57,6 +57,15 @@ class APIStatusError(APIError):
         self.error_type = error_type
         super().__init__(message)
 
+    def __str__(self) -> str:
+        header = f"[HTTP {self.status_code}]"
+        if self.error_type:
+            header += f" ({self.error_type})"
+        result = f"{header} {self.message}"
+        if self.body:
+            result += f"\nAPI response body: {self.body}"
+        return result
+
 
 class AuthError(APIStatusError):
     """Authentication or authorization failed (HTTP 403).

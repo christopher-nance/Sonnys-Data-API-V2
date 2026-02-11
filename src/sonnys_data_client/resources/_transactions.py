@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 import time
+from datetime import datetime, timezone
 
 from sonnys_data_client._exceptions import APIError, APITimeoutError
+
+logger = logging.getLogger("sonnys_data_client")
 from sonnys_data_client._resources import GettableResource, ListableResource
 from sonnys_data_client.types._base import SonnysModel
 from sonnys_data_client.types._transactions import (
@@ -41,6 +45,39 @@ class Transactions(ListableResource, GettableResource):
     _detail_path = "/transaction/{id}"
     _detail_model = Transaction
 
+    @staticmethod
+    def _convert_dates(params: dict) -> dict:
+        """Convert ISO date strings to Unix timestamps for the API.
+
+        The Sonny's API expects ``startDate`` and ``endDate`` as integer
+        Unix timestamps.  This helper lets callers pass human-readable
+        ISO-8601 strings (e.g. ``"2026-01-15"``) which are converted
+        automatically.  Values that are already numeric pass through
+        unchanged.
+        """
+        converted = dict(params)
+        for key in ("startDate", "endDate"):
+            value = converted.get(key)
+            if value is None or isinstance(value, (int, float)):
+                continue
+            if isinstance(value, str):
+                dt = datetime.fromisoformat(value)
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
+                converted[key] = int(dt.timestamp())
+        return converted
+
+    def list(self, **params: object) -> list[TransactionListItem]:
+        """Fetch all transactions, converting date strings to timestamps.
+
+        Accepts ``startDate`` / ``endDate`` as ISO-8601 strings
+        (e.g. ``"2026-01-15"``) or Unix timestamps.
+
+        Returns:
+            A flat list of :class:`TransactionListItem` instances.
+        """
+        return super().list(**self._convert_dates(params))
+
     def _paginated_fetch(
         self,
         path: str,
@@ -65,12 +102,12 @@ class Transactions(ListableResource, GettableResource):
             A list of validated Pydantic model instances.
         """
         all_items: list[SonnysModel] = []
-        offset = 1
+        page = 1
 
         while True:
             request_params = {
                 "limit": limit,
-                "offset": offset,
+                "offset": page,
                 **params,
             }
             response = self._client._request("GET", path, params=request_params)
@@ -82,8 +119,10 @@ class Transactions(ListableResource, GettableResource):
             for item in items:
                 all_items.append(model.model_validate(item))
 
-            offset += limit
-            if total is None or offset > total:
+            if len(items) < limit:
+                break
+            page += 1
+            if total is not None and len(all_items) >= total:
                 break
 
         return all_items
@@ -107,7 +146,7 @@ class Transactions(ListableResource, GettableResource):
             f"/transaction/type/{item_type}",
             "transactions",
             TransactionListItem,
-            **params,
+            **self._convert_dates(params),
         )
 
     def list_v2(self, **params: object) -> list[TransactionV2ListItem]:
@@ -126,7 +165,7 @@ class Transactions(ListableResource, GettableResource):
             "/transaction/version-2",
             "transactions",
             TransactionV2ListItem,
-            **params,
+            **self._convert_dates(params),
         )
 
     def _submit_and_poll(
@@ -141,13 +180,18 @@ class Transactions(ListableResource, GettableResource):
         Returns:
             A tuple of (list of raw item dicts, total count).
         """
+        logger.debug("Job submit: POST /transaction/load-job params=%s", params)
         response = self._client._request(
             "POST", "/transaction/load-job", params=params,
         )
         hash_value = response.json()["data"]["hash"]
+        logger.debug("Job submitted: hash=%s", hash_value)
 
         deadline = time.monotonic() + timeout
+        poll_count = 0
         while True:
+            poll_count += 1
+            logger.debug("Job poll #%d: hash=%s", poll_count, hash_value)
             response = self._client._request(
                 "GET",
                 "/transaction/get-job-data",
@@ -157,9 +201,15 @@ class Transactions(ListableResource, GettableResource):
             status = body["status"]
 
             if status == "pass":
-                return body["data"], body.get("total", len(body["data"]))
+                total = body.get("total", len(body["data"]))
+                logger.debug(
+                    "Job complete: hash=%s records=%d polls=%d",
+                    hash_value, total, poll_count,
+                )
+                return body["data"], total
 
             if status == "fail":
+                logger.error("Job failed: hash=%s", hash_value)
                 raise APIError("Batch job failed")
 
             if time.monotonic() >= deadline:
@@ -167,6 +217,7 @@ class Transactions(ListableResource, GettableResource):
                     f"Batch job did not complete within {timeout}s"
                 )
 
+            logger.debug("Job pending: hash=%s status=%s", hash_value, status)
             time.sleep(poll_interval)
 
     def load_job(
@@ -199,6 +250,7 @@ class Transactions(ListableResource, GettableResource):
             APIError: If any job status is ``"fail"``.
             APITimeoutError: If any job does not complete within *timeout*.
         """
+        params = self._convert_dates(params)
         limit = int(params.get("limit", 100))
         page = int(params.get("offset", 1))
 

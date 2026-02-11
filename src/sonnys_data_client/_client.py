@@ -5,6 +5,7 @@ from __future__ import annotations
 import functools
 import logging
 import time
+from zoneinfo import ZoneInfo
 
 import requests
 
@@ -65,6 +66,23 @@ class SonnysClient:
         )
         if site_code is not None:
             self._session.headers["X-Sonnys-Site-Code"] = site_code
+
+    @functools.cached_property
+    def site_timezone(self) -> ZoneInfo | None:
+        """Look up the IANA timezone for the configured site.
+
+        Returns ``None`` if no ``site_code`` was provided (UTC fallback).
+        Cached for the client lifetime (one ``/sites`` API call max).
+
+        Raises:
+            ValueError: If ``site_code`` doesn't match any site.
+        """
+        if self.site_code is None:
+            return None
+        for site in self.sites.list():
+            if site.code == self.site_code:
+                return ZoneInfo(site.timezone) if site.timezone else None
+        raise ValueError(f"Site code {self.site_code!r} not found in sites list")
 
     @functools.cached_property
     def customers(self) -> Customers:

@@ -1,0 +1,2193 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python client for the Sonny's Carwash Controls Data API">
+      
+      
+      
+      
+        <link rel="prev" href="../washbooks/">
+      
+      
+        <link rel="next" href="../transactions/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Recurring Accounts - Sonny's Data Client</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#recurring-accounts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sonny&#39;s Data Client" class="md-header__button md-logo" aria-label="Sonny's Data Client" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sonny's Data Client
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Recurring Accounts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../customers/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/client/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sonny&#39;s Data Client" class="md-nav__button md-logo" aria-label="Sonny's Data Client" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sonny's Data Client
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../items/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Items
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../employees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Employees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../giftcards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Giftcards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../washbooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Washbooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recurring Accounts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recurring Accounts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-the-right-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing the Right Method
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listparams-listrecurringlistitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list(**params) -&gt; list[RecurringListItem]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getaccount_id-recurring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get(account_id) -&gt; Recurring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list_status_changesparams-listrecurringstatuschange" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list_status_changes(**params) -&gt; list[RecurringStatusChange]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list_modificationsparams-listrecurringmodification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list_modifications(**params) -&gt; list[RecurringModification]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list_detailsparams-listrecurring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list_details(**params) -&gt; list[Recurring]
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list-recurring-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List recurring accounts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-account-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get account detail
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#track-status-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Track status changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#review-modifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review modifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compare-list-vs-list_details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compare list vs list_details
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recurringlistitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringListItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recurring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringbilling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringBilling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringstatuschange" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringStatusChange
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringmodification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringModification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringmodificationentry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringModificationEntry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#churn-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Churn Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#billing-history-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Billing History Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error-handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exceptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-the-right-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing the Right Method
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listparams-listrecurringlistitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list(**params) -&gt; list[RecurringListItem]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getaccount_id-recurring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get(account_id) -&gt; Recurring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list_status_changesparams-listrecurringstatuschange" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list_status_changes(**params) -&gt; list[RecurringStatusChange]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list_modificationsparams-listrecurringmodification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list_modifications(**params) -&gt; list[RecurringModification]
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list_detailsparams-listrecurring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        list_details(**params) -&gt; list[Recurring]
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#list-recurring-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List recurring accounts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-account-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Get account detail
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#track-status-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Track status changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#review-modifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review modifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compare-list-vs-list_details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compare list vs list_details
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recurringlistitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringListItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recurring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringbilling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringBilling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringstatuschange" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringStatusChange
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringmodification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringModification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recurringmodificationentry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecurringModificationEntry
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#churn-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Churn Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#billing-history-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Billing History Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="recurring-accounts">Recurring Accounts<a class="headerlink" href="#recurring-accounts" title="Permanent link">&para;</a></h1>
+<p>The <strong>Recurring Accounts</strong> resource provides access to recurring (membership)
+car wash accounts. This is the richest standard resource in the client, offering
+five methods for listing accounts, fetching full details, tracking status
+changes, and reviewing modification history. Each account includes billing
+information, plan details, associated tags, vehicles, and customer data.</p>
+<h2 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h2>
+<p>The recurring resource offers five methods. Pick the one that matches your use
+case to avoid fetching more data than you need:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Use When</th>
+<th>Pagination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list()</code></td>
+<td><code>RecurringListItem</code></td>
+<td>Quick summaries, filtering by date/site</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>get()</code></td>
+<td><code>Recurring</code></td>
+<td>Full detail for a single account</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td><code>list_status_changes()</code></td>
+<td><code>RecurringStatusChange</code></td>
+<td>Tracking cancellations, reactivations</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>list_modifications()</code></td>
+<td><code>RecurringModification</code></td>
+<td>Audit trail, plan changes, account edits</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>list_details()</code></td>
+<td><code>Recurring</code></td>
+<td>Bulk export with full detail (heavier)</td>
+<td>Auto</td>
+</tr>
+</tbody>
+</table>
+<p>Start with <code>list()</code> for lightweight summaries and filtering by date range or
+site. Use <code>get()</code> when you need a single-account deep dive with nested billing
+history, tags, vehicles, and customer data. Reach for
+<code>list_status_changes()</code> when analyzing churn and retention trends, and
+<code>list_modifications()</code> when you need an audit trail of plan changes or account
+edits. Reserve <code>list_details()</code> for cases where you need the full nested data
+(tags, vehicles, billing history) in bulk -- it returns the same rich
+<code>Recurring</code> objects as <code>get()</code> but for every account, so it is significantly
+heavier.</p>
+<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
+<h3 id="listparams-listrecurringlistitem"><code>list(**params) -&gt; list[RecurringListItem]</code><a class="headerlink" href="#listparams-listrecurringlistitem" title="Permanent link">&para;</a></h3>
+<p>Fetch all recurring accounts. Returns a list of <code>RecurringListItem</code> objects with
+summary fields. The client automatically paginates through all pages of results.</p>
+<div class="highlight"><pre><span></span><code><span class="n">accounts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+</code></pre></div>
+<p>You can pass optional query parameters to filter results:</p>
+<div class="highlight"><pre><span></span><code><span class="n">accounts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+    <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+    <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-01-31&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="getaccount_id-recurring"><code>get(account_id) -&gt; Recurring</code><a class="headerlink" href="#getaccount_id-recurring" title="Permanent link">&para;</a></h3>
+<p>Fetch full details for a single recurring account by its ID. Returns a
+<code>Recurring</code> object with nested customer, tags, vehicles, billing history, and
+status history.</p>
+<div class="highlight"><pre><span></span><code><span class="n">account</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;12345&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="list_status_changesparams-listrecurringstatuschange"><code>list_status_changes(**params) -&gt; list[RecurringStatusChange]</code><a class="headerlink" href="#list_status_changesparams-listrecurringstatuschange" title="Permanent link">&para;</a></h3>
+<p>Fetch all recurring account status changes. Returns a list of
+<code>RecurringStatusChange</code> objects tracking when accounts changed status (e.g.,
+active to cancelled).</p>
+<div class="highlight"><pre><span></span><code><span class="n">changes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_status_changes</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="list_modificationsparams-listrecurringmodification"><code>list_modifications(**params) -&gt; list[RecurringModification]</code><a class="headerlink" href="#list_modificationsparams-listrecurringmodification" title="Permanent link">&para;</a></h3>
+<p>Fetch all recurring account modifications. Returns a list of
+<code>RecurringModification</code> objects -- each includes the full account detail plus a
+list of modification entries.</p>
+<div class="highlight"><pre><span></span><code><span class="n">modifications</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_modifications</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="list_detailsparams-listrecurring"><code>list_details(**params) -&gt; list[Recurring]</code><a class="headerlink" href="#list_detailsparams-listrecurring" title="Permanent link">&para;</a></h3>
+<p>Fetch all recurring accounts with full detail. Returns full <code>Recurring</code> objects
+(the same model as <code>get()</code>) for every account, rather than the summary
+<code>RecurringListItem</code> objects returned by <code>list()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">details</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_details</span><span class="p">()</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Heavier API call</p>
+<p><code>list_details()</code> returns full <code>Recurring</code> objects for every account. This
+results in significantly more data per request than <code>list()</code>. Use <code>list()</code>
+when you only need summary fields, and reserve <code>list_details()</code> for when
+you need the complete account data in bulk.</p>
+</div>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<h3 id="list-recurring-accounts">List recurring accounts<a class="headerlink" href="#list-recurring-accounts" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">accounts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">acct</span> <span class="ow">in</span> <span class="n">accounts</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Account </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">status_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(status=</span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">, site=</span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">billing_site_code</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span>
+</code></pre></div>
+<h3 id="get-account-detail">Get account detail<a class="headerlink" href="#get-account-detail" title="Permanent link">&para;</a></h3>
+<p>The detail endpoint returns billing info, plan details, tags, vehicles,
+customer data, and full status and billing history:</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">acct</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;12345&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Plan and billing info</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plan: </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">plan_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Billing amount: $</span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">billing_amount</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Next bill date: </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">next_bill_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;On trial: </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">is_on_trial</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Suspended: </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">is_suspended</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Customer</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Customer: </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">customer</span><span class="o">.</span><span class="n">first_name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">customer</span><span class="o">.</span><span class="n">last_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Tags and vehicles</span>
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">acct</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tag #</span><span class="si">{</span><span class="n">tag</span><span class="o">.</span><span class="n">number</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="s1">&#39;active&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">tag</span><span class="o">.</span><span class="n">enabled</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;disabled&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">vehicle</span> <span class="ow">in</span> <span class="n">acct</span><span class="o">.</span><span class="n">vehicles</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vehicle </span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">plate</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;No plate&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Status history</span>
+    <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="n">acct</span><span class="o">.</span><span class="n">recurring_statuses</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Status: </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">status</span><span class="o">.</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Billing history</span>
+    <span class="k">for</span> <span class="n">billing</span> <span class="ow">in</span> <span class="n">acct</span><span class="o">.</span><span class="n">recurring_billings</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Billed $</span><span class="si">{</span><span class="n">billing</span><span class="o">.</span><span class="n">amount_charged</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">billing</span><span class="o">.</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="track-status-changes">Track status changes<a class="headerlink" href="#track-status-changes" title="Permanent link">&para;</a></h3>
+<p>The <code>list_status_changes()</code> method returns a flat list of every status
+transition across all accounts:</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">changes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_status_changes</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">change</span> <span class="ow">in</span> <span class="n">changes</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Account </span><span class="si">{</span><span class="n">change</span><span class="o">.</span><span class="n">recurring_id</span><span class="si">}</span><span class="s2">: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">change</span><span class="o">.</span><span class="n">old_status</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">change</span><span class="o">.</span><span class="n">new_status</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;on </span><span class="si">{</span><span class="n">change</span><span class="o">.</span><span class="n">status_date</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(by </span><span class="si">{</span><span class="n">change</span><span class="o">.</span><span class="n">employee_name</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">change</span><span class="o">.</span><span class="n">site_code</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="p">)</span>
+</code></pre></div>
+<h3 id="review-modifications">Review modifications<a class="headerlink" href="#review-modifications" title="Permanent link">&para;</a></h3>
+<p>The <code>list_modifications()</code> method returns full account objects extended with a
+<code>modifications</code> list:</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">modified</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_modifications</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">acct</span> <span class="ow">in</span> <span class="n">modified</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Account </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">plan_name</span><span class="si">}</span><span class="s2">):&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">acct</span><span class="o">.</span><span class="n">modifications</span><span class="p">:</span>
+            <span class="n">comment</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">comment</span> <span class="ow">or</span> <span class="s2">&quot;No comment&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">date</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">mod</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">comment</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="compare-list-vs-list_details">Compare list vs list_details<a class="headerlink" href="#compare-list-vs-list_details" title="Permanent link">&para;</a></h3>
+<p>Use <code>list()</code> for lightweight summaries and <code>list_details()</code> when you need the
+full account data:</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="c1"># Lightweight: returns RecurringListItem objects</span>
+    <span class="n">summaries</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">summaries</span><span class="p">)</span><span class="si">}</span><span class="s2"> accounts (summary)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Full detail: returns Recurring objects (same as get())</span>
+    <span class="n">details</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_details</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">details</span><span class="p">)</span><span class="si">}</span><span class="s2"> accounts (full detail)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Full detail includes nested data not available in summaries</span>
+    <span class="k">for</span> <span class="n">acct</span> <span class="ow">in</span> <span class="n">details</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Account </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">plan_name</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">acct</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span><span class="si">}</span><span class="s2"> tags, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">acct</span><span class="o">.</span><span class="n">vehicles</span><span class="p">)</span><span class="si">}</span><span class="s2"> vehicles&quot;</span>
+        <span class="p">)</span>
+</code></pre></div>
+<h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
+<h3 id="recurringlistitem"><code>RecurringListItem</code><a class="headerlink" href="#recurringlistitem" title="Permanent link">&para;</a></h3>
+<p>Returned by <code>list()</code>. Contains summary fields for each recurring account.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>str</code></td>
+<td>Unique account identifier</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>str \| None</code></td>
+<td>Account name</td>
+</tr>
+<tr>
+<td><code>balance</code></td>
+<td><code>float \| None</code></td>
+<td>Current account balance</td>
+</tr>
+<tr>
+<td><code>sign_up_date</code></td>
+<td><code>str</code></td>
+<td>Date the account was created</td>
+</tr>
+<tr>
+<td><code>cancel_date</code></td>
+<td><code>str \| None</code></td>
+<td>Date the account was cancelled</td>
+</tr>
+<tr>
+<td><code>billing_site_id</code></td>
+<td><code>int</code></td>
+<td>ID of the billing site</td>
+</tr>
+<tr>
+<td><code>customer_id</code></td>
+<td><code>str \| None</code></td>
+<td>Associated customer identifier</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>int</code></td>
+<td>Numeric status code</td>
+</tr>
+<tr>
+<td><code>status_name</code></td>
+<td><code>str</code></td>
+<td>Human-readable status name</td>
+</tr>
+<tr>
+<td><code>billing_site_code</code></td>
+<td><code>str</code></td>
+<td>Site code of the billing site</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recurring"><code>Recurring</code><a class="headerlink" href="#recurring" title="Permanent link">&para;</a></h3>
+<p>Returned by <code>get()</code> and <code>list_details()</code>. Contains full account details with
+nested models.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>str</code></td>
+<td>Unique account identifier</td>
+</tr>
+<tr>
+<td><code>is_on_trial</code></td>
+<td><code>bool</code></td>
+<td>Whether the account is on trial</td>
+</tr>
+<tr>
+<td><code>trial_amount</code></td>
+<td><code>float</code></td>
+<td>Trial billing amount</td>
+</tr>
+<tr>
+<td><code>billing_site_code</code></td>
+<td><code>str</code></td>
+<td>Site code of the billing site</td>
+</tr>
+<tr>
+<td><code>creation_site_code</code></td>
+<td><code>str</code></td>
+<td>Site code where account was created</td>
+</tr>
+<tr>
+<td><code>next_bill_date</code></td>
+<td><code>str</code></td>
+<td>Next scheduled billing date</td>
+</tr>
+<tr>
+<td><code>last_bill_date</code></td>
+<td><code>str \| None</code></td>
+<td>Most recent billing date</td>
+</tr>
+<tr>
+<td><code>billing_amount</code></td>
+<td><code>float \| None</code></td>
+<td>Current billing amount</td>
+</tr>
+<tr>
+<td><code>is_suspended</code></td>
+<td><code>bool</code></td>
+<td>Whether the account is suspended</td>
+</tr>
+<tr>
+<td><code>suspended_until</code></td>
+<td><code>str \| None</code></td>
+<td>Suspension end date</td>
+</tr>
+<tr>
+<td><code>current_recurring_status_name</code></td>
+<td><code>str</code></td>
+<td>Current status name</td>
+</tr>
+<tr>
+<td><code>plan_name</code></td>
+<td><code>str</code></td>
+<td>Name of the wash plan</td>
+</tr>
+<tr>
+<td><code>additional_tag_price</code></td>
+<td><code>float \| None</code></td>
+<td>Price for additional tags</td>
+</tr>
+<tr>
+<td><code>customer</code></td>
+<td><code>WashbookCustomer</code></td>
+<td>Nested customer object</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td><code>list[WashbookTag]</code></td>
+<td>List of RFID tags</td>
+</tr>
+<tr>
+<td><code>vehicles</code></td>
+<td><code>list[WashbookVehicle]</code></td>
+<td>List of vehicles</td>
+</tr>
+<tr>
+<td><code>recurring_statuses</code></td>
+<td><code>list[RecurringStatus]</code></td>
+<td>Status history (see below)</td>
+</tr>
+<tr>
+<td><code>recurring_billings</code></td>
+<td><code>list[RecurringBilling]</code></td>
+<td>Billing history (see below)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recurringstatus"><code>RecurringStatus</code><a class="headerlink" href="#recurringstatus" title="Permanent link">&para;</a></h3>
+<p>Nested inside the <code>Recurring</code> model. Represents a single status history entry.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>str</code></td>
+<td>Status name</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>str</code></td>
+<td>Date of the status</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recurringbilling"><code>RecurringBilling</code><a class="headerlink" href="#recurringbilling" title="Permanent link">&para;</a></h3>
+<p>Nested inside the <code>Recurring</code> model. Represents a single billing history entry.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount_charged</code></td>
+<td><code>float</code></td>
+<td>Amount billed</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>str</code></td>
+<td>Billing date</td>
+</tr>
+<tr>
+<td><code>last_four_cc</code></td>
+<td><code>str</code></td>
+<td>Last four digits of credit card</td>
+</tr>
+<tr>
+<td><code>credit_card_expiration_date</code></td>
+<td><code>str \| None</code></td>
+<td>Card expiration date</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recurringstatuschange"><code>RecurringStatusChange</code><a class="headerlink" href="#recurringstatuschange" title="Permanent link">&para;</a></h3>
+<p>Returned by <code>list_status_changes()</code>. Represents a single status transition.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>washbook_account_id</code></td>
+<td><code>str</code></td>
+<td>Associated washbook account ID</td>
+</tr>
+<tr>
+<td><code>recurring_id</code></td>
+<td><code>str</code></td>
+<td>Recurring account identifier</td>
+</tr>
+<tr>
+<td><code>old_status</code></td>
+<td><code>str</code></td>
+<td>Previous status</td>
+</tr>
+<tr>
+<td><code>new_status</code></td>
+<td><code>str</code></td>
+<td>New status</td>
+</tr>
+<tr>
+<td><code>status_date</code></td>
+<td><code>str</code></td>
+<td>Date of the status change</td>
+</tr>
+<tr>
+<td><code>employee_name</code></td>
+<td><code>str</code></td>
+<td>Employee who made the change</td>
+</tr>
+<tr>
+<td><code>site_code</code></td>
+<td><code>str</code></td>
+<td>Site where the change occurred</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recurringmodification"><code>RecurringModification</code><a class="headerlink" href="#recurringmodification" title="Permanent link">&para;</a></h3>
+<p>Returned by <code>list_modifications()</code>. Extends the <code>Recurring</code> model with a
+modifications list.</p>
+<p>This model inherits all fields from <code>Recurring</code> (see above) plus:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modifications</code></td>
+<td><code>list[RecurringModificationEntry]</code></td>
+<td>List of modifications</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recurringmodificationentry"><code>RecurringModificationEntry</code><a class="headerlink" href="#recurringmodificationentry" title="Permanent link">&para;</a></h3>
+<p>Nested inside <code>RecurringModification</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td>Modification name</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>str</code></td>
+<td>Date of the modification</td>
+</tr>
+<tr>
+<td><code>comment</code></td>
+<td><code>str \| None</code></td>
+<td>Optional comment</td>
+</tr>
+</tbody>
+</table>
+<h2 id="advanced-patterns">Advanced Patterns<a class="headerlink" href="#advanced-patterns" title="Permanent link">&para;</a></h2>
+<h3 id="churn-analysis">Churn Analysis<a class="headerlink" href="#churn-analysis" title="Permanent link">&para;</a></h3>
+<p>Use <code>list_status_changes()</code> to analyze account churn over a date range. Each
+status change includes the old and new status, the date, and the employee and
+site responsible:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">changes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_status_changes</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Count transitions by type</span>
+    <span class="n">transitions</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">old_status</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">new_status</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">changes</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">transition</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">transitions</span><span class="o">.</span><span class="n">most_common</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">transition</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Find cancellations</span>
+    <span class="n">cancellations</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">changes</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">new_status</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;cancelled&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cancellations</span><span class="p">)</span><span class="si">}</span><span class="s2"> cancellations this month&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cancellations</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Account </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">recurring_id</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">site_code</span><span class="si">}</span><span class="s2"> on </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">status_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="billing-history-report">Billing History Report<a class="headerlink" href="#billing-history-report" title="Permanent link">&para;</a></h3>
+<p>Use <code>list_details()</code> to build a billing summary across all accounts. Each
+<code>Recurring</code> object includes a <code>recurring_billings</code> list with individual charge
+records:</p>
+<div class="highlight"><pre><span></span><code><span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">accounts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_details</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">total_revenue</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">acct</span> <span class="ow">in</span> <span class="n">accounts</span><span class="p">:</span>
+        <span class="n">acct_total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">amount_charged</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">acct</span><span class="o">.</span><span class="n">recurring_billings</span><span class="p">)</span>
+        <span class="n">total_revenue</span> <span class="o">+=</span> <span class="n">acct_total</span>
+        <span class="k">if</span> <span class="n">acct_total</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Account </span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">acct</span><span class="o">.</span><span class="n">plan_name</span><span class="si">}</span><span class="s2">): &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">acct_total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> over </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">acct</span><span class="o">.</span><span class="n">recurring_billings</span><span class="p">)</span><span class="si">}</span><span class="s2"> billings&quot;</span>
+            <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total recurring revenue: $</span><span class="si">{</span><span class="n">total_revenue</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Use <code>list_details()</code> only when needed</p>
+<p><code>list_details()</code> returns full <code>Recurring</code> objects for every account,
+including nested tags, vehicles, and billing history. This is significantly
+heavier than <code>list()</code>. Use it only when you need billing or status history
+data in bulk.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Shared nested types</p>
+<p>The <code>Recurring</code> model reuses <code>WashbookCustomer</code>, <code>WashbookTag</code>, and
+<code>WashbookVehicle</code> from the <a href="../washbooks/">Washbooks</a> resource. See that
+guide for field-level documentation of those nested types.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Auto-pagination</p>
+<p>All list methods (<code>list()</code>, <code>list_status_changes()</code>, <code>list_modifications()</code>,
+and <code>list_details()</code>) automatically fetch all pages of results. You do not
+need to handle pagination manually.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">See also</p>
+<p>For patterns combining recurring accounts with transaction data, see the
+<a href="../transactions/#cross-resource-lookups">Transactions</a> guide.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -121,16 +121,16 @@ class TestListAutoPaginated:
             "data": {"customers": page1_items, "offset": 1, "limit": 100, "total": 250}
         })
 
-        # Page 2: offset=101, 100 items
+        # Page 2: offset=2, 100 items
         page2_items = [{"itemId": i, "name": f"Item {i}"} for i in range(101, 201)]
         resp2 = _make_response(200, json_body={
-            "data": {"customers": page2_items, "offset": 101, "limit": 100, "total": 250}
+            "data": {"customers": page2_items, "offset": 2, "limit": 100, "total": 250}
         })
 
-        # Page 3: offset=201, 50 items
+        # Page 3: offset=3, 50 items
         page3_items = [{"itemId": i, "name": f"Item {i}"} for i in range(201, 251)]
         resp3 = _make_response(200, json_body={
-            "data": {"customers": page3_items, "offset": 201, "limit": 100, "total": 250}
+            "data": {"customers": page3_items, "offset": 3, "limit": 100, "total": 250}
         })
 
         client._request = MagicMock(side_effect=[resp1, resp2, resp3])
@@ -152,10 +152,10 @@ class TestListAutoPaginated:
             "GET", "/customer", params={"limit": 100, "offset": 1}
         )
         client._request.assert_any_call(
-            "GET", "/customer", params={"limit": 100, "offset": 101}
+            "GET", "/customer", params={"limit": 100, "offset": 2}
         )
         client._request.assert_any_call(
-            "GET", "/customer", params={"limit": 100, "offset": 201}
+            "GET", "/customer", params={"limit": 100, "offset": 3}
         )
 
         client.close()

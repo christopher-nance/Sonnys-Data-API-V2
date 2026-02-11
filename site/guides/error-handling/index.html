@@ -1,0 +1,2689 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python client for the Sonny's Carwash Controls Data API">
+      
+      
+      
+      
+        <link rel="prev" href="../stats/">
+      
+      
+        <link rel="next" href="../advanced-patterns/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Error Handling - Sonny's Data Client</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#error-handling" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sonny&#39;s Data Client" class="md-header__button md-logo" aria-label="Sonny's Data Client" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sonny's Data Client
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Error Handling
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../customers/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/client/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sonny&#39;s Data Client" class="md-nav__button md-logo" aria-label="Sonny's Data Client" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sonny's Data Client
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../items/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Items
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../employees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Employees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../giftcards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Giftcards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../washbooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Washbooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recurring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recurring Accounts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#exception-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catching-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catching Errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Catching Errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#catch-all" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catch-all
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catch-by-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catch by category
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catch-specific-exceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catch specific exceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Attributes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-exception-type-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-Exception-Type Guidance
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Per-Exception-Type Guidance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#autherror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AuthError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ratelimiterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RateLimitError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ValidationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notfounderror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NotFoundError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servererror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ServerError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiconnectionerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APIConnectionError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apitimeouterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APITimeoutError
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#built-in-retry-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in Retry Behavior
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Built-in Retry Behavior">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-request-rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-request rate limiting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#429-retry-with-exponential-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        429 retry with exponential backoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-not-retried-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is NOT retried automatically
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-retry-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Retry Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Retry Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retry-on-transient-server-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry on transient server errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retry-on-connection-and-timeout-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry on connection and timeout errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-retry-with-tenacity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production retry with tenacity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging &amp; Debugging
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging &amp; Debugging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enabling-debug-logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enabling Debug Logging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-gets-logged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Gets Logged
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-debug-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading Debug Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-issues-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues &amp; Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues &amp; Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostic-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exceptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#exception-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Hierarchy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catching-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catching Errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Catching Errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#catch-all" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catch-all
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catch-by-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catch by category
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catch-specific-exceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catch specific exceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Attributes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-exception-type-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-Exception-Type Guidance
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Per-Exception-Type Guidance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#autherror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AuthError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ratelimiterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RateLimitError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validationerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ValidationError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notfounderror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NotFoundError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servererror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ServerError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiconnectionerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APIConnectionError
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apitimeouterror" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        APITimeoutError
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#built-in-retry-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in Retry Behavior
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Built-in Retry Behavior">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-request-rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-request rate limiting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#429-retry-with-exponential-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        429 retry with exponential backoff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-not-retried-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is NOT retried automatically
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-retry-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Retry Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Retry Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retry-on-transient-server-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry on transient server errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retry-on-connection-and-timeout-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retry on connection and timeout errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-retry-with-tenacity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production retry with tenacity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging &amp; Debugging
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging &amp; Debugging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enabling-debug-logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enabling Debug Logging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-gets-logged" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Gets Logged
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-debug-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading Debug Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-issues-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues &amp; Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues &amp; Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostic-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diagnostic Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h1>
+<p>The SDK raises typed exceptions for every failure mode so your code can react
+precisely to each problem. Every exception inherits from <code>SonnysError</code>, letting
+you catch broadly or narrow down to specific error types depending on your needs.</p>
+<h2 id="exception-hierarchy">Exception Hierarchy<a class="headerlink" href="#exception-hierarchy" title="Permanent link">&para;</a></h2>
+<p>All SDK exceptions follow this inheritance tree. Catching a parent class also
+catches all of its children.</p>
+<div class="highlight"><pre><span></span><code>SonnysError                     # Base for all SDK errors
+  APIError                      # Base for API-related errors
+    APIConnectionError          # Network failures (DNS, refused, etc.)
+      APITimeoutError           # Request timed out before a response
+    APIStatusError              # HTTP error responses (4xx / 5xx)
+      AuthError                 # 403 -- credential or authorization problem
+      RateLimitError            # 429 -- rate limit exceeded
+      ValidationError           # 400 / 422 -- bad request parameters
+      NotFoundError             # 404 -- resource not found
+      ServerError               # 5xx -- server-side failure
+</code></pre></div>
+<h2 id="catching-errors">Catching Errors<a class="headerlink" href="#catching-errors" title="Permanent link">&para;</a></h2>
+<h3 id="catch-all">Catch-all<a class="headerlink" href="#catch-all" title="Permanent link">&para;</a></h3>
+<p>The simplest approach catches <code>SonnysError</code> to handle any SDK failure in one
+place:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span><span class="p">,</span> <span class="n">SonnysError</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">SonnysError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SDK error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="catch-by-category">Catch by category<a class="headerlink" href="#catch-by-category" title="Permanent link">&para;</a></h3>
+<p>Separate network problems from HTTP errors to apply different recovery
+strategies:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">APIConnectionError</span><span class="p">,</span>
+    <span class="n">APIStatusError</span><span class="p">,</span>
+    <span class="n">SonnysError</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customers</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">customers</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">APIConnectionError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Network problem -- check your connection&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">APIStatusError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTTP </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">SonnysError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Other SDK error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="catch-specific-exceptions">Catch specific exceptions<a class="headerlink" href="#catch-specific-exceptions" title="Permanent link">&para;</a></h3>
+<p>For fine-grained control, catch each exception type individually:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AuthError</span><span class="p">,</span>
+    <span class="n">NotFoundError</span><span class="p">,</span>
+    <span class="n">RateLimitError</span><span class="p">,</span>
+    <span class="n">ServerError</span><span class="p">,</span>
+    <span class="n">ValidationError</span><span class="p">,</span>
+    <span class="n">SonnysError</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">customer</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">customers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;12345&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">AuthError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid credentials or unauthorized site&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">NotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Customer not found&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">RateLimitError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate limit exceeded after retries&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bad request: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ServerError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Server error -- try again later&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">SonnysError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected SDK error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Order specific exceptions before general ones -- Python matches the first
+<code>except</code> clause. Place <code>AuthError</code> before <code>APIStatusError</code>, and
+<code>APIStatusError</code> before <code>SonnysError</code>.</p>
+</div>
+<h2 id="error-attributes">Error Attributes<a class="headerlink" href="#error-attributes" title="Permanent link">&para;</a></h2>
+<p>All <code>APIStatusError</code> subclasses (<code>AuthError</code>, <code>RateLimitError</code>,
+<code>ValidationError</code>, <code>NotFoundError</code>, <code>ServerError</code>) expose these attributes:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td><code>str</code></td>
+<td>Human-readable error description from the API</td>
+</tr>
+<tr>
+<td><code>status_code</code></td>
+<td><code>int</code></td>
+<td>HTTP status code (e.g., 403, 404, 429)</td>
+</tr>
+<tr>
+<td><code>body</code></td>
+<td><code>dict \| None</code></td>
+<td>Full parsed JSON response body from the API</td>
+</tr>
+<tr>
+<td><code>error_type</code></td>
+<td><code>str \| None</code></td>
+<td>Sonny's API error type string (e.g., <code>"BadClientCredentialsError"</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Access these attributes in your <code>except</code> block to log details or branch on
+the specific error type:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIStatusError</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">APIStatusError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Status:     </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Message:    </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error type: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Body:       </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Readable error strings</p>
+<p>Printing or logging an <code>APIStatusError</code> directly (e.g., <code>print(e)</code>) produces
+a formatted string with all key details:</p>
+<div class="highlight"><pre><span></span><code>[HTTP 422] (PayloadValidationError) site: Only 1 site can be selected.
+API response body: {&#39;error&#39;: {&#39;type&#39;: &#39;PayloadValidationError&#39;, ...}}
+</code></pre></div>
+<p>This makes tracebacks and log output immediately actionable without needing
+to inspect individual attributes.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">API error_type values</p>
+<p>The <code>error_type</code> attribute contains the raw error type string returned by
+the Sonny's API. The SDK maps these to exception classes automatically:</p>
+<table>
+<thead>
+<tr>
+<th>API <code>error_type</code></th>
+<th>HTTP Status</th>
+<th>SDK Exception</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MissingClientCredentialsError</code></td>
+<td>403</td>
+<td><code>AuthError</code></td>
+</tr>
+<tr>
+<td><code>BadClientCredentialsError</code></td>
+<td>403</td>
+<td><code>AuthError</code></td>
+</tr>
+<tr>
+<td><code>MismatchCredentialsError</code></td>
+<td>403</td>
+<td><code>AuthError</code></td>
+</tr>
+<tr>
+<td><code>NotAuthorizedError</code></td>
+<td>403</td>
+<td><code>AuthError</code></td>
+</tr>
+<tr>
+<td><code>BadSiteCredentialsError</code></td>
+<td>403</td>
+<td><code>AuthError</code></td>
+</tr>
+<tr>
+<td><code>NotAuthorizedSiteCredentialsError</code></td>
+<td>403</td>
+<td><code>AuthError</code></td>
+</tr>
+<tr>
+<td><code>NotAuthorizedSiteArgsError</code></td>
+<td>403</td>
+<td><code>AuthError</code></td>
+</tr>
+<tr>
+<td><code>RequestRateExceedError</code></td>
+<td>429</td>
+<td><code>RateLimitError</code></td>
+</tr>
+<tr>
+<td><code>PayloadValidationError</code></td>
+<td>422</td>
+<td><code>ValidationError</code></td>
+</tr>
+<tr>
+<td><code>InvalidPayloadRequestTimestampError</code></td>
+<td>400</td>
+<td><code>ValidationError</code></td>
+</tr>
+<tr>
+<td><code>EntityNotFoundError</code></td>
+<td>404</td>
+<td><code>NotFoundError</code></td>
+</tr>
+<tr>
+<td><code>UnexpectedFailure</code></td>
+<td>400</td>
+<td><code>APIError</code></td>
+</tr>
+<tr>
+<td><code>ServerUnexpectedFailure</code></td>
+<td>500</td>
+<td><code>ServerError</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="per-exception-type-guidance">Per-Exception-Type Guidance<a class="headerlink" href="#per-exception-type-guidance" title="Permanent link">&para;</a></h2>
+<h3 id="autherror">AuthError<a class="headerlink" href="#autherror" title="Permanent link">&para;</a></h3>
+<p><strong>When it is raised:</strong> The API returns HTTP 403 for any credential or
+authorization problem.</p>
+<p><strong>Common causes:</strong></p>
+<ul>
+<li>Wrong <code>api_id</code> or <code>api_key</code> values (e.g., copied from the wrong environment or database)</li>
+<li><code>site_code</code> not authorized for the given API ID -- each API ID is provisioned for specific sites, and using a site code from a different organization triggers <code>NotAuthorizedSiteCredentialsError</code></li>
+<li>Missing credentials -- forgetting to pass <code>api_id</code> or <code>api_key</code> to the constructor</li>
+<li>API ID/key pair mismatch -- using the API ID from one database (e.g., WashU) with the API key from another (e.g., Icon)</li>
+<li>Passing <code>site</code> as a query parameter instead of using the <code>site_code</code> constructor argument</li>
+</ul>
+<p><strong>Recommended handling:</strong> Do not retry -- fix your credentials or site code
+configuration. Check that your <code>api_id</code>, <code>api_key</code>, and <code>site_code</code> match what
+was provisioned by Sonny's. Use <code>error_type</code> to pinpoint the exact problem.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthError</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sites</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">sites</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">AuthError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Auth failed: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error type: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Branch on the specific auth failure</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;BadClientCredentialsError&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Check your api_id and api_key values&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;NotAuthorizedSiteCredentialsError&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This site_code is not authorized for your API ID&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;MissingClientCredentialsError&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Credentials were not provided&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;MismatchCredentialsError&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;API ID and key do not belong to the same account&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you operate multiple databases (e.g., WashU and Icon) with separate
+credentials, double-check that you are not mixing API IDs and keys across
+client instances. A <code>MismatchCredentialsError</code> means the ID and key belong
+to different accounts.</p>
+</div>
+<h3 id="ratelimiterror">RateLimitError<a class="headerlink" href="#ratelimiterror" title="Permanent link">&para;</a></h3>
+<p><strong>When it is raised:</strong> The API returns HTTP 429 and all built-in retries have
+been exhausted (default: 3 attempts with exponential backoff).</p>
+<p><strong>Common causes:</strong></p>
+<ul>
+<li>Running an analytics script while a scheduled cron job is also pulling data against the same API ID</li>
+<li>Bulk-exporting transactions for multiple sites in a tight loop without pausing between sites</li>
+<li>Multiple <code>SonnysClient</code> instances sharing the same <code>api_id</code> -- each instance has its own rate limiter, but the API enforces a single 20 req/15s limit per API ID</li>
+<li>Burst traffic from a loop that calls <code>client.transactions.get()</code> for hundreds of individual transaction IDs</li>
+</ul>
+<p><strong>Recommended handling:</strong> The SDK already retries 429 responses with exponential
+backoff (see <a href="#built-in-retry-behavior">Built-in Retry Behavior</a>). If this
+exception reaches your code, the situation is severe. Back off for a longer
+period before retrying, or stagger your scripts.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitError</span>
+
+<span class="c1"># Enable logging to see when 429 retries happen internally</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">RateLimitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limited after retries: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># All 3 built-in retries failed -- back off for 30 seconds</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you regularly hit rate limits, check whether multiple processes share
+the same API ID. Stagger scheduled jobs by at least 60 seconds, or
+increase <code>max_retries</code> on the client to allow more backoff time.</p>
+</div>
+<h3 id="validationerror">ValidationError<a class="headerlink" href="#validationerror" title="Permanent link">&para;</a></h3>
+<p><strong>When it is raised:</strong> The API returns HTTP 400 or 422 for invalid request
+parameters.</p>
+<p><strong>Common causes:</strong></p>
+<ul>
+<li>Date format <code>"06/01/2025"</code> instead of ISO 8601 (<code>"2025-06-01"</code>) -- this is the most common validation error and triggers <code>InvalidPayloadRequestTimestampError</code>. The SDK auto-converts ISO 8601 strings to Unix timestamps, but non-ISO formats like <code>MM/DD/YYYY</code> are not supported.</li>
+<li>Passing a transaction type string that does not exist to <code>list_by_type()</code> (e.g., <code>"membership"</code> instead of <code>"recurring"</code>)</li>
+<li>Sending <code>endDate</code> earlier than <code>startDate</code></li>
+<li>Missing the required <code>site</code> parameter on <code>load_job()</code> when the API ID has access to multiple sites</li>
+<li>Missing required parameters on endpoints that enforce them</li>
+</ul>
+<p><strong>Recommended handling:</strong> Do not retry -- fix the request parameters. Use ISO 8601
+date strings (<code>"2025-06-01"</code>) or Unix timestamps. Check parameter names and allowed
+values. Use <code>error_type</code> to distinguish between timestamp errors and general payload
+errors.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># load_job() requires explicit site= when the API ID has multi-site access</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-15&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-16&quot;</span><span class="p">,</span>
+            <span class="c1"># Missing site= parameter!</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation error: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error type: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">error_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;PayloadValidationError&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Check parameter names and values&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Full response: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">error_type</span> <span class="o">==</span> <span class="s2">&quot;InvalidPayloadRequestTimestampError&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Use ISO 8601 date format (YYYY-MM-DD) or Unix timestamps&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The <code>PayloadValidationError</code> type may return multiple error messages in the
+response body. The SDK joins them into a single <code>message</code> string separated
+by semicolons. Check <code>e.body</code> for the original <code>"messages"</code> array if you
+need to inspect each validation failure individually.</p>
+</div>
+<h3 id="notfounderror">NotFoundError<a class="headerlink" href="#notfounderror" title="Permanent link">&para;</a></h3>
+<p><strong>When it is raised:</strong> The API returns HTTP 404 when the requested resource does
+not exist.</p>
+<p><strong>Common causes:</strong></p>
+<ul>
+<li>Transaction ID from a different site than the one configured via <code>site_code</code> -- IDs are scoped per site</li>
+<li>Customer ID that was valid in one database but does not exist in another (e.g., looking up a WashU customer ID against the Icon database)</li>
+<li>Deleted recurring account or gift card that no longer exists in the system</li>
+<li>Typo or truncated ID string</li>
+</ul>
+<p><strong>Recommended handling:</strong> Verify the ID is correct and belongs to the configured
+site. In batch workflows where you iterate over a list of IDs, catch
+<code>NotFoundError</code> and skip or log the missing record rather than aborting the
+entire loop.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotFoundError</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="c1"># Gracefully handle missing records in a batch lookup</span>
+    <span class="n">customer_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;12345&quot;</span><span class="p">,</span> <span class="s2">&quot;99999&quot;</span><span class="p">,</span> <span class="s2">&quot;67890&quot;</span><span class="p">]</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">cid</span> <span class="ow">in</span> <span class="n">customer_ids</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">customer</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">customers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
+            <span class="n">found</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">customer</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NotFoundError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Customer </span><span class="si">{</span><span class="n">cid</span><span class="si">}</span><span class="s2"> not found, skipping&quot;</span><span class="p">)</span>
+            <span class="c1"># e.error_type will be &quot;EntityNotFoundError&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">found</span><span class="p">)</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">customer_ids</span><span class="p">)</span><span class="si">}</span><span class="s2"> customers&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="servererror">ServerError<a class="headerlink" href="#servererror" title="Permanent link">&para;</a></h3>
+<p><strong>When it is raised:</strong> The API returns HTTP 5xx indicating a server-side
+failure.</p>
+<p><strong>Common causes:</strong></p>
+<ul>
+<li>Sonny's API scheduled maintenance window -- the API may return 500 or 503 during planned updates</li>
+<li>Intermittent 500 errors on large date-range queries or <code>load_job()</code> requests that stress the backend</li>
+<li><code>ServerUnexpectedFailure</code> -- an unexpected crash on the API side</li>
+<li>502/503 responses from upstream infrastructure (load balancer, gateway)</li>
+</ul>
+<p><strong>Recommended handling:</strong> Retry after a delay. Server errors are often transient.
+If they persist beyond a few minutes, check with Sonny's support for known
+outages. For automated pipelines, implement retry with backoff (see
+<a href="#custom-retry-patterns">Custom Retry Patterns</a>).</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ServerError</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">max_attempts</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+                <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+                <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">break</span>  <span class="c1"># Success</span>
+        <span class="k">except</span> <span class="n">ServerError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Server error (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">&lt;</span> <span class="n">max_attempts</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">delay</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">attempt</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retrying in </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2">s...&quot;</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All retries exhausted&quot;</span><span class="p">)</span>
+                <span class="k">raise</span>
+</code></pre></div>
+<h3 id="apiconnectionerror">APIConnectionError<a class="headerlink" href="#apiconnectionerror" title="Permanent link">&para;</a></h3>
+<p><strong>When it is raised:</strong> The HTTP request fails before reaching the server --
+no response is received.</p>
+<p><strong>Common causes:</strong></p>
+<ul>
+<li>No internet connection on the machine running the script</li>
+<li>DNS resolution failure for <code>trigonapi.sonnyscontrols.com</code> -- common on new server deployments where DNS is not yet configured</li>
+<li>Corporate firewall or proxy blocking outbound HTTPS traffic to the Sonny's API domain</li>
+<li>VPN disconnection mid-request</li>
+<li>Running inside a Docker container or CI environment without outbound network access</li>
+</ul>
+<p><strong>Recommended handling:</strong> Check network connectivity. This error does not have
+<code>status_code</code> or <code>body</code> attributes since no HTTP response was received. For
+automated pipelines, retry a few times with a delay -- the network issue may be
+transient.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIConnectionError</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sites</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">sites</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">APIConnectionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection failed: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Troubleshooting steps:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  1. Check internet connectivity&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  2. Verify DNS resolves: nslookup trigonapi.sonnyscontrols.com&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  3. Check firewall allows HTTPS to trigonapi.sonnyscontrols.com&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  4. If behind a proxy, configure requests proxy settings&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="apitimeouterror">APITimeoutError<a class="headerlink" href="#apitimeouterror" title="Permanent link">&para;</a></h3>
+<p><strong>When it is raised:</strong> The HTTP request was sent but no response arrived within
+the timeout period. Also raised when <code>load_job()</code> polling exceeds the configured
+<code>timeout</code>.</p>
+<p><strong>Common causes:</strong></p>
+<ul>
+<li><code>load_job()</code> on a high-volume site with a full day of transactions -- the batch job takes longer than the default 300-second timeout to complete</li>
+<li>Very large <code>list()</code> or <code>list_v2()</code> queries spanning months of data at a busy site</li>
+<li>Network congestion or high latency between your server and <code>trigonapi.sonnyscontrols.com</code></li>
+<li>API under heavy load from other consumers during peak hours</li>
+</ul>
+<p><strong>Recommended handling:</strong> For <code>load_job()</code>, increase the <code>timeout</code> parameter or
+use a shorter date range. For list methods, narrow the date range. Consider
+splitting multi-month queries into smaller chunks.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APITimeoutError</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Large export that may time out</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-02&quot;</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="mf">600.0</span><span class="p">,</span>  <span class="c1"># 10 minutes instead of default 5</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">APITimeoutError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job timed out -- try a shorter date range or increase timeout&quot;</span><span class="p">)</span>
+        <span class="c1"># Fallback: split into smaller chunks</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">midpoint</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Try splitting: </span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">midpoint</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">midpoint</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>APITimeoutError</code> is a subclass of <code>APIConnectionError</code>. If you catch
+<code>APIConnectionError</code>, it will also catch timeouts. Use the specific
+<code>APITimeoutError</code> class when you need to distinguish timeouts from other
+connection failures.</p>
+</div>
+<h2 id="built-in-retry-behavior">Built-in Retry Behavior<a class="headerlink" href="#built-in-retry-behavior" title="Permanent link">&para;</a></h2>
+<p>The SDK includes two layers of automatic protection against rate limiting.</p>
+<h3 id="pre-request-rate-limiting">Pre-request rate limiting<a class="headerlink" href="#pre-request-rate-limiting" title="Permanent link">&para;</a></h3>
+<p>Every request passes through a sliding window rate limiter before it is sent.
+The limiter enforces a maximum of <strong>20 requests per 15-second window</strong>. If you
+are at capacity, the client automatically sleeps until a slot opens -- no
+exception is raised.</p>
+<h3 id="429-retry-with-exponential-backoff">429 retry with exponential backoff<a class="headerlink" href="#429-retry-with-exponential-backoff" title="Permanent link">&para;</a></h3>
+<p>If the API returns HTTP 429 despite the client-side limiter (e.g., another
+script shares the same API ID), the SDK retries with exponential backoff:</p>
+<table>
+<thead>
+<tr>
+<th>Attempt</th>
+<th>Delay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1 second</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2 seconds</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4 seconds</td>
+</tr>
+</tbody>
+</table>
+<p>After <code>max_retries</code> attempts (default 3), the SDK raises <code>RateLimitError</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can configure <code>max_retries</code> when constructing the client:</p>
+<div class="highlight"><pre><span></span><code><span class="n">client</span> <span class="o">=</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># Allow up to 5 retry attempts for 429s</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<h3 id="what-is-not-retried-automatically">What is NOT retried automatically<a class="headerlink" href="#what-is-not-retried-automatically" title="Permanent link">&para;</a></h3>
+<p>The SDK only retries HTTP 429 responses. These errors are <strong>not</strong> retried:</p>
+<ul>
+<li><strong><code>APIConnectionError</code></strong> -- Network failures (no response received)</li>
+<li><strong><code>APITimeoutError</code></strong> -- Request timeouts</li>
+<li><strong><code>AuthError</code></strong> (403) -- Credential or authorization problems</li>
+<li><strong><code>ValidationError</code></strong> (400/422) -- Invalid request parameters</li>
+<li><strong><code>NotFoundError</code></strong> (404) -- Resource does not exist</li>
+<li><strong><code>ServerError</code></strong> (5xx) -- Server-side failures</li>
+</ul>
+<p>If you need retry logic for these errors, implement it yourself using the
+patterns below.</p>
+<h2 id="custom-retry-patterns">Custom Retry Patterns<a class="headerlink" href="#custom-retry-patterns" title="Permanent link">&para;</a></h2>
+<h3 id="retry-on-transient-server-errors">Retry on transient server errors<a class="headerlink" href="#retry-on-transient-server-errors" title="Permanent link">&para;</a></h3>
+<p>Server errors (500, 502, 503) are often transient. Wrap your call in a simple
+retry loop with backoff:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ServerError</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch_with_retry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">base_delay</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">retries</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+                <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+                <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">ServerError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="n">retries</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="n">delay</span> <span class="o">=</span> <span class="n">base_delay</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">attempt</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Server error (</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">), retrying in </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2">s...&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">fetch_with_retry</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="retry-on-connection-and-timeout-errors">Retry on connection and timeout errors<a class="headerlink" href="#retry-on-connection-and-timeout-errors" title="Permanent link">&para;</a></h3>
+<p>Network problems can be intermittent. Retry <code>APIConnectionError</code> and
+<code>APITimeoutError</code> with a short delay:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch_with_network_retry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">5.0</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">retries</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">customers</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="n">retries</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">, retrying in </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2">s...&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">customers</span> <span class="o">=</span> <span class="n">fetch_with_network_retry</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="production-retry-with-tenacity">Production retry with tenacity<a class="headerlink" href="#production-retry-with-tenacity" title="Permanent link">&para;</a></h3>
+<p>For production systems, use the <code>tenacity</code> library for configurable,
+decorator-based retry logic:</p>
+<div class="highlight"><pre><span></span><code>pip install tenacity
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tenacity</span><span class="w"> </span><span class="kn">import</span> <span class="n">retry</span><span class="p">,</span> <span class="n">stop_after_attempt</span><span class="p">,</span> <span class="n">wait_exponential</span><span class="p">,</span> <span class="n">retry_if_exception_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span><span class="p">,</span> <span class="n">ServerError</span>
+
+<span class="nd">@retry</span><span class="p">(</span>
+    <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">((</span><span class="n">ServerError</span><span class="p">,</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span><span class="p">)),</span>
+    <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+    <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch_transactions</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">fetch_transactions</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Never retry <code>AuthError</code> or <code>ValidationError</code> -- these indicate a code or
+configuration problem, not a transient failure. Retrying them wastes time
+and rate limit budget without any chance of success.</p>
+</div>
+<h2 id="logging-debugging">Logging &amp; Debugging<a class="headerlink" href="#logging-debugging" title="Permanent link">&para;</a></h2>
+<p>The SDK logs every request, response, and retry through Python's built-in
+<code>logging</code> module under the <code>sonnys_data_client</code> logger. Enabling debug logging
+is the fastest way to understand what the SDK is doing under the hood.</p>
+<h3 id="enabling-debug-logging">Enabling Debug Logging<a class="headerlink" href="#enabling-debug-logging" title="Permanent link">&para;</a></h3>
+<p><strong>Log everything</strong> (SDK + all other libraries):</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Log only the SDK</strong> (recommended for most debugging):</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;sonnys_data_client&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Add a StreamHandler for scripts</strong> that don't already configure logging:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+<span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(name)s</span><span class="s2">: </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">))</span>
+
+<span class="n">sdk_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;sonnys_data_client&quot;</span><span class="p">)</span>
+<span class="n">sdk_logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+<span class="n">sdk_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="what-gets-logged">What Gets Logged<a class="headerlink" href="#what-gets-logged" title="Permanent link">&para;</a></h3>
+<p>The SDK emits these log messages at each stage of a request:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Message Pattern</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEBUG</td>
+<td><code>Rate limiter: waiting {N}s</code></td>
+<td>Pre-request rate limit sleep</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Request: {METHOD} {PATH} params={PARAMS}</code></td>
+<td>Outgoing HTTP request</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Response: {METHOD} {PATH} status={CODE} elapsed={TIME}s</code></td>
+<td>Successful response received</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Error response: {METHOD} {PATH} status={CODE} body={BODY}</code></td>
+<td>HTTP error before exception is raised</td>
+</tr>
+<tr>
+<td>WARNING</td>
+<td><code>Rate limited (429), retry {N}/{MAX} after {DELAY}s</code></td>
+<td>429 received, backing off before retry</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job submit: POST /transaction/load-job params={PARAMS}</code></td>
+<td>Batch job submitted</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job submitted: hash={HASH}</code></td>
+<td>Job hash received from API</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job poll #{N}: hash={HASH}</code></td>
+<td>Polling for job results</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job pending: hash={HASH} status={STATUS}</code></td>
+<td>Job still processing</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td><code>Job complete: hash={HASH} records={N} polls={N}</code></td>
+<td>Job finished with record count</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td><code>Job failed: hash={HASH}</code></td>
+<td>Batch job returned failure status</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading-debug-output">Reading Debug Output<a class="headerlink" href="#reading-debug-output" title="Permanent link">&para;</a></h3>
+<p>Here is an annotated example of a typical debug session showing a successful
+request, a 429 retry, and an error response:</p>
+<div class="highlight"><pre><span></span><code>2025-06-15 10:00:00,100 DEBUG sonnys_data_client: Rate limiter: waiting 0.450s
+# ^ Rate limiter detected we&#39;re near the 20 req/15s limit. Sleeping 450ms.
+
+2025-06-15 10:00:00,550 DEBUG sonnys_data_client: Request: GET /sites params=None
+# ^ Outgoing request to the /sites endpoint with no query parameters.
+
+2025-06-15 10:00:01,200 DEBUG sonnys_data_client: Response: GET /sites status=200 elapsed=0.650s
+# ^ Success! The API responded in 650ms with HTTP 200.
+
+2025-06-15 10:00:01,210 DEBUG sonnys_data_client: Request: GET /transaction params={&#39;startDate&#39;: 1717200000, &#39;endDate&#39;: 1718409600, &#39;limit&#39;: 100, &#39;offset&#39;: 1}
+# ^ Fetching transactions. Dates were auto-converted from ISO strings to Unix timestamps.
+
+2025-06-15 10:00:01,800 WARNING sonnys_data_client: Rate limited (429), retry 1/3 after 1.0s
+# ^ API returned 429. SDK will wait 1 second then retry (attempt 1 of 3).
+
+2025-06-15 10:00:02,810 DEBUG sonnys_data_client: Request: GET /transaction params={&#39;startDate&#39;: 1717200000, &#39;endDate&#39;: 1718409600, &#39;limit&#39;: 100, &#39;offset&#39;: 1}
+# ^ Retry request sent after the 1-second backoff.
+
+2025-06-15 10:00:03,500 DEBUG sonnys_data_client: Response: GET /transaction status=200 elapsed=0.690s
+# ^ Retry succeeded. The API responded with HTTP 200.
+</code></pre></div>
+<p>And here is an example showing batch job lifecycle logging:</p>
+<div class="highlight"><pre><span></span><code>2025-06-15 10:01:00,100 DEBUG sonnys_data_client: Job submit: POST /transaction/load-job params={&#39;startDate&#39;: 1717200000, &#39;endDate&#39;: 1717286400, &#39;site&#39;: &#39;JOLIET&#39;, &#39;limit&#39;: 100, &#39;offset&#39;: 1}
+# ^ Batch job submitted with date range and site parameters.
+
+2025-06-15 10:01:00,800 DEBUG sonnys_data_client: Job submitted: hash=abc123def456
+# ^ API accepted the job and returned a hash for polling.
+
+2025-06-15 10:01:02,810 DEBUG sonnys_data_client: Job poll #1: hash=abc123def456
+# ^ First poll attempt (after poll_interval delay).
+
+2025-06-15 10:01:03,200 DEBUG sonnys_data_client: Job pending: hash=abc123def456 status=pending
+# ^ Job is still processing. Will poll again after another interval.
+
+2025-06-15 10:01:05,210 DEBUG sonnys_data_client: Job poll #2: hash=abc123def456
+# ^ Second poll attempt.
+
+2025-06-15 10:01:05,900 DEBUG sonnys_data_client: Job complete: hash=abc123def456 records=347 polls=2
+# ^ Job finished! 347 records returned after 2 poll cycles.
+</code></pre></div>
+<p>And an error response example:</p>
+<div class="highlight"><pre><span></span><code>2025-06-15 10:02:00,100 DEBUG sonnys_data_client: Request: GET /transaction params={&#39;startDate&#39;: &#39;06/01/2025&#39;}
+# ^ Request with an invalid date format (not ISO-8601 or Unix timestamp).
+
+2025-06-15 10:02:00,700 DEBUG sonnys_data_client: Error response: GET /transaction status=400 body={&quot;error&quot;:{&quot;type&quot;:&quot;InvalidPayloadRequestTimestampError&quot;,&quot;message&quot;:&quot;Invalid timestamp&quot;}}
+# ^ Full error response body logged before the exception is raised.
+
+# The exception traceback will show:
+# sonnys_data_client._exceptions.ValidationError: [HTTP 400] (InvalidPayloadRequestTimestampError) Invalid timestamp
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In production, leave the SDK logger at WARNING to only see 429 retries.
+Set to DEBUG only when troubleshooting.</p>
+</div>
+<h2 id="common-issues-troubleshooting">Common Issues &amp; Troubleshooting<a class="headerlink" href="#common-issues-troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="troubleshooting-table">Troubleshooting Table<a class="headerlink" href="#troubleshooting-table" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AuthError: MissingClientCredentialsError</code></td>
+<td><code>api_id</code> or <code>api_key</code> not provided or empty</td>
+<td>Check <code>SonnysClient</code> constructor args</td>
+</tr>
+<tr>
+<td><code>AuthError: BadClientCredentialsError</code></td>
+<td>Wrong <code>api_id</code> or <code>api_key</code></td>
+<td>Verify credentials with Sonny's support</td>
+</tr>
+<tr>
+<td><code>AuthError: NotAuthorizedSiteCredentialsError</code></td>
+<td><code>site_code</code> not authorized for this API ID</td>
+<td>Use a <code>site_code</code> linked to your API credentials</td>
+</tr>
+<tr>
+<td><code>RateLimitError</code> after retries exhausted</td>
+<td>Too many concurrent requests</td>
+<td>Reduce parallelism or increase <code>max_retries</code></td>
+</tr>
+<tr>
+<td><code>ValidationError: PayloadValidationError</code></td>
+<td>Invalid parameter or missing <code>site</code> on <code>load_job()</code></td>
+<td>Check parameter names; pass <code>site=</code> to <code>load_job()</code></td>
+</tr>
+<tr>
+<td><code>NotFoundError: EntityNotFoundError</code></td>
+<td>Resource ID doesn't exist or wrong site</td>
+<td>Verify ID and <code>site_code</code> match</td>
+</tr>
+<tr>
+<td><code>ServerError</code> intermittent 500s</td>
+<td>Sonny's API transient issue</td>
+<td>Add retry logic for 5xx (see <a href="#custom-retry-patterns">Custom Retry Patterns</a>)</td>
+</tr>
+<tr>
+<td><code>APIConnectionError</code></td>
+<td>Network/DNS failure</td>
+<td>Check internet, verify <code>trigonapi.sonnyscontrols.com</code> is reachable</td>
+</tr>
+<tr>
+<td><code>APITimeoutError</code></td>
+<td>Request took too long</td>
+<td>Use smaller date ranges, check network latency</td>
+</tr>
+<tr>
+<td>Slow responses but no errors</td>
+<td>Rate limiter pre-emptively sleeping</td>
+<td>Enable DEBUG logging to see rate limiter waits</td>
+</tr>
+<tr>
+<td><code>ImportError</code> on exceptions</td>
+<td>Wrong import path</td>
+<td>Import from <code>sonnys_data_client</code> directly, not <code>_exceptions</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="diagnostic-checklist">Diagnostic Checklist<a class="headerlink" href="#diagnostic-checklist" title="Permanent link">&para;</a></h3>
+<p>When something goes wrong, follow these steps in order:</p>
+<ol>
+<li><strong>Enable DEBUG logging</strong> -- see <a href="#enabling-debug-logging">Enabling Debug Logging</a> above</li>
+<li><strong>Check the <code>error_type</code> attribute</strong> for the specific API error string (e.g., <code>"BadClientCredentialsError"</code>)</li>
+<li><strong>Inspect the <code>body</code> attribute</strong> for the full API response JSON -- it often contains additional detail</li>
+<li><strong>Verify credentials</strong> with a simple <code>client.sites.list()</code> call -- if this fails with <code>AuthError</code>, your credentials are wrong</li>
+<li><strong>Check rate limiter state</strong> with debug logs -- look for <code>Rate limiter: waiting</code> messages to see if pre-request throttling is slowing you down</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The SDK auto-converts ISO 8601 date strings (e.g., <code>"2025-06-01"</code>) to Unix
+timestamps for the API. However, non-ISO formats like <code>"06/01/2025"</code> are <strong>not</strong>
+recognized and will cause an <code>InvalidPayloadRequestTimestampError</code>. Always use
+<code>YYYY-MM-DD</code> format or pass Unix timestamps directly.</p>
+</div>
+<h2 id="quick-reference">Quick Reference<a class="headerlink" href="#quick-reference" title="Permanent link">&para;</a></h2>
+<p>A scannable cheat sheet mapping HTTP status codes to SDK exceptions, typical
+causes, and recommended actions.</p>
+<table>
+<thead>
+<tr>
+<th>HTTP Status</th>
+<th>SDK Exception</th>
+<th>Typical Cause</th>
+<th>Recommended Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--</td>
+<td><code>APIConnectionError</code></td>
+<td>Network down, DNS failure, firewall blocking</td>
+<td>Check connectivity; retry with delay</td>
+</tr>
+<tr>
+<td>--</td>
+<td><code>APITimeoutError</code></td>
+<td>Slow response, large query, job polling timeout</td>
+<td>Shorten date range; increase timeout</td>
+</tr>
+<tr>
+<td>400</td>
+<td><code>ValidationError</code></td>
+<td>Bad date format, invalid parameters</td>
+<td>Fix request parameters; do not retry</td>
+</tr>
+<tr>
+<td>403</td>
+<td><code>AuthError</code></td>
+<td>Wrong credentials, unauthorized site code</td>
+<td>Fix credentials or site_code; do not retry</td>
+</tr>
+<tr>
+<td>404</td>
+<td><code>NotFoundError</code></td>
+<td>ID does not exist, wrong site, deleted record</td>
+<td>Verify ID and site; skip in batch loops</td>
+</tr>
+<tr>
+<td>422</td>
+<td><code>ValidationError</code></td>
+<td>Payload validation failure</td>
+<td>Check parameter values; do not retry</td>
+</tr>
+<tr>
+<td>429</td>
+<td><code>RateLimitError</code></td>
+<td>Rate limit exceeded after built-in retries</td>
+<td>Back off 30s+; stagger concurrent scripts</td>
+</tr>
+<tr>
+<td>500</td>
+<td><code>ServerError</code></td>
+<td>API crash, maintenance, <code>ServerUnexpectedFailure</code></td>
+<td>Retry with backoff; contact support if persistent</td>
+</tr>
+<tr>
+<td>502/503</td>
+<td><code>ServerError</code></td>
+<td>Gateway/infrastructure error</td>
+<td>Retry with backoff; usually transient</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -65,12 +65,12 @@ class ListableResource(BaseResource):
     def _list_paginated(self, **params: object) -> list[SonnysModel]:
         """Fetch all pages from a paginated list endpoint."""
         all_items: list[SonnysModel] = []
-        offset = 1
+        page = 1
 
         while True:
             request_params = {
                 "limit": self._default_limit,
-                "offset": offset,
+                "offset": page,
                 **params,
             }
             response = self._client._request("GET", self._path, params=request_params)
@@ -82,8 +82,10 @@ class ListableResource(BaseResource):
             for item in items:
                 all_items.append(self._model.model_validate(item))
 
-            offset += self._default_limit
-            if total is None or offset > total:
+            if len(items) < self._default_limit:
+                break
+            page += 1
+            if total is not None and len(all_items) >= total:
                 break
 
         return all_items

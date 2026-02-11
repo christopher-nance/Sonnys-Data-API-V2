@@ -24,52 +24,59 @@ class SalesResult(SonnysModel):
 class WashResult(SonnysModel):
     """Wash volume breakdown returned by ``client.stats.total_washes()``.
 
-    Categorizes wash transactions into two types: retail washes
-    (standard single-use transactions of type ``"wash"``) and prepaid
-    washes (transactions of type ``"prepaid-wash"`` redeemed against
-    pre-purchased wash books).  The ``total`` field is the sum of both.
+    Categorizes wash transactions using v2 transaction flags:
+
+    - **retail_wash_count**: Transactions where both
+      ``is_recurring_plan_sale`` and ``is_recurring_plan_redemption``
+      are ``False``.
+    - **member_wash_count**: Transactions where
+      ``is_recurring_plan_redemption`` is ``True`` (membership washes).
+    - **eligible_wash_count**: Retail washes with ``total > 0``
+      (excludes complimentary washes).  Used as the denominator in
+      conversion rate calculations.
+
+    The ``total`` field is the sum of retail and member wash counts.
     """
 
     total: int
-    wash_count: int
-    prepaid_wash_count: int
+    retail_wash_count: int
+    member_wash_count: int
+    eligible_wash_count: int
 
 
 class ConversionResult(SonnysModel):
     """Membership conversion KPI returned by ``client.stats.conversion_rate()``.
 
-    Measures how effectively a site converts retail wash customers into
-    membership sign-ups.  The ``rate`` is computed as
+    Measures how effectively a site converts eligible wash customers
+    into membership sign-ups.  The ``rate`` is computed as
     ``new_memberships / total_opportunities`` where total opportunities
-    is the sum of new membership activations and retail wash transactions.
+    is the sum of new memberships sold and eligible washes (retail
+    washes with ``total > 0``).
 
-    A rate of ``0.15`` means 15 % of wash-or-membership interactions
-    resulted in a new membership activation.  When there are zero
-    opportunities the rate is ``0.0`` (division-by-zero safe).
+    A rate of ``0.15`` means 15 % of eligible-wash-or-membership
+    interactions resulted in a new membership sale.  When there are
+    zero opportunities the rate is ``0.0`` (division-by-zero safe).
     """
 
     rate: float
     new_memberships: int
-    retail_washes: int
+    eligible_washes: int
     total_opportunities: int
 
 
 class StatsReport(SonnysModel):
     """Unified analytics report returned by ``client.stats.report()``.
 
-    Bundles all KPIs into a single result object, computed from shared
-    data fetches for efficiency.  Calling ``report()`` makes **4 API
-    calls** instead of the **7** that would result from calling
-    ``total_sales()``, ``total_washes()``, ``new_memberships_sold()``,
-    and ``conversion_rate()`` individually.
+    Bundles all KPIs into a single result object, computed from a
+    single v2 transaction fetch for efficiency.
 
     Attributes:
         sales: Revenue breakdown (recurring plan sales, recurring
             redemptions, and retail) as a :class:`SalesResult`.
-        washes: Wash volume breakdown (retail washes and prepaid washes)
-            as a :class:`WashResult`.
-        new_memberships: Count of membership activations (transitions to
-            ``"Active"`` status) during the report period.
+        washes: Wash volume breakdown (retail, member, and eligible
+            washes) as a :class:`WashResult`.
+        new_memberships: Count of recurring plan sales during the
+            report period.
         conversion: Membership conversion rate KPI as a
             :class:`ConversionResult`.
         period_start: ISO-8601 date string for the start of the report

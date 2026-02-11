@@ -21,6 +21,7 @@ ENV/
 
 # Testing
 .pytest_cache/
+PRODUCTION_TESTS/
 
 # Linting
 .ruff_cache/
@@ -34,3 +35,5 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+export_joliet_transactions.py
+test_uat.py

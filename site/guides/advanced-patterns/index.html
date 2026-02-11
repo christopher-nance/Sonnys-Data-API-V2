@@ -1,0 +1,2684 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python client for the Sonny's Carwash Controls Data API">
+      
+      
+      
+      
+        <link rel="prev" href="../error-handling/">
+      
+      
+        <link rel="next" href="../../api/client/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Advanced Patterns - Sonny's Data Client</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#advanced-patterns" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sonny&#39;s Data Client" class="md-header__button md-logo" aria-label="Sonny's Data Client" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sonny's Data Client
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Advanced Patterns
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../customers/" class="md-tabs__link">
+          
+  
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/client/" class="md-tabs__link">
+          
+  
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sonny&#39;s Data Client" class="md-nav__button md-logo" aria-label="Sonny's Data Client" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sonny's Data Client
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Customers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../items/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Items
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../employees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Employees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../giftcards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Giftcards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../washbooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Washbooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recurring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recurring Accounts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error-handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Patterns
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#multi-site-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Site Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multi-Site Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#single-site-vs-multi-site-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single-Site vs Multi-Site Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterating-multiple-sites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iterating Multiple Sites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-database-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Database Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consolidated-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consolidated Reporting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-managers-for-multi-site" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context Managers for Multi-Site
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limiting-deep-dive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate Limiting Deep Dive
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rate Limiting Deep Dive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-rate-limiter-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the Rate Limiter Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-client-rate-limit-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Client Rate Limit Considerations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-budget-forecasting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request Budget Forecasting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staying-within-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Staying Within Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Optimization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-the-right-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing the Right Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#date-range-sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Date Range Sizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-spacing-for-bulk-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request Spacing for Bulk Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-jobs-vs-paginated-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch Jobs vs Paginated Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Recipes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration Recipes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-to-csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to CSV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export-to-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to JSON
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduled-daily-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduled Daily Export
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-site-daily-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Site Daily Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-pipeline-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Pipeline Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-alerting-recipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring &amp; Alerting Recipe
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/resources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exceptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#multi-site-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Site Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multi-Site Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#single-site-vs-multi-site-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Single-Site vs Multi-Site Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterating-multiple-sites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iterating Multiple Sites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-database-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Database Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consolidated-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consolidated Reporting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-managers-for-multi-site" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context Managers for Multi-Site
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limiting-deep-dive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate Limiting Deep Dive
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rate Limiting Deep Dive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-rate-limiter-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the Rate Limiter Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-client-rate-limit-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Client Rate Limit Considerations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-budget-forecasting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request Budget Forecasting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staying-within-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Staying Within Limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Optimization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-the-right-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing the Right Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#date-range-sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Date Range Sizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-spacing-for-bulk-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request Spacing for Bulk Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#batch-jobs-vs-paginated-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Batch Jobs vs Paginated Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-recipes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration Recipes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration Recipes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#export-to-csv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to CSV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#export-to-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Export to JSON
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheduled-daily-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduled Daily Export
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-site-daily-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-Site Daily Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-pipeline-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data Pipeline Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-alerting-recipe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring &amp; Alerting Recipe
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="advanced-patterns">Advanced Patterns<a class="headerlink" href="#advanced-patterns" title="Permanent link">&para;</a></h1>
+<p>This guide covers SDK usage patterns that go beyond single-resource CRUD
+operations. If you are building production data pipelines, operating across
+multiple sites, or need to understand the rate limiter in depth, this is
+the right place.</p>
+<p><strong>Who this is for:</strong></p>
+<ul>
+<li>Developers building scheduled data pipelines that pull from multiple sites</li>
+<li>Operators managing separate databases (e.g., WashU and Icon) with different
+  API credentials</li>
+<li>Anyone who needs to export large volumes of data efficiently without hitting
+  rate limits</li>
+</ul>
+<p><strong>Prerequisites:</strong> Familiarity with the basic client usage covered in the
+resource guides (e.g., <a href="../transactions/">Transactions</a>) and the
+<a href="../error-handling/">Error Handling guide</a>.</p>
+<hr />
+<h2 id="multi-site-operations">Multi-Site Operations<a class="headerlink" href="#multi-site-operations" title="Permanent link">&para;</a></h2>
+<p>The Sonny's API scopes data by site code. A single API ID may have access to
+multiple sites, and an organization may operate multiple databases with
+entirely separate credentials. This section covers patterns for working across
+sites and databases.</p>
+<h3 id="single-site-vs-multi-site-setup">Single-Site vs Multi-Site Setup<a class="headerlink" href="#single-site-vs-multi-site-setup" title="Permanent link">&para;</a></h3>
+<p>When you pass <code>site_code</code> to the constructor, every request is scoped to that
+site automatically via the <code>X-Sonnys-Site-Code</code> header:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="c1"># Scoped to a single site -- all requests return data for JOLIET only</span>
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Joliet transactions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transactions</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Omitting <code>site_code</code> returns data for <strong>all sites</strong> the API ID has access to.
+This is useful when you want a consolidated view without looping:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># No site_code -- returns transactions across all authorized sites</span>
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">all_transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All-site transactions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_transactions</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Use <code>site_code</code> when you need per-site reporting or when the API ID has
+access to many sites and you want to reduce response size. Omit it when
+you need a quick cross-site total.</p>
+</div>
+<h3 id="iterating-multiple-sites">Iterating Multiple Sites<a class="headerlink" href="#iterating-multiple-sites" title="Permanent link">&para;</a></h3>
+<p>When you need per-site breakdowns, create a separate client for each site
+code. This is the standard pattern for daily dashboards and scheduled reports:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
+
+<span class="n">daily_counts</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">SITES</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+        <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+        <span class="n">site_code</span><span class="o">=</span><span class="n">site</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-15&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-16&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">daily_counts</span><span class="p">[</span><span class="n">site</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">transactions</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">site</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">daily_counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Each client in this loop shares the same <code>api_id</code>, which means the API
+server enforces a <strong>single</strong> 20 req/15s rate limit across all of them.
+See <a href="#multi-client-rate-limit-considerations">Multi-Client Rate Limit Considerations</a>
+for details and mitigation strategies.</p>
+</div>
+<h3 id="multi-database-operations">Multi-Database Operations<a class="headerlink" href="#multi-database-operations" title="Permanent link">&para;</a></h3>
+<p>Some organizations operate entirely separate databases with different API
+credentials. For example, WashU and Icon each have their own <code>api_id</code> and
+<code>api_key</code>. Create independent clients for each database:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="c1"># WashU database -- separate API credentials</span>
+<span class="n">washu_client</span> <span class="o">=</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;washu-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;washu-api-key&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Icon database -- separate API credentials</span>
+<span class="n">icon_client</span> <span class="o">=</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;icon-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;icon-api-key&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">washu_txns</span> <span class="o">=</span> <span class="n">washu_client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">icon_txns</span> <span class="o">=</span> <span class="n">icon_client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WashU: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">washu_txns</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Icon:  </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">icon_txns</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Combined: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">washu_txns</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">icon_txns</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">washu_client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">icon_client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since these clients use <strong>different</strong> API IDs, each has its own independent
+rate limit (20 req/15s per API ID). They will not interfere with each other.</p>
+</div>
+<h3 id="consolidated-reporting">Consolidated Reporting<a class="headerlink" href="#consolidated-reporting" title="Permanent link">&para;</a></h3>
+<p>A common need is aggregating data across sites into a single report. This
+pattern collects revenue per site for a date range and produces a summary:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
+
+<span class="n">revenue_by_site</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">SITES</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+        <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+        <span class="n">site_code</span><span class="o">=</span><span class="n">site</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">revenue_by_site</span><span class="p">[</span><span class="n">site</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">txn</span><span class="o">.</span><span class="n">total</span> <span class="k">for</span> <span class="n">txn</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">)</span>
+
+<span class="c1"># Print consolidated report</span>
+<span class="n">total_revenue</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">revenue_by_site</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Site&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Revenue&#39;</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">28</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">site</span><span class="p">,</span> <span class="n">revenue</span> <span class="ow">in</span> <span class="n">revenue_by_site</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">pct</span> <span class="o">=</span> <span class="p">(</span><span class="n">revenue</span> <span class="o">/</span> <span class="n">total_revenue</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="k">if</span> <span class="n">total_revenue</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">site</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> $</span><span class="si">{</span><span class="n">revenue</span><span class="si">:</span><span class="s2">&gt;10,.2f</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">28</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;TOTAL&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> $</span><span class="si">{</span><span class="n">total_revenue</span><span class="si">:</span><span class="s2">&gt;10,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Sample output:</p>
+<div class="highlight"><pre><span></span><code>Site                 Revenue
+----------------------------
+JOLIET          $  45,230.50  (39.2%)
+PLNFLD          $  38,910.25  (33.7%)
+NILES           $  31,245.75  (27.1%)
+----------------------------
+TOTAL           $ 115,386.50
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For large multi-site reports, add a <code>time.sleep(1)</code> between site iterations
+to avoid rate limit pressure. See
+<a href="#request-spacing-for-bulk-operations">Request Spacing for Bulk Operations</a>
+for a configurable pattern.</p>
+</div>
+<h3 id="context-managers-for-multi-site">Context Managers for Multi-Site<a class="headerlink" href="#context-managers-for-multi-site" title="Permanent link">&para;</a></h3>
+<p>When working with multiple clients simultaneously, use <code>contextlib.ExitStack</code>
+to manage their lifecycles cleanly. This ensures all clients are closed even
+if an error occurs partway through:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;WashU&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;api_id&quot;</span><span class="p">:</span> <span class="s2">&quot;washu-api-id&quot;</span><span class="p">,</span> <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;washu-api-key&quot;</span><span class="p">},</span>
+    <span class="s2">&quot;Icon&quot;</span><span class="p">:</span>  <span class="p">{</span><span class="s2">&quot;api_id&quot;</span><span class="p">:</span> <span class="s2">&quot;icon-api-id&quot;</span><span class="p">,</span>  <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;icon-api-key&quot;</span><span class="p">},</span>
+<span class="p">}</span>
+
+<span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
+    <span class="n">clients</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">creds</span> <span class="ow">in</span> <span class="n">DATABASES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="n">creds</span><span class="p">[</span><span class="s2">&quot;api_id&quot;</span><span class="p">],</span> <span class="n">api_key</span><span class="o">=</span><span class="n">creds</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">])</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+        <span class="n">clients</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span>
+
+    <span class="c1"># All clients are open -- use them freely</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">client</span> <span class="ow">in</span> <span class="n">clients</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">sites</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">sites</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sites</span><span class="p">)</span><span class="si">}</span><span class="s2"> sites&quot;</span><span class="p">)</span>
+
+    <span class="c1"># All clients are automatically closed when the block exits</span>
+</code></pre></div>
+<p>For the common case of iterating sites within a single database, you can
+combine <code>ExitStack</code> with site-scoped clients:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
+
+<span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
+    <span class="n">clients</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">SITES</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">SonnysClient</span><span class="p">(</span>
+            <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+            <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+            <span class="n">site_code</span><span class="o">=</span><span class="n">site</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+        <span class="n">clients</span><span class="p">[</span><span class="n">site</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span>
+
+    <span class="c1"># Fetch data from all sites with all clients open</span>
+    <span class="k">for</span> <span class="n">site</span><span class="p">,</span> <span class="n">client</span> <span class="ow">in</span> <span class="n">clients</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">txns</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-15&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-16&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">txns</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Opening multiple clients to the <strong>same</strong> API ID simultaneously means they
+all share the server-side rate limit but each has its own local rate
+limiter. The local limiters do not coordinate. If you fire requests from
+all clients at once, you will likely hit server-side 429s. Use sequential
+access or add delays between clients.</p>
+</div>
+<hr />
+<h2 id="rate-limiting-deep-dive">Rate Limiting Deep Dive<a class="headerlink" href="#rate-limiting-deep-dive" title="Permanent link">&para;</a></h2>
+<p>The SDK includes a built-in rate limiter that prevents most 429 errors before
+they happen. This section explains how the limiter works internally, what
+happens with multiple clients, and how to forecast your request budget for
+bulk operations.</p>
+<p>For exception handling when rate limits are exceeded, see the
+<a href="../error-handling/#ratelimiterror">Error Handling guide</a>.</p>
+<h3 id="how-the-rate-limiter-works">How the Rate Limiter Works<a class="headerlink" href="#how-the-rate-limiter-works" title="Permanent link">&para;</a></h3>
+<p>Each <code>SonnysClient</code> instance creates its own <code>RateLimiter</code> with a sliding
+window algorithm:</p>
+<ul>
+<li><strong>Window:</strong> 15 seconds (rolling, not fixed intervals)</li>
+<li><strong>Capacity:</strong> 20 requests per window</li>
+<li><strong>Behavior:</strong> The limiter tracks the timestamp of each request in a deque.
+  Before every request, it purges timestamps older than 15 seconds. If fewer
+  than 20 timestamps remain, the request proceeds immediately. If at capacity,
+  the client <strong>sleeps</strong> until the oldest timestamp expires from the window.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>Timeline (seconds):
+0s    5s    10s   15s   20s   25s   30s
+|-----|-----|-----|-----|-----|-----|
+[  20 requests fired  ]
+                       ^ window expires for req #1
+                       ^ req #21 can now proceed
+</code></pre></div>
+<p>The key insight is that requests <strong>never fail</strong> due to the client-side rate
+limiter. Instead, the client automatically waits until a slot opens. You can
+observe this behavior by enabling debug logging:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;sonnys_data_client&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="c1"># After 20 rapid requests, the 21st will pause automatically</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Debug log: &quot;Rate limiter: waiting 2.350s&quot;</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The rate limiter is per-client-instance. Two separate <code>SonnysClient</code> objects
+each maintain independent rate limiters, even if they share the same
+<code>api_id</code>.</p>
+</div>
+<h3 id="multi-client-rate-limit-considerations">Multi-Client Rate Limit Considerations<a class="headerlink" href="#multi-client-rate-limit-considerations" title="Permanent link">&para;</a></h3>
+<p>This is the most common source of unexpected 429 errors. Understanding it
+will save you hours of debugging.</p>
+<p><strong>The problem:</strong> Each <code>SonnysClient</code> has its own local rate limiter allowing
+20 req/15s. But the Sonny's API server enforces a <strong>single</strong> 20 req/15s limit
+<strong>per API ID</strong>, regardless of how many clients use that ID. If two clients
+share the same <code>api_id</code>, each thinks it can send 20 requests, but the server
+only allows 20 total.</p>
+<div class="highlight"><pre><span></span><code>Client A (api_id=&quot;ABC&quot;):  local limiter = 20 req/15s  ─┐
+                                                         ├─&gt; Server: 20 req/15s for &quot;ABC&quot;
+Client B (api_id=&quot;ABC&quot;):  local limiter = 20 req/15s  ─┘
+
+Combined effective limit: 20 req/15s total, NOT 40
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Shared API ID = shared rate limit</p>
+<p>If you run N clients against the same <code>api_id</code>, expect effective per-client
+throughput of approximately <strong>20/N requests per 15 seconds</strong>. With 4
+site-scoped clients sharing one API ID, each client effectively gets
+~5 req/15s before the server starts returning 429s.</p>
+</div>
+<p>The SDK handles server-side 429s with exponential backoff retries (up to
+<code>max_retries</code> attempts), so your script will not crash immediately. But each
+retry adds latency. It is faster to proactively space your requests than to
+rely on retry-after-429 recovery.</p>
+<p><strong>Mitigation strategies:</strong></p>
+<ol>
+<li>
+<p><strong>Sequential site iteration</strong> -- Process one site at a time rather than
+   opening all clients simultaneously (see
+   <a href="#iterating-multiple-sites">Iterating Multiple Sites</a>).</p>
+</li>
+<li>
+<p><strong>Add delays between sites</strong> -- Insert <code>time.sleep(2)</code> between site
+   iterations to let the rate limit window recover.</p>
+</li>
+<li>
+<p><strong>Increase <code>max_retries</code></strong> -- If you must run multiple clients concurrently,
+   increase <code>max_retries</code> to give the backoff more room:</p>
+<div class="highlight"><pre><span></span><code><span class="n">client</span> <span class="o">=</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># More room for 429 recovery</span>
+<span class="p">)</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>Use separate API IDs</strong> -- If available, request separate API credentials
+   for separate processes. Each API ID gets its own 20 req/15s budget.</p>
+</li>
+</ol>
+<h3 id="request-budget-forecasting">Request Budget Forecasting<a class="headerlink" href="#request-budget-forecasting" title="Permanent link">&para;</a></h3>
+<p>Before running a bulk export, estimate how many requests it will consume and
+how long it will take. This helps you plan scheduling windows and avoid
+surprises.</p>
+<p><strong>Formula:</strong> The API returns up to 100 records per page. For a paginated
+endpoint:</p>
+<div class="highlight"><pre><span></span><code>pages = ceil(total_records / 100)
+</code></pre></div>
+<p>At 20 requests per 15 seconds, the minimum time to complete is:</p>
+<div class="highlight"><pre><span></span><code>time_seconds = (pages / 20) * 15
+</code></pre></div>
+<p><strong>Reference table:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Records</th>
+<th style="text-align: right;">Pages</th>
+<th style="text-align: right;">Min Time</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">&lt; 1s</td>
+<td>Single request</td>
+</tr>
+<tr>
+<td style="text-align: right;">500</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">~4s</td>
+<td>Fits in one rate limit window</td>
+</tr>
+<tr>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">~8s</td>
+<td>Fits in one rate limit window</td>
+</tr>
+<tr>
+<td style="text-align: right;">2,000</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">~15s</td>
+<td>Fills exactly one window</td>
+</tr>
+<tr>
+<td style="text-align: right;">5,000</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">~38s</td>
+<td>~2.5 windows</td>
+</tr>
+<tr>
+<td style="text-align: right;">10,000</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">~75s</td>
+<td>5 windows</td>
+</tr>
+<tr>
+<td style="text-align: right;">25,000</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">~188s (~3 min)</td>
+<td>12.5 windows</td>
+</tr>
+<tr>
+<td style="text-align: right;">50,000</td>
+<td style="text-align: right;">500</td>
+<td style="text-align: right;">~375s (~6 min)</td>
+<td>25 windows</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These estimates assume a single client with exclusive use of the API ID.
+If other processes share the same API ID, actual times will be longer due
+to contention.</p>
+</div>
+<p><strong>Example: estimating a monthly export</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="c1"># Estimate for a site that processes ~800 transactions per day</span>
+<span class="n">days_in_month</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">daily_transactions</span> <span class="o">=</span> <span class="mi">800</span>
+<span class="n">total_records</span> <span class="o">=</span> <span class="n">days_in_month</span> <span class="o">*</span> <span class="n">daily_transactions</span>  <span class="c1"># 24,000</span>
+
+<span class="n">pages</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">total_records</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># 240 pages</span>
+<span class="n">min_seconds</span> <span class="o">=</span> <span class="p">(</span><span class="n">pages</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span> <span class="o">*</span> <span class="mi">15</span>  <span class="c1"># 180 seconds = 3 minutes</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated: </span><span class="si">{</span><span class="n">total_records</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> records, </span><span class="si">{</span><span class="n">pages</span><span class="si">}</span><span class="s2"> pages, ~</span><span class="si">{</span><span class="n">min_seconds</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For <code>load_job()</code>, each page submits a separate batch job that must be
+polled. The total time includes polling delays (default 2s per poll).
+A 240-page <code>load_job()</code> export will take significantly longer than a
+240-page <code>list()</code> call. Use <code>list()</code> when you only need summary fields.</p>
+</div>
+<h3 id="staying-within-limits">Staying Within Limits<a class="headerlink" href="#staying-within-limits" title="Permanent link">&para;</a></h3>
+<p>Practical tips to keep your scripts running smoothly without hitting rate
+limits:</p>
+<p><strong>1. Add sleep between site iterations</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">SITES</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+        <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+        <span class="n">site_code</span><span class="o">=</span><span class="n">site</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-15&quot;</span><span class="p">,</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-16&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transactions</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Let the rate limit window recover between sites</span>
+</code></pre></div>
+<p><strong>2. Use <code>load_job()</code> for bulk exports instead of paginated <code>list()</code></strong></p>
+<p>A <code>load_job()</code> call for 10,000 records uses fewer API requests than paginating
+through <code>list()</code>, because the batch job server does the heavy lifting. The
+tradeoff is wall-clock time (polling delay), but the request budget impact is
+lower.</p>
+<p><strong>3. Keep date ranges narrow</strong></p>
+<p>Fewer records per query means fewer pages, which means fewer requests.
+Day-by-day iteration is the safest approach for large exports:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="n">start</span>
+
+    <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+        <span class="n">next_day</span> <span class="o">=</span> <span class="n">current</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="n">next_day</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transactions</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">next_day</span>
+</code></pre></div>
+<p><strong>4. Stagger scheduled jobs</strong></p>
+<p>If you have multiple cron jobs or scheduled tasks using the same API ID,
+offset their start times by at least 60 seconds. Two jobs starting
+simultaneously will compete for the same 20 req/15s budget.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <a href="../error-handling/#built-in-retry-behavior">Error Handling guide</a>
+covers what happens when rate limits are exceeded despite these
+precautions -- the SDK retries 429s with exponential backoff before
+raising <code>RateLimitError</code>.</p>
+</div>
+<hr />
+<h2 id="performance-optimization">Performance Optimization<a class="headerlink" href="#performance-optimization" title="Permanent link">&para;</a></h2>
+<p>Getting data out of the API efficiently means choosing the right method,
+sizing your date ranges, and spacing your requests. This section provides
+practical guidance for minimizing wall-clock time and request budget usage
+in production pipelines.</p>
+<h3 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h3>
+<p>The Transactions resource offers five methods, each with different performance
+characteristics. The <a href="../transactions/#choosing-the-right-method">Transactions guide</a>
+has a full comparison table. Here is the decision from a <strong>performance</strong>
+perspective:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Priority</th>
+<th>Method</th>
+<th>Speed</th>
+<th>Request Cost</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td><code>list()</code></td>
+<td>Fastest</td>
+<td>1 req per 100 records</td>
+<td>Daily counts, revenue totals, date range summaries</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td><code>list_by_type()</code></td>
+<td>Fast</td>
+<td>1 req per 100 records</td>
+<td>Type-filtered queries (fewer records = fewer pages)</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td><code>list_v2()</code></td>
+<td>Fast</td>
+<td>1 req per 100 records</td>
+<td>When you need <code>customer_id</code> or recurring flags</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td><code>get()</code></td>
+<td>Per-record</td>
+<td>1 req per record</td>
+<td>Single transaction detail lookup</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td><code>load_job()</code></td>
+<td>Slowest</td>
+<td>Submit + poll + paginate</td>
+<td>Bulk full-detail exports</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Default to <code>list()</code> unless you need specific fields</p>
+<p><code>list()</code> has no server-side caching layer and returns results immediately.
+It is the fastest method for most reporting use cases. Only switch to
+<code>list_v2()</code> when you specifically need <code>customer_id</code>,
+<code>is_recurring_plan_sale</code>, <code>is_recurring_plan_redemption</code>, or
+<code>transaction_status</code>. Only use <code>load_job()</code> when you need full transaction
+detail (tenders, line items, discounts) on every record.</p>
+</div>
+<p><strong>Avoid <code>get()</code> in loops.</strong> Fetching 500 transactions one at a time with
+<code>get()</code> costs 500 requests. The same data from <code>load_job()</code> costs roughly
+5 job submissions + polling. If you need full detail on many transactions,
+always prefer <code>load_job()</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="c1"># BAD: 500 requests for 500 transactions</span>
+    <span class="c1"># for tid in transaction_ids:</span>
+    <span class="c1">#     detail = client.transactions.get(tid)</span>
+
+    <span class="c1"># GOOD: ~5 requests for 500 transactions with full detail</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-15&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-16&quot;</span><span class="p">,</span>
+        <span class="n">site</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div>
+<h3 id="date-range-sizing">Date Range Sizing<a class="headerlink" href="#date-range-sizing" title="Permanent link">&para;</a></h3>
+<p>Narrower date ranges mean fewer records per query, which means fewer pages and
+fewer requests. The tradeoff is more iterations if you need a wide range.</p>
+<p><strong>Guidelines by method:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Recommended Range</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list()</code></td>
+<td>Up to 30 days</td>
+<td>Fast pagination, no caching complications</td>
+</tr>
+<tr>
+<td><code>list_v2()</code></td>
+<td>Up to 30 days</td>
+<td>10-min cache; repeated calls within cache window return stale data</td>
+</tr>
+<tr>
+<td><code>load_job()</code></td>
+<td>Exactly 1 day</td>
+<td><strong>Required</strong> -- max 24-hour range per call</td>
+</tr>
+</tbody>
+</table>
+<p>For <code>load_job()</code> exports spanning multiple days, iterate day by day. The
+<a href="../transactions/#multi-day-exports">Transactions guide</a> shows this pattern in
+detail. Here is the performance-optimized version with request spacing:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="n">start</span>
+
+    <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+        <span class="n">next_day</span> <span class="o">=</span> <span class="n">current</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">day_results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="n">next_day</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="n">site</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">day_results</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">day_results</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">next_day</span>
+
+        <span class="c1"># Pause between days to stay well within rate limits</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_results</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions over </span><span class="si">{</span><span class="p">(</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">)</span><span class="o">.</span><span class="n">days</span><span class="si">}</span><span class="s2"> days&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <code>list()</code> and <code>list_v2()</code>, wider date ranges are fine if you only need
+summary data. A 30-day <code>list()</code> query on a site with 800 transactions/day
+returns ~24,000 records across ~240 pages -- about 3 minutes of wall time
+with a single client.</p>
+</div>
+<h3 id="request-spacing-for-bulk-operations">Request Spacing for Bulk Operations<a class="headerlink" href="#request-spacing-for-bulk-operations" title="Permanent link">&para;</a></h3>
+<p>Even though the SDK handles 429 retries automatically, each retry adds
+latency. A request that gets a 429, waits 1 second, retries, and succeeds
+takes ~1.7 seconds instead of ~0.7 seconds. Proactive spacing is faster
+overall than reactive retry.</p>
+<p>Here is a configurable pattern for bulk operations with built-in spacing:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">export_site_transactions</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">start</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span>
+    <span class="n">end</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span>
+    <span class="n">delay_between_days</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Export transactions for a site with configurable request spacing.&quot;&quot;&quot;</span>
+    <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+        <span class="n">api_id</span><span class="o">=</span><span class="n">api_id</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="n">api_key</span><span class="p">,</span>
+        <span class="n">site_code</span><span class="o">=</span><span class="n">site_code</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+            <span class="n">next_day</span> <span class="o">=</span> <span class="n">current</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">day_results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">load_job</span><span class="p">(</span>
+                <span class="n">startDate</span><span class="o">=</span><span class="n">current</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                <span class="n">endDate</span><span class="o">=</span><span class="n">next_day</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                <span class="n">site</span><span class="o">=</span><span class="n">site_code</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">day_results</span><span class="p">)</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">next_day</span>
+
+            <span class="k">if</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay_between_days</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">all_results</span>
+
+
+<span class="c1"># Usage: export June for Joliet with 2-second spacing</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">export_site_transactions</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+    <span class="n">start</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">end</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+    <span class="n">delay_between_days</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exported </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>For multi-site exports, add an additional delay between sites:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">site</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">SITES</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">export_site_transactions</span><span class="p">(</span>
+        <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+        <span class="n">site_code</span><span class="o">=</span><span class="n">site</span><span class="p">,</span>
+        <span class="n">start</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">end</span><span class="o">=</span><span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+        <span class="n">delay_between_days</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Pause between sites (skip after the last one)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">SITES</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not set <code>delay_between_days</code> to 0 for large exports. While the SDK
+will handle the resulting 429s gracefully, the exponential backoff delays
+(1s, 2s, 4s per retry) will make the total run time <strong>longer</strong> than a
+small proactive delay would.</p>
+</div>
+<h3 id="batch-jobs-vs-paginated-lists">Batch Jobs vs Paginated Lists<a class="headerlink" href="#batch-jobs-vs-paginated-lists" title="Permanent link">&para;</a></h3>
+<p>The choice between <code>load_job()</code> and <code>list()</code> is the most impactful performance
+decision. Here is when to use each:</p>
+<p><strong>Use <code>list()</code> when:</strong></p>
+<ul>
+<li>You need summary fields only (transaction number, total, date)</li>
+<li>You are building dashboards or real-time reports</li>
+<li>Speed matters more than data completeness</li>
+<li>You are querying across wide date ranges (up to 30 days)</li>
+</ul>
+<p><strong>Use <code>load_job()</code> when:</strong></p>
+<ul>
+<li>You need full transaction detail (tenders, line items, discounts) on every
+  record</li>
+<li>You need v2 enrichment fields (<code>customer_id</code>, <code>transaction_status</code>) combined
+  with full detail</li>
+<li>You are building a data warehouse or archival export</li>
+<li>You can tolerate longer run times (polling overhead)</li>
+</ul>
+<p><strong>Performance comparison for 1,000 transactions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th><code>list()</code></th>
+<th><code>load_job()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Requests</td>
+<td>10 (paginated)</td>
+<td>~10 job submissions + ~10 poll cycles</td>
+</tr>
+<tr>
+<td>Wall time</td>
+<td>~8 seconds</td>
+<td>~30-60 seconds (includes polling)</td>
+</tr>
+<tr>
+<td>Data depth</td>
+<td>Summary only</td>
+<td>Full detail + v2 fields</td>
+</tr>
+<tr>
+<td>Caching</td>
+<td>None</td>
+<td>20-min server cache</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Leveraging the <code>load_job()</code> cache</p>
+<p>Job results are cached by the API for <strong>20 minutes</strong>. If you call
+<code>load_job()</code> with the same parameters within that window, the API returns
+cached results without re-processing the job. This means repeated calls
+are fast -- useful for retry-after-failure scenarios. See the
+<a href="../transactions/#batch-job-workflow">Transactions guide</a> for details on the
+job lifecycle.</p>
+</div>
+<p><strong>Hybrid approach:</strong> Use <code>list()</code> to get transaction counts and summaries,
+then use <code>load_job()</code> only for the specific date ranges where you need full
+detail:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="c1"># Step 1: Quick summary scan with list()</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions in June&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Step 2: Full detail export only for high-value days</span>
+    <span class="n">high_value_txns</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">summary</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">total</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">high_value_txns</span><span class="p">)</span><span class="si">}</span><span class="s2"> high-value transactions to inspect&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Step 3: Get full detail for specific transactions</span>
+    <span class="k">for</span> <span class="n">txn</span> <span class="ow">in</span> <span class="n">high_value_txns</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>  <span class="c1"># Limit to first 10</span>
+        <span class="n">detail</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">txn</span><span class="o">.</span><span class="n">trans_id</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">detail</span><span class="o">.</span><span class="n">number</span><span class="si">}</span><span class="s2">: $</span><span class="si">{</span><span class="n">detail</span><span class="o">.</span><span class="n">total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> - &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">detail</span><span class="o">.</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">detail</span><span class="o">.</span><span class="n">tenders</span><span class="p">)</span><span class="si">}</span><span class="s2"> tenders&quot;</span>
+        <span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="integration-recipes">Integration Recipes<a class="headerlink" href="#integration-recipes" title="Permanent link">&para;</a></h2>
+<p>Ready-to-use patterns for the most common SDK integration scenarios. Each
+recipe is a complete, copy-pasteable script that uses only the standard library
+and the SDK itself -- no extra dependencies required. Change the credentials
+and run.</p>
+<h3 id="export-to-csv">Export to CSV<a class="headerlink" href="#export-to-csv" title="Permanent link">&para;</a></h3>
+<p>Export transaction data for a date range to a CSV file. Uses <code>model_dump()</code>
+to convert each Pydantic model to a dictionary, then writes rows with the
+standard <code>csv</code> module.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">transactions</span><span class="p">:</span>
+    <span class="n">fieldnames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">transactions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;joliet_transactions.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">txn</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">txn</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exported </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">transactions</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions to joliet_transactions.csv&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Use <code>list_v2()</code> instead of <code>list()</code> when you need enriched CSV exports
+with <code>customer_id</code>, <code>is_recurring_plan_sale</code>, <code>is_recurring_plan_redemption</code>,
+and <code>transaction_status</code> columns. Use <code>list()</code> for lightweight exports
+with just <code>trans_number</code>, <code>trans_id</code>, <code>total</code>, and <code>date</code>.</p>
+</div>
+<h3 id="export-to-json">Export to JSON<a class="headerlink" href="#export-to-json" title="Permanent link">&para;</a></h3>
+<p>Export transaction data to a JSON file. Use <code>model_dump(mode="json")</code> to get
+a JSON-serializable dictionary (handles dates, decimals, etc.).</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">txn</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">txn</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;joliet_transactions.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exported </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions to joliet_transactions.json&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use <code>model_dump(mode="json", by_alias=True)</code> if the downstream consumer
+expects camelCase field names matching the raw API format (e.g.,
+<code>transNumber</code> instead of <code>trans_number</code>).</p>
+</div>
+<h3 id="scheduled-daily-export">Scheduled Daily Export<a class="headerlink" href="#scheduled-daily-export" title="Permanent link">&para;</a></h3>
+<p>A script designed to run once per day that exports yesterday's transactions to
+a date-stamped CSV file. Ideal for cron jobs or Windows Task Scheduler.</p>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;daily_export.py -- Export yesterday&#39;s transactions to a date-stamped CSV.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">yesterday</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;exports&quot;</span><span class="p">)</span>
+<span class="n">output_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">output_file</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;transactions_</span><span class="si">{</span><span class="n">yesterday</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="n">yesterday</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="n">today</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+    <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">transactions</span><span class="p">:</span>
+    <span class="n">fieldnames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">transactions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">txn</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">txn</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Exported </span><span class="si">%d</span><span class="s2"> transactions to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">transactions</span><span class="p">),</span> <span class="n">output_file</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Scheduling this script</p>
+<p><strong>Linux/Mac (cron):</strong> Run daily at 6:00 AM:</p>
+<div class="highlight"><pre><span></span><code>0 6 * * * python /path/to/daily_export.py
+</code></pre></div>
+<p><strong>Windows (Task Scheduler):</strong> Create a Basic Task triggered daily at
+6:00 AM, with the action "Start a program" pointing to your Python
+executable and the script path as the argument.</p>
+</div>
+<h3 id="multi-site-daily-report">Multi-Site Daily Report<a class="headerlink" href="#multi-site-daily-report" title="Permanent link">&para;</a></h3>
+<p>Combine the multi-site iteration pattern with CSV export to produce either
+per-site CSV files or a single consolidated CSV with a <code>site_code</code> column.
+This example builds a consolidated file.</p>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;multi_site_report.py -- Consolidated daily report across all sites.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
+
+<span class="n">yesterday</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+<span class="n">output_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;daily_report_</span><span class="si">{</span><span class="n">yesterday</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">)</span>
+
+<span class="n">all_rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">SITES</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+        <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+        <span class="n">site_code</span><span class="o">=</span><span class="n">site</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+            <span class="n">startDate</span><span class="o">=</span><span class="n">yesterday</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+            <span class="n">endDate</span><span class="o">=</span><span class="n">today</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">txn</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">txn</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+            <span class="n">row</span><span class="p">[</span><span class="s2">&quot;site_code&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">site</span>
+            <span class="n">all_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Respect shared rate limit between sites</span>
+
+<span class="k">if</span> <span class="n">all_rows</span><span class="p">:</span>
+    <span class="n">fieldnames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_rows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">all_rows</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exported </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_rows</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions across </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">SITES</span><span class="p">)</span><span class="si">}</span><span class="s2"> sites&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Output: </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For per-site CSV files instead of a consolidated file, move the file
+writing inside the site loop and use
+<code>Path(f"{site}_{yesterday.isoformat()}.csv")</code> as the output path. See
+<a href="#iterating-multiple-sites">Iterating Multiple Sites</a> for the base pattern.</p>
+</div>
+<h3 id="data-pipeline-pattern">Data Pipeline Pattern<a class="headerlink" href="#data-pipeline-pattern" title="Permanent link">&para;</a></h3>
+<p>A structured fetch-validate-transform-load pipeline. This example pulls
+recurring account data, filters to active accounts, calculates key metrics
+(active count, monthly recurring revenue), and writes a summary to JSON.</p>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;recurring_pipeline.py -- Recurring account data pipeline.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIError</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># --- Fetch ---</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+        <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+        <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">accounts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_details</span><span class="p">()</span>
+<span class="k">except</span> <span class="n">APIError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to fetch recurring accounts: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Fetched </span><span class="si">%d</span><span class="s2"> recurring accounts&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">accounts</span><span class="p">))</span>
+
+<span class="c1"># --- Validate &amp; Transform ---</span>
+<span class="n">active</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">accounts</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">current_recurring_status_name</span> <span class="o">==</span> <span class="s2">&quot;Active&quot;</span><span class="p">]</span>
+<span class="n">mrr</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">billing_amount</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">active</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">billing_amount</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="n">summary</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+    <span class="s2">&quot;total_accounts&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">accounts</span><span class="p">),</span>
+    <span class="s2">&quot;active_accounts&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">active</span><span class="p">),</span>
+    <span class="s2">&quot;monthly_recurring_revenue&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">mrr</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="s2">&quot;average_billing&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">mrr</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">active</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">active</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># --- Load ---</span>
+<span class="n">output_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;recurring_summary_</span><span class="si">{</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Pipeline complete: </span><span class="si">%d</span><span class="s2"> active accounts, MRR=$</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">active</span><span class="p">),</span> <span class="n">mrr</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Output: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For production pipelines, reference the
+<a href="../error-handling/#custom-retry-patterns">Error Handling guide</a> for more
+granular exception handling. You can wrap each pipeline stage in its own
+try/except to handle partial failures gracefully.</p>
+</div>
+<h3 id="monitoring-alerting-recipe">Monitoring &amp; Alerting Recipe<a class="headerlink" href="#monitoring-alerting-recipe" title="Permanent link">&para;</a></h3>
+<p>A simple script that checks a KPI (today's transaction count) against a
+threshold and logs a warning when the value is below expected volume. Run this
+on a schedule to catch low-volume days early.</p>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;monitor_volume.py -- Check daily transaction volume against threshold.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">SITE</span> <span class="o">=</span> <span class="s2">&quot;JOLIET&quot;</span>
+<span class="n">MIN_EXPECTED_TRANSACTIONS</span> <span class="o">=</span> <span class="mi">200</span>  <span class="c1"># Typical daily volume for this site</span>
+
+<span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+<span class="n">yesterday</span> <span class="o">=</span> <span class="n">today</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
+    <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+    <span class="n">site_code</span><span class="o">=</span><span class="n">SITE</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="n">transactions</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
+        <span class="n">startDate</span><span class="o">=</span><span class="n">yesterday</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="n">endDate</span><span class="o">=</span><span class="n">today</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+    <span class="p">)</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">transactions</span><span class="p">)</span>
+<span class="n">revenue</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">txn</span><span class="o">.</span><span class="n">total</span> <span class="k">for</span> <span class="n">txn</span> <span class="ow">in</span> <span class="n">transactions</span><span class="p">)</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%d</span><span class="s2"> transactions, $</span><span class="si">%.2f</span><span class="s2"> revenue&quot;</span><span class="p">,</span> <span class="n">SITE</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">revenue</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">MIN_EXPECTED_TRANSACTIONS</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+        <span class="s2">&quot;LOW VOLUME ALERT: </span><span class="si">%s</span><span class="s2"> had </span><span class="si">%d</span><span class="s2"> transactions (expected &gt;= </span><span class="si">%d</span><span class="s2">)&quot;</span><span class="p">,</span>
+        <span class="n">SITE</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">MIN_EXPECTED_TRANSACTIONS</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> volume is normal (</span><span class="si">%d</span><span class="s2"> &gt;= </span><span class="si">%d</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">SITE</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">MIN_EXPECTED_TRANSACTIONS</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Extending with real alerts</p>
+<p>This recipe logs warnings to stdout. In production, extend it with:</p>
+<ul>
+<li><strong>Email alerts:</strong> Use <code>smtplib</code> from the standard library to send an
+  email when the threshold is breached.</li>
+<li><strong>Slack webhooks:</strong> Use <code>urllib.request</code> to POST a JSON payload to a
+  Slack incoming webhook URL.</li>
+<li><strong>Integration with the logging config</strong> from the
+  <a href="../error-handling/#logging-debugging">Error Handling guide</a> to route
+  warnings to a file or external logging service.</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

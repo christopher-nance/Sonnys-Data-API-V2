@@ -69,8 +69,8 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
 with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     items = client.items.list()
 
-    site_items = [i for i in items if i.site_location == "MAIN"]
-    print(f"Found {len(site_items)} items at MAIN site")
+    site_items = [i for i in items if i.site_location == "JOLIET"]
+    print(f"Found {len(site_items)} items at JOLIET site")
 ```
 
 ## Models

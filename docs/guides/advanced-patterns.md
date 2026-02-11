@@ -76,7 +76,7 @@ code. This is the standard pattern for daily dashboards and scheduled reports:
 ```python
 from sonnys_data_client import SonnysClient
 
-SITES = ["JOLIET", "ROMEOVILLE", "PLAINFIELD", "SHOREWOOD"]
+SITES = ["JOLIET", "PLNFLD", "NILES"]
 
 daily_counts = {}
 
@@ -153,7 +153,7 @@ pattern collects revenue per site for a date range and produces a summary:
 ```python
 from sonnys_data_client import SonnysClient
 
-SITES = ["JOLIET", "ROMEOVILLE", "PLAINFIELD", "SHOREWOOD"]
+SITES = ["JOLIET", "PLNFLD", "NILES"]
 
 revenue_by_site = {}
 
@@ -185,12 +185,11 @@ Sample output:
 ```
 Site                 Revenue
 ----------------------------
-JOLIET          $  45,230.50  (32.1%)
-ROMEOVILLE      $  38,910.25  (27.6%)
-PLAINFIELD      $  31,445.00  (22.3%)
-SHOREWOOD       $  25,310.75  (18.0%)
+JOLIET          $  45,230.50  (39.2%)
+PLNFLD          $  38,910.25  (33.7%)
+NILES           $  31,245.75  (27.1%)
 ----------------------------
-TOTAL           $ 140,896.50
+TOTAL           $ 115,386.50
 ```
 
 !!! tip
@@ -236,7 +235,7 @@ combine `ExitStack` with site-scoped clients:
 import contextlib
 from sonnys_data_client import SonnysClient
 
-SITES = ["JOLIET", "ROMEOVILLE", "PLAINFIELD"]
+SITES = ["JOLIET", "PLNFLD", "NILES"]
 
 with contextlib.ExitStack() as stack:
     clients = {}
@@ -446,7 +445,7 @@ limits:
 import time
 from sonnys_data_client import SonnysClient
 
-SITES = ["JOLIET", "ROMEOVILLE", "PLAINFIELD", "SHOREWOOD"]
+SITES = ["JOLIET", "PLNFLD", "NILES"]
 
 for site in SITES:
     with SonnysClient(
@@ -546,7 +545,11 @@ always prefer `load_job()`:
 ```python
 from sonnys_data_client import SonnysClient
 
-with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+with SonnysClient(
+    api_id="your-api-id",
+    api_key="your-api-key",
+    site_code="JOLIET",
+) as client:
     # BAD: 500 requests for 500 transactions
     # for tid in transaction_ids:
     #     detail = client.transactions.get(tid)
@@ -555,6 +558,7 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
     results = client.transactions.load_job(
         startDate="2025-06-15",
         endDate="2025-06-16",
+        site="JOLIET",
     )
 ```
 
@@ -580,7 +584,11 @@ import time
 from datetime import date, timedelta
 from sonnys_data_client import SonnysClient
 
-with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
+with SonnysClient(
+    api_id="your-api-id",
+    api_key="your-api-key",
+    site_code="JOLIET",
+) as client:
     start = date(2025, 6, 1)
     end = date(2025, 6, 30)
     all_results = []
@@ -591,6 +599,7 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key") as client:
         day_results = client.transactions.load_job(
             startDate=current.isoformat(),
             endDate=next_day.isoformat(),
+            site="JOLIET",
         )
         all_results.extend(day_results)
         print(f"{current}: {len(day_results)} transactions")
@@ -644,6 +653,7 @@ def export_site_transactions(
             day_results = client.transactions.load_job(
                 startDate=current.isoformat(),
                 endDate=next_day.isoformat(),
+                site=site_code,
             )
             all_results.extend(day_results)
             current = next_day
@@ -672,7 +682,7 @@ For multi-site exports, add an additional delay between sites:
 import time
 from datetime import date
 
-SITES = ["JOLIET", "ROMEOVILLE", "PLAINFIELD", "SHOREWOOD"]
+SITES = ["JOLIET", "PLNFLD", "NILES"]
 
 for i, site in enumerate(SITES):
     results = export_site_transactions(
@@ -910,7 +920,7 @@ from pathlib import Path
 
 from sonnys_data_client import SonnysClient
 
-SITES = ["JOLIET", "ROMEOVILLE", "PLAINFIELD", "SHOREWOOD"]
+SITES = ["JOLIET", "PLNFLD", "NILES"]
 
 yesterday = date.today() - timedelta(days=1)
 today = date.today()
