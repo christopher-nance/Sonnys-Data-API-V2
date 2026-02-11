@@ -33,3 +33,22 @@ class WashResult(SonnysModel):
     total: int
     wash_count: int
     prepaid_wash_count: int
+
+
+class ConversionResult(SonnysModel):
+    """Membership conversion KPI returned by ``client.stats.conversion_rate()``.
+
+    Measures how effectively a site converts retail wash customers into
+    membership sign-ups.  The ``rate`` is computed as
+    ``new_memberships / total_opportunities`` where total opportunities
+    is the sum of new membership activations and retail wash transactions.
+
+    A rate of ``0.15`` means 15 % of wash-or-membership interactions
+    resulted in a new membership activation.  When there are zero
+    opportunities the rate is ``0.0`` (division-by-zero safe).
+    """
+
+    rate: float
+    new_memberships: int
+    retail_washes: int
+    total_opportunities: int
