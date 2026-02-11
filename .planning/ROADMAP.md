@@ -82,10 +82,10 @@ Plans:
 **Goal**: `client.stats.total_sales(start, end)` with breakdowns by transaction type
 **Depends on**: Phase 20
 **Research**: Unlikely (aggregation over existing transaction data)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 21-01: TBD
+- [x] 21-01: Revenue Stats Implementation — completed 2026-02-11
 
 #### Phase 22: Wash Analytics
 
@@ -161,7 +161,7 @@ Plans:
 | 18. Docstring Audit | v1.1 | 3/3 | Complete | 2026-02-11 |
 | 19. Stats Module Foundation | v1.2 | 2/2 | Complete | 2026-02-11 |
 | 20. Data Fetching Layer | v1.2 | 1/1 | Complete | 2026-02-11 |
-| 21. Revenue & Sales Stats | v1.2 | 0/? | Not started | - |
+| 21. Revenue & Sales Stats | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 22. Wash Analytics | v1.2 | 0/? | Not started | - |
 | 23. Membership Analytics | v1.2 | 0/? | Not started | - |
 | 24. Conversion Rate | v1.2 | 0/? | Not started | - |
