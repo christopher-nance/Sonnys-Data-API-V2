@@ -5,6 +5,83 @@
 - ✅ **v1.0 Initial Release** — [milestones/v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md) (Phases 1-10, shipped 2026-02-10)
 - ✅ **v1.1 Documentation** — [milestones/v1.1-ROADMAP.md](milestones/v1.1-ROADMAP.md) (Phases 11-18, shipped 2026-02-11)
 - ✅ **v1.2 Improvements** — [milestones/v1.2-ROADMAP.md](milestones/v1.2-ROADMAP.md) (Phases 19-26, shipped 2026-02-11)
+- 🚧 **v1.3 Labor CPC** — Phases 27-34 (in progress)
+
+### 🚧 v1.3 Labor CPC (In Progress)
+
+**Milestone Goal:** Add labor cost per car (CPC) metric to the Stats resource, using employee clock entry data from the Sonny's API to compute labor costs and divide by total washes.
+
+#### Phase 27: Labor Data Layer
+**Goal**: Bulk-fetch clock entries across all active employees for a date range, with site filtering
+**Depends on**: Previous milestone complete
+**Research**: Unlikely (existing Employee resource already supports clock entries)
+**Plans**: TBD
+
+Plans:
+- [ ] 27-01: TBD (run /gsd:plan-phase 27 to break down)
+
+#### Phase 28: Labor Cost Result Models
+**Goal**: Pydantic models for labor cost and CPC results (LaborCostResult, CostPerCarResult)
+**Depends on**: Phase 27
+**Research**: Unlikely (established Pydantic model patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 28-01: TBD
+
+#### Phase 29: Labor Cost Computation
+**Goal**: `total_labor_cost()` stats method computing regular + overtime cost from clock entries
+**Depends on**: Phase 28
+**Research**: Unlikely (internal computation, established stats patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 29-01: TBD
+
+#### Phase 30: CPC Computation
+**Goal**: `cost_per_car()` stats method: labor cost / total washes with zero-division safety
+**Depends on**: Phase 29
+**Research**: Unlikely (mirrors existing conversion_rate pattern)
+**Plans**: TBD
+
+Plans:
+- [ ] 30-01: TBD
+
+#### Phase 31: Report Integration
+**Goal**: Add labor CPC to `StatsReport` and `report()` method with shared data fetching
+**Depends on**: Phase 30
+**Research**: Unlikely (extending existing report() pattern)
+**Plans**: TBD
+
+Plans:
+- [ ] 31-01: TBD
+
+#### Phase 32: Stats Guide Update
+**Goal**: Document labor CPC methods with examples, field tables, and performance tips
+**Depends on**: Phase 31
+**Research**: Unlikely (following existing stats guide format)
+**Plans**: TBD
+
+Plans:
+- [ ] 32-01: TBD
+
+#### Phase 33: Unit Tests
+**Goal**: Tests for labor cost aggregation and CPC calculation
+**Depends on**: Phase 31
+**Research**: Unlikely (established test patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 33-01: TBD
+
+#### Phase 34: Validation & Deployment
+**Goal**: Validate against real JOLIET data, deploy docs to GitHub Pages
+**Depends on**: Phase 32, Phase 33
+**Research**: Unlikely (established validation and deployment workflow)
+**Plans**: TBD
+
+Plans:
+- [ ] 34-01: TBD
 
 ## Completed Milestones
 
@@ -103,3 +180,11 @@ Client-side business analytics via `client.stats.*` — six stat methods with ty
 | 24. Conversion Rate | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 25. Stats Report | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 26. Stats Documentation & Testing | v1.2 | 1/1 | Complete | 2026-02-11 |
+| 27. Labor Data Layer | v1.3 | 0/? | Not started | - |
+| 28. Labor Cost Result Models | v1.3 | 0/? | Not started | - |
+| 29. Labor Cost Computation | v1.3 | 0/? | Not started | - |
+| 30. CPC Computation | v1.3 | 0/? | Not started | - |
+| 31. Report Integration | v1.3 | 0/? | Not started | - |
+| 32. Stats Guide Update | v1.3 | 0/? | Not started | - |
+| 33. Unit Tests | v1.3 | 0/? | Not started | - |
+| 34. Validation & Deployment | v1.3 | 0/? | Not started | - |
