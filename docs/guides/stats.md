@@ -8,17 +8,34 @@ memberships, and conversion rates without writing any aggregation logic
 yourself.
 
 !!! note "Rinsed alignment"
-    Stats calculations are designed to match **Rinsed** reporting as closely
-    as possible.  Wash classification uses a combination of v2 transaction
-    flags (`is_recurring_plan_sale`, `is_recurring_plan_redemption`) and v1
-    type endpoints (`type=wash`, `type=recurring`) to accurately distinguish
-    car washes from recharges and refunds.  Membership counts are verified
-    via v1 detail lookups to exclude plan upgrades/switches.  In validation
-    testing across 31 days of JOLIET data (January 2026):
+    Stats calculations are designed to align with
+    **[Rinsed: The Car Wash CRM](https://www.rfrinsed.com/)** and its
+    reporting metrics as closely as possible.  Rinsed is the system of record
+    for WashU membership and conversion reporting, so matching its numbers is
+    the primary accuracy benchmark for this library.
 
-    - **Member washes**, **free washes**, and **new memberships**: 31/31 days exact match (100%)
-    - **Total washes**: 22/31 days exact match, cumulative gap +11 (0.09%)
-    - **Perfect match (all 5 metrics)**: 22/31 days (71%)
+    Wash classification uses a combination of v2 transaction flags
+    (`is_recurring_plan_sale`, `is_recurring_plan_redemption`) and v1 type
+    endpoints (`type=wash`, `type=recurring`) to accurately distinguish car
+    washes from recharges and refunds.  Membership counts are verified via v1
+    detail lookups to exclude plan upgrades/switches.
+
+    In validation testing across 31 days of JOLIET data (January 2026),
+    compared against the Rinsed *Daily Conversion Detail* report:
+
+    | Metric | Exact-match days | Monthly gap | Accuracy |
+    |--------|:----------------:|:-----------:|:--------:|
+    | **Member washes** | 31/31 (100%) | 0 of 8,506 | 100% |
+    | **Free washes** | 31/31 (100%) | 0 of 319 | 100% |
+    | **New memberships** | 31/31 (100%) | 0 of 438 | 100% |
+    | **Total washes** | 22/31 (71%) | +11 of 12,097 | 99.91% |
+    | **Eligible washes** | 22/31 (71%) | +11 of 3,272 | 99.66% |
+    | **Perfect match (all 5)** | **22/31 (71%)** | | |
+
+    The +11 total-wash gap (spread across 9 days, each off by 1–2 washes)
+    likely reflects transaction-boundary timing differences between the
+    Sonny's API and Rinsed's data pipeline.  Eligible washes inherit the same
+    gap since `eligible = total − member − free`.
 
 ## Choosing the Right Method
 
