@@ -1,4 +1,4 @@
-# sonnys-data-client
+# sonnys-data-API-client
 
 > A typed Python SDK for the Sonny's Carwash Controls Data API.
 
