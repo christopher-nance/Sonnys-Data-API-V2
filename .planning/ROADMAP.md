@@ -18,7 +18,8 @@
 **Plans**: TBD
 
 Plans:
-- [ ] 27-01: TBD (run /gsd:plan-phase 27 to break down)
+- [x] 27-01: build_date_chunks TDD (date range splitter)
+- [ ] 27-02: bulk clock entry fetching
 
 #### Phase 28: Labor Cost Result Models
 **Goal**: Pydantic models for labor cost and CPC results (LaborCostResult, CostPerCarResult)
@@ -180,7 +181,7 @@ Client-side business analytics via `client.stats.*` — six stat methods with ty
 | 24. Conversion Rate | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 25. Stats Report | v1.2 | 1/1 | Complete | 2026-02-11 |
 | 26. Stats Documentation & Testing | v1.2 | 1/1 | Complete | 2026-02-11 |
-| 27. Labor Data Layer | v1.3 | 0/? | Not started | - |
+| 27. Labor Data Layer | v1.3 | 1/2 | In progress | - |
 | 28. Labor Cost Result Models | v1.3 | 0/? | Not started | - |
 | 29. Labor Cost Computation | v1.3 | 0/? | Not started | - |
 | 30. CPC Computation | v1.3 | 0/? | Not started | - |
