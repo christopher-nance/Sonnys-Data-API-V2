@@ -66,6 +66,59 @@ class ConversionResult(SonnysModel):
     eligible_washes: int
 
 
+class LaborCostResult(SonnysModel):
+    """Labor cost breakdown returned by ``client.stats.total_labor_cost()``.
+
+    Aggregates pay data from all clock entries in the requested period,
+    splitting costs into regular and overtime buckets.  Each cost is
+    computed as ``rate * hours`` for the corresponding pay type, then
+    summed across all entries.
+
+    Attributes:
+        total_cost: Combined regular and overtime cost
+            (``regular_cost + overtime_cost``).
+        regular_cost: Sum of ``regular_rate * regular_hours`` across all
+            clock entries.
+        overtime_cost: Sum of ``overtime_rate * overtime_hours`` across
+            all clock entries.
+        regular_hours: Total regular hours worked across all entries.
+        overtime_hours: Total overtime hours worked across all entries.
+        total_hours: Combined hours (``regular_hours + overtime_hours``).
+        entry_count: Number of clock entries aggregated.
+    """
+
+    total_cost: float
+    regular_cost: float
+    overtime_cost: float
+    regular_hours: float
+    overtime_hours: float
+    total_hours: float
+    entry_count: int
+
+
+class CostPerCarResult(SonnysModel):
+    """Cost-per-car KPI returned by ``client.stats.cost_per_car()``.
+
+    Measures labor efficiency by dividing total labor cost by the
+    number of washes in the period.  A value of ``4.25`` means the
+    site spent $4.25 in labor for each car washed.
+
+    When there are zero washes the ``cost_per_car`` is ``0.0``
+    (division-by-zero safe).
+
+    Attributes:
+        cost_per_car: Total labor cost divided by total washes
+            (``0.0`` when ``total_washes`` is zero).
+        total_labor_cost: Aggregate labor cost from
+            :class:`LaborCostResult`.
+        total_washes: Wash count from :class:`WashResult`.
+    """
+
+    cost_per_car: float
+    total_labor_cost: float
+    total_washes: int
+
+
 class StatsReport(SonnysModel):
     """Unified analytics report returned by ``client.stats.report()``.
 
