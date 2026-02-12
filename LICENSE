@@ -1,85 +1,119 @@
-# PolyForm Noncommercial License 1.0.0
+# Wash Associates Business Internal Use License 1.0
 
-<https://polyformproject.org/licenses/noncommercial/1.0.0>
+Copyright © 2026 Wash Associates
 
-## Acceptance
+------------------------------------------------------------------------
 
-In order to get any license under these terms, you must agree
-to them as both strict obligations and conditions to all your
-licenses.
+## 1. Definitions
 
-## Copyright License
+**"Licensor"** means Wash Associates.
 
-The licensor grants you a copyright license to do everything with
-this software that would otherwise infringe the licensor's copyright
-in it for any permitted purpose.
+**"Software"** means the source code, object code, APIs, documentation,
+and any accompanying materials distributed under this License, including
+any updates provided by Licensor.
 
-## Limits
+**"You"** or **"Licensee"** means the individual or legal entity
+exercising rights under this License.
 
-You may use this software for noncommercial purposes only.
+**"Internal Business Purposes"** means use of the Software solely within
+Your organization to support, maintain, or improve Your internal
+operations. Internal Business Purposes expressly exclude Distribution
+(as defined below) or making the Software available to third parties.
 
-Any purpose is a noncommercial purpose only if you do not or will
-not receive, directly or indirectly, a fee or other consideration in
-exchange for using this software.
+**"Distribute"** or **"Distribution"** means providing, transferring,
+publishing, sublicensing, selling, leasing, hosting, or otherwise making
+the Software available to any third party, whether in source or object
+form, including as part of a hosted, SaaS, or managed service offering.
 
-Businesses are for commercial purposes. A purpose is commercial if it
-is the purpose of running a business.
+------------------------------------------------------------------------
 
-## Patent License
+## 2. Grant of License
 
-The licensor grants you a patent license for your use of this
-software for any permitted purpose.
+Subject to the terms and conditions of this License, Licensor grants You
+a non-exclusive, non-transferable, non-sublicensable, worldwide license
+to:
 
-## Fair Use
+1.  Use the Software for Internal Business Purposes;
+2.  Copy the Software as reasonably necessary for such use;
+3.  Modify the Software and create derivative works for Internal
+    Business Purposes.
 
-You may have "fair use" rights for this software under the law.
-These terms do not limit them.
+This License permits use of the Software within commercial organizations
+and in connection with revenue-generating business activities, provided
+that such use remains strictly internal and complies with Section 3.
 
-## No Other Rights
+------------------------------------------------------------------------
 
-These terms do not allow you to sublicense or transfer any of your
-licenses to anyone else, or prevent the licensor from granting
-licenses to anyone else.
+## 3. Restrictions
 
-These terms do not imply any other licenses.
+You may not:
 
-## Patent Defense
+1.  Distribute the Software or any derivative works to any third party;
+2.  Sell, sublicense, license, lease, assign, or otherwise transfer the
+    Software or any rights under this License;
+3.  Bundle or incorporate the Software into any product or service
+    offered to third parties;
+4.  Offer the Software as a hosted service, SaaS solution, API service,
+    platform, or similar offering accessible by third parties;
+5.  Charge any fee specifically for access to, use of, or functionality
+    provided by the Software itself;
+6.  Remove or alter any copyright, license, or proprietary notices in
+    the Software.
 
-If you make any written claim that this software infringes or
-contributes to infringement of any patent, your patent license
-for this software ends immediately. If your company makes such a
-claim, your patent license ends immediately for work on behalf of
-your company.
+For clarity, You may use the Software internally even if Your
+organization generates revenue, but You may not commercialize the
+Software itself.
 
-## Violations
+------------------------------------------------------------------------
 
-If you violate these terms, all your licenses end immediately.
+## 4. Contractors and Affiliates
 
-## No Liability
+You may permit contractors and affiliates under Your control to access
+and use the Software solely on Your behalf for Internal Business
+Purposes, provided that:
 
-As far as the law allows, this software comes as is, without
-any warranty or condition, and the licensor will not be liable
-to you for any damages arising out of these terms or the use
-or nature of this software, under any kind of legal claim.
+-   They are bound by written obligations no less protective than this
+    License; and\
+-   You remain fully responsible for their compliance.
 
-## Definitions
+No rights are granted to contractors or affiliates independent of Your
+organization.
 
-The **licensor** is whoever distributes this software.
+------------------------------------------------------------------------
 
-The **software** is this software with each contributor's
-contributions included.
+## 5. Ownership
 
-**You** refers to the individual or entity agreeing to these terms.
+The Software is licensed, not sold. Licensor retains all right, title,
+and interest in and to the Software, including all intellectual property
+rights not expressly granted under this License.
 
-**Your company** is any legal entity, sole proprietorship, or other kind
-of organization that you work for, plus all organizations that have
-control over, are under the control of, or are under common control with
-that organization. **Control** means ownership of substantially all the
-assets of an entity, or the power to direct its management and policies
-by vote, contract, or otherwise. Control can be direct or indirect.
+No implied licenses are granted.
 
-**Your licenses** are all the licenses granted to you for the software
-under these terms.
+------------------------------------------------------------------------
 
-**Use** means anything you do with the software requiring one of your
-licenses.
+## 6. Termination
+
+This License terminates automatically if You violate any of its terms.
+
+Upon termination, You must cease all use of the Software and destroy all
+copies in Your possession or control.
+
+Sections 3, 5, 6, 7, and 8 survive termination.
+
+------------------------------------------------------------------------
+
+## 7. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, WHETHER
+EXPRESS, IMPLIED, OR STATUTORY, INCLUDING WITHOUT LIMITATION WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+NON-INFRINGEMENT.
+
+------------------------------------------------------------------------
+
+## 8. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, LICENSOR SHALL NOT BE LIABLE FOR
+ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES,
+OR ANY LOSS OF PROFITS, DATA, OR BUSINESS OPPORTUNITY, ARISING OUT OF OR
+RELATED TO THIS LICENSE OR THE USE OF THE SOFTWARE.
