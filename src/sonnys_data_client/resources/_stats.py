@@ -230,10 +230,18 @@ class StatsResource(BaseResource):
         """Count new membership sales for a date range.
 
         Fetches enriched v2 transactions and counts those flagged as
-        ``is_recurring_plan_sale``.  This captures both brand-new sign-ups
-        and reactivations — any transaction where a recurring plan was sold.
-        The returned count serves as the numerator for conversion rate
-        calculations.
+        ``is_recurring_plan_sale``.  This captures brand-new sign-ups,
+        reactivations, and plan upgrades/switches — any transaction where
+        the v2 API sets the recurring plan sale flag.
+
+        .. note::
+
+            May overcount by ~2-3% vs Rinsed because the v2
+            ``is_recurring_plan_sale`` flag includes plan upgrades
+            (e.g. Express → Clean) that Rinsed excludes from its
+            "Sales" metric.  The v1 ``is_recurring_sale`` flag
+            distinguishes the two but requires per-transaction
+            detail fetches.
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)

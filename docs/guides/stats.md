@@ -12,9 +12,23 @@ yourself.
     as possible.  Wash classification uses a combination of v2 transaction
     flags (`is_recurring_plan_sale`, `is_recurring_plan_redemption`) and v1
     type endpoints (`type=wash`, `type=recurring`) to accurately distinguish
-    car washes from recharges and refunds.  In validation testing across 10
-    days of JOLIET data, **7/10 days matched Rinsed exactly** on all wash
-    metrics, with remaining days off by only 1-2 counts.
+    car washes from recharges and refunds.  In validation testing across 31
+    days of JOLIET data (January 2026):
+
+    - **Member washes** and **free washes**: 31/31 days exact match (100%)
+    - **Total washes**: 22/31 days exact match, cumulative gap +11 (0.09%)
+    - **New memberships**: 21/31 days exact match, cumulative gap +12 (2.74%)
+
+!!! warning "Known limitation: membership overcounting"
+    `new_memberships_sold()` uses the v2 `is_recurring_plan_sale` flag, which
+    includes both genuine new membership sales **and** plan upgrades/switches
+    (e.g. upgrading from Express to Clean).  Rinsed excludes plan upgrades
+    from its "Sales" metric.  The v1 detail endpoint exposes a separate
+    `is_recurring_sale` flag that distinguishes the two, but fetching it
+    requires an individual API call per transaction.  As a result, membership
+    counts may overcount by roughly **2--3%** compared to Rinsed.  This also
+    affects `conversion_rate()` and the `new_memberships` field on
+    `report()`.
 
 ## Choosing the Right Method
 
@@ -131,8 +145,10 @@ print(f"Retail washes: {count}")
 ### `new_memberships_sold(start, end) -> int`
 
 Count new membership sales for a date range. Fetches v2 transactions and counts
-those flagged as `is_recurring_plan_sale`. This captures both brand-new
-sign-ups and reactivations -- any transaction where a recurring plan was sold.
+those flagged as `is_recurring_plan_sale`. This captures brand-new sign-ups,
+reactivations, and plan upgrades/switches -- any transaction where the v2 API
+sets the recurring plan sale flag. See the known limitation note above
+regarding ~2-3% overcounting vs Rinsed due to plan upgrades being included.
 
 ```python
 count = client.stats.new_memberships_sold("2026-01-01", "2026-01-31")
