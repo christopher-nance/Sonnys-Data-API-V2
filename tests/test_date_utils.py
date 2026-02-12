@@ -7,7 +7,7 @@ from datetime import datetime, timezone, timedelta
 import pytest
 from zoneinfo import ZoneInfo
 
-from sonnys_data_client._date_utils import parse_date_range
+from sonnys_data_client._date_utils import build_date_chunks, parse_date_range
 
 
 # ---------------------------------------------------------------------------
@@ -222,3 +222,60 @@ class TestParseDateRangeWithTimezone:
 
         assert start == datetime(2026, 1, 15, 0, 0, 1, tzinfo=timezone.utc)
         assert end == datetime(2026, 1, 15, 23, 59, 59, tzinfo=timezone.utc)
+
+
+# ---------------------------------------------------------------------------
+# build_date_chunks — 14-day date range splitter
+# ---------------------------------------------------------------------------
+
+
+class TestBuildDateChunks:
+    """Tests for build_date_chunks() date range chunking utility."""
+
+    def test_single_day(self) -> None:
+        """Single day returns one chunk containing that day."""
+        result = build_date_chunks("2026-01-01", "2026-01-01")
+        assert result == [("2026-01-01", "2026-01-01")]
+
+    def test_exact_14_days(self) -> None:
+        """Exactly 14 days fits in one chunk (inclusive)."""
+        result = build_date_chunks("2026-01-01", "2026-01-14")
+        assert result == [("2026-01-01", "2026-01-14")]
+
+    def test_15_days_two_chunks(self) -> None:
+        """15 days splits into 14-day chunk + 1-day remainder."""
+        result = build_date_chunks("2026-01-01", "2026-01-15")
+        assert result == [
+            ("2026-01-01", "2026-01-14"),
+            ("2026-01-15", "2026-01-15"),
+        ]
+
+    def test_31_days_three_chunks(self) -> None:
+        """31 days splits into three chunks: 14 + 14 + 3."""
+        result = build_date_chunks("2026-01-01", "2026-01-31")
+        assert result == [
+            ("2026-01-01", "2026-01-14"),
+            ("2026-01-15", "2026-01-28"),
+            ("2026-01-29", "2026-01-31"),
+        ]
+
+    def test_14_days_cross_month(self) -> None:
+        """14 days crossing a month boundary fits in one chunk."""
+        result = build_date_chunks("2026-01-28", "2026-02-10")
+        assert result == [("2026-01-28", "2026-02-10")]
+
+    def test_custom_max_days_7(self) -> None:
+        """Custom max_days=7 splits 31 days into 5 chunks."""
+        result = build_date_chunks("2026-01-01", "2026-01-31", max_days=7)
+        assert result == [
+            ("2026-01-01", "2026-01-07"),
+            ("2026-01-08", "2026-01-14"),
+            ("2026-01-15", "2026-01-21"),
+            ("2026-01-22", "2026-01-28"),
+            ("2026-01-29", "2026-01-31"),
+        ]
+
+    def test_start_after_end_raises_value_error(self) -> None:
+        """start > end raises ValueError."""
+        with pytest.raises(ValueError, match="start must be before or equal to end"):
+            build_date_chunks("2026-02-01", "2026-01-01")
