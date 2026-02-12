@@ -9,7 +9,7 @@ from sonnys_data_client._date_utils import build_date_chunks, parse_date_range
 from sonnys_data_client._resources import BaseResource
 from sonnys_data_client.types._employees import ClockEntry
 from sonnys_data_client.types._recurring import RecurringStatusChange
-from sonnys_data_client.types._stats import ConversionResult, SalesResult, StatsReport, WashResult
+from sonnys_data_client.types._stats import ConversionResult, LaborCostResult, SalesResult, StatsReport, WashResult
 from sonnys_data_client.types._transactions import (
     TransactionListItem,
     TransactionV2ListItem,
@@ -540,6 +540,66 @@ class StatsResource(BaseResource):
             rate=rate,
             new_memberships=new_memberships,
             eligible_washes=eligible_washes,
+        )
+
+    def total_labor_cost(
+        self,
+        start: str | datetime,
+        end: str | datetime,
+    ) -> LaborCostResult:
+        """Compute labor cost breakdown for a date range.
+
+        Fetches all clock entries via
+        :meth:`_fetch_all_clock_entries` and aggregates regular and
+        overtime costs in a single pass.  Each entry's cost is computed
+        as ``rate * hours`` for the corresponding pay type.
+
+        Args:
+            start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
+                or :class:`~datetime.datetime`.
+            end: Range end as an ISO-8601 string or
+                :class:`~datetime.datetime`.
+
+        Returns:
+            A :class:`~sonnys_data_client.types.LaborCostResult` containing
+            the total cost, regular/overtime breakdowns, hours, and entry
+            count.
+
+        Raises:
+            ValueError: If *start* is after *end*, or if a string cannot
+                be parsed as a valid ISO-8601 date/datetime.
+
+        Example::
+
+            result = client.stats.total_labor_cost("2026-01-01", "2026-01-31")
+            print(f"Total: ${result.total_cost:.2f}")
+            print(f"Regular: ${result.regular_cost:.2f} ({result.regular_hours:.1f}h)")
+            print(f"Overtime: ${result.overtime_cost:.2f} ({result.overtime_hours:.1f}h)")
+        """
+        entries = self._fetch_all_clock_entries(start, end)
+
+        regular_cost = 0.0
+        overtime_cost = 0.0
+        regular_hours = 0.0
+        overtime_hours = 0.0
+
+        for entry in entries:
+            regular_cost += entry.regular_rate * entry.regular_hours
+            overtime_cost += entry.overtime_rate * entry.overtime_hours
+            regular_hours += entry.regular_hours
+            overtime_hours += entry.overtime_hours
+
+        total_cost = regular_cost + overtime_cost
+        total_hours = regular_hours + overtime_hours
+
+        return LaborCostResult(
+            total_cost=total_cost,
+            regular_cost=regular_cost,
+            overtime_cost=overtime_cost,
+            regular_hours=regular_hours,
+            overtime_hours=overtime_hours,
+            total_hours=total_hours,
+            entry_count=len(entries),
         )
 
     def report(
