@@ -183,6 +183,34 @@ class StatsResource(BaseResource):
             **self._resolve_dates(start, end)
         )
 
+    def _genuine_plan_sale_ids(
+        self,
+        v2_transactions: list[TransactionV2ListItem],
+    ) -> set[str]:
+        """Identify genuine new membership sales from v2 plan sale candidates.
+
+        The v2 ``is_recurring_plan_sale`` flag includes both genuine new
+        membership sales and plan upgrades/switches (e.g. Express → Clean).
+        This method calls :meth:`~sonnys_data_client.resources.Transactions.get`
+        on each candidate to check the v1 ``is_recurring_sale`` flag, which
+        is ``True`` only for genuine new sales.
+
+        Args:
+            v2_transactions: The full v2 transaction list for the date range.
+
+        Returns:
+            A set of ``trans_id`` values for genuine new membership sales
+            (excluding plan upgrades/switches).
+        """
+        genuine_ids: set[str] = set()
+        for txn in v2_transactions:
+            if not txn.is_recurring_plan_sale:
+                continue
+            detail = self._client.transactions.get(txn.trans_id)
+            if getattr(detail, "is_recurring_sale", False):
+                genuine_ids.add(txn.trans_id)
+        return genuine_ids
+
     def retail_wash_count(
         self,
         start: str | datetime,
@@ -229,19 +257,10 @@ class StatsResource(BaseResource):
     ) -> int:
         """Count new membership sales for a date range.
 
-        Fetches enriched v2 transactions and counts those flagged as
-        ``is_recurring_plan_sale``.  This captures brand-new sign-ups,
-        reactivations, and plan upgrades/switches — any transaction where
-        the v2 API sets the recurring plan sale flag.
-
-        .. note::
-
-            May overcount by ~2-3% vs Rinsed because the v2
-            ``is_recurring_plan_sale`` flag includes plan upgrades
-            (e.g. Express → Clean) that Rinsed excludes from its
-            "Sales" metric.  The v1 ``is_recurring_sale`` flag
-            distinguishes the two but requires per-transaction
-            detail fetches.
+        Fetches enriched v2 transactions and identifies those flagged as
+        ``is_recurring_plan_sale``, then verifies each via the v1 detail
+        endpoint to exclude plan upgrades/switches.  Only transactions
+        where the v1 ``is_recurring_sale`` flag is ``True`` are counted.
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
@@ -250,7 +269,7 @@ class StatsResource(BaseResource):
                 :class:`~datetime.datetime`.
 
         Returns:
-            The number of recurring plan sales in the date range.
+            The number of genuine new membership sales in the date range.
 
         Raises:
             ValueError: If *start* is after *end*, or if a string cannot
@@ -262,7 +281,7 @@ class StatsResource(BaseResource):
             print(f"New memberships sold: {count}")
         """
         transactions = self._fetch_transactions_v2(start, end)
-        return sum(1 for t in transactions if t.is_recurring_plan_sale)
+        return len(self._genuine_plan_sale_ids(transactions))
 
     def total_sales(
         self,
@@ -455,7 +474,8 @@ class StatsResource(BaseResource):
         """
         washes = self.total_washes(start, end)
         v2_transactions = self._fetch_transactions_v2(start, end)
-        new_memberships = sum(1 for t in v2_transactions if t.is_recurring_plan_sale)
+        genuine_ids = self._genuine_plan_sale_ids(v2_transactions)
+        new_memberships = len(genuine_ids)
         eligible_washes = washes.eligible_wash_count
 
         rate = new_memberships / eligible_washes if eligible_washes > 0 else 0.0
@@ -473,12 +493,11 @@ class StatsResource(BaseResource):
     ) -> StatsReport:
         """Compute all KPIs for a date range in a single call.
 
-        Fetches v2 transactions, v1 ``type=wash``, and v1 ``type=recurring``
-        with **3 API calls** and computes every KPI locally, compared to the
-        **12 API calls** that would result from calling
-        :meth:`total_sales`, :meth:`total_washes`,
-        :meth:`new_memberships_sold`, and :meth:`conversion_rate`
-        individually.
+        Fetches v2 transactions, v1 ``type=wash``, v1 ``type=recurring``,
+        and verifies each plan sale candidate via ``get()`` to exclude
+        plan upgrades/switches.  Makes **3 bulk API calls** plus
+        **~N detail calls** (one per v2 plan sale candidate, typically
+        ~15/day) and computes every KPI locally.
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
@@ -503,7 +522,7 @@ class StatsResource(BaseResource):
             print(f"New members: {rpt.new_memberships}")
             print(f"Conversion: {rpt.conversion.rate:.1%}")
         """
-        # --- 1. Fetch data (3 API calls) ---
+        # --- 1. Fetch data (3 bulk API calls + ~N get() calls) ---
         v2_transactions = self._fetch_transactions_v2(start, end)
         wash_ids = {
             t.trans_id
@@ -513,6 +532,8 @@ class StatsResource(BaseResource):
             t.trans_id
             for t in self._fetch_transactions_by_type(start, end, "recurring")
         }
+        # Verify plan sales via v1 get() to exclude upgrades/switches
+        genuine_sale_ids = self._genuine_plan_sale_ids(v2_transactions)
 
         # --- 2. Single-pass classification ---
         recurring_plan_sales = 0.0
@@ -569,7 +590,7 @@ class StatsResource(BaseResource):
 
         # --- 4. WashResult ---
         member_wash_count = recurring_redemptions_count
-        new_memberships = recurring_plan_sales_count
+        new_memberships = len(genuine_sale_ids)
         total_washes = member_wash_count + retail_wash_count + plan_sale_wash_count
         # Eligible = total minus member washes minus free washes
         eligible_wash_count = total_washes - member_wash_count - free_wash_count

@@ -319,7 +319,7 @@ print(f"Total washes: {washes.total}, Member: {washes.member_wash_count}")
 rate = client.stats.conversion_rate("2026-01-01", "2026-01-31")
 print(f"Conversion: {rate.rate:.1%}")
 
-# All KPIs in one call (3 API calls instead of 11)
+# All KPIs in one call (3 bulk + ~N detail calls)
 rpt = client.stats.report("2026-01-01", "2026-01-31")
 print(f"Revenue: ${rpt.sales.total:.2f}, Washes: {rpt.washes.total}")
 print(f"New members: {rpt.new_memberships}, Conversion: {rpt.conversion.rate:.1%}")

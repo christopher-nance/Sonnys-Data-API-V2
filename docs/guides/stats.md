@@ -12,23 +12,13 @@ yourself.
     as possible.  Wash classification uses a combination of v2 transaction
     flags (`is_recurring_plan_sale`, `is_recurring_plan_redemption`) and v1
     type endpoints (`type=wash`, `type=recurring`) to accurately distinguish
-    car washes from recharges and refunds.  In validation testing across 31
-    days of JOLIET data (January 2026):
+    car washes from recharges and refunds.  Membership counts are verified
+    via v1 detail lookups to exclude plan upgrades/switches.  In validation
+    testing across 31 days of JOLIET data (January 2026):
 
-    - **Member washes** and **free washes**: 31/31 days exact match (100%)
+    - **Member washes**, **free washes**, and **new memberships**: 31/31 days exact match (100%)
     - **Total washes**: 22/31 days exact match, cumulative gap +11 (0.09%)
-    - **New memberships**: 21/31 days exact match, cumulative gap +12 (2.74%)
-
-!!! warning "Known limitation: membership overcounting"
-    `new_memberships_sold()` uses the v2 `is_recurring_plan_sale` flag, which
-    includes both genuine new membership sales **and** plan upgrades/switches
-    (e.g. upgrading from Express to Clean).  Rinsed excludes plan upgrades
-    from its "Sales" metric.  The v1 detail endpoint exposes a separate
-    `is_recurring_sale` flag that distinguishes the two, but fetching it
-    requires an individual API call per transaction.  As a result, membership
-    counts may overcount by roughly **2--3%** compared to Rinsed.  This also
-    affects `conversion_rate()` and the `new_memberships` field on
-    `report()`.
+    - **Perfect match (all 5 metrics)**: 22/31 days (71%)
 
 ## Choosing the Right Method
 
@@ -39,13 +29,17 @@ The stats resource offers six methods. Pick the one that matches your use case:
 | `total_sales(start, end)` | `SalesResult` | Revenue breakdown by category (recurring, retail) | 1 |
 | `total_washes(start, end)` | `WashResult` | Wash volume breakdown (member, retail, eligible, free) | 3 |
 | `retail_wash_count(start, end)` | `int` | Count of retail wash transactions | 2 |
-| `new_memberships_sold(start, end)` | `int` | Count of recurring plan sales | 1 |
-| `conversion_rate(start, end)` | `ConversionResult` | Membership conversion rate KPI | 4 |
-| `report(start, end)` | `StatsReport` | All KPIs in a single call (most efficient) | 3 |
+| `new_memberships_sold(start, end)` | `int` | Count of genuine new membership sales | 1 + ~N |
+| `conversion_rate(start, end)` | `ConversionResult` | Membership conversion rate KPI | 4 + ~N |
+| `report(start, end)` | `StatsReport` | All KPIs in a single call (most efficient) | 3 + ~N |
+
+Where **~N** is the number of v2 plan sale candidates verified via `get()`
+(typically ~15/day).  This verification excludes plan upgrades/switches from
+membership counts to match Rinsed exactly.
 
 Use individual methods when you need a single metric. Use `report()` when you
-need multiple KPIs -- it makes **3 API calls** instead of the **11** that
-would result from calling the individual methods separately.
+need multiple KPIs -- it shares bulk data fetches across KPIs and only
+verifies plan sales once.
 
 ## Date Range Input
 
@@ -144,11 +138,11 @@ print(f"Retail washes: {count}")
 
 ### `new_memberships_sold(start, end) -> int`
 
-Count new membership sales for a date range. Fetches v2 transactions and counts
-those flagged as `is_recurring_plan_sale`. This captures brand-new sign-ups,
-reactivations, and plan upgrades/switches -- any transaction where the v2 API
-sets the recurring plan sale flag. See the known limitation note above
-regarding ~2-3% overcounting vs Rinsed due to plan upgrades being included.
+Count genuine new membership sales for a date range. Fetches v2 transactions
+to identify plan sale candidates, then verifies each via the v1 detail
+endpoint (`is_recurring_sale`) to exclude plan upgrades/switches (e.g.
+upgrading from Express to Clean). Only brand-new sign-ups and reactivations
+are counted.
 
 ```python
 count = client.stats.new_memberships_sold("2026-01-01", "2026-01-31")
@@ -180,16 +174,15 @@ When there are zero eligible washes the rate is `0.0` (division-by-zero safe).
 | Field | Type | Description |
 |-------|------|-------------|
 | `rate` | `float` | Conversion rate as a decimal (e.g. `0.15` = 15%) |
-| `new_memberships` | `int` | Number of recurring plan sales |
+| `new_memberships` | `int` | Number of genuine new membership sales |
 | `eligible_washes` | `int` | Eligible washes (denominator) |
 
 ### `report(start, end) -> StatsReport`
 
-Compute all KPIs for a date range in a single call. This is the most efficient
-way to retrieve multiple stats -- it makes **3 API calls** and computes every
-KPI locally, compared to the **11 API calls** that would result from calling
-`total_sales()`, `total_washes()`, `new_memberships_sold()`, and
-`conversion_rate()` individually.
+Compute all KPIs for a date range in a single call. Makes **3 bulk API calls**
+plus **~N detail calls** (one per plan sale candidate, typically ~15/day) to
+verify memberships.  This is far more efficient than calling each method
+individually, which would duplicate bulk fetches and detail lookups.
 
 ```python
 rpt = client.stats.report("2026-01-01", "2026-01-31")
@@ -278,18 +271,18 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key",
 
 !!! tip "Use `report()` when you need multiple KPIs"
     Calling `total_sales()`, `total_washes()`, `new_memberships_sold()`, and
-    `conversion_rate()` individually results in **11 API calls** because some
-    underlying data fetches overlap. The `report()` method shares data fetches
-    across KPIs and computes everything in just **3 API calls**:
+    `conversion_rate()` individually duplicates bulk data fetches and plan sale
+    verification calls.  The `report()` method shares all data across KPIs:
 
     1. `transactions.list_v2()` -- enriched transactions with membership flags
     2. `transactions.list_by_type("wash")` -- identifies actual car washes
     3. `transactions.list_by_type("recurring")` -- identifies recharges to exclude
+    4. `transactions.get()` x ~N -- verifies each plan sale candidate (~15/day)
 
 !!! tip "Use individual methods for single metrics"
     If you only need one stat, calling the individual method is more efficient
     than `report()`. For example, `total_sales()` makes just **1 API call**,
-    while `report()` always makes 3.
+    while `report()` always makes 3 + ~N.
 
 !!! note "No caching between calls"
     Stats methods do not cache results between calls. Each invocation fetches
