@@ -9,7 +9,7 @@ yourself.
 
 !!! note "Rinsed alignment"
     Stats calculations are designed to align with
-    **[Rinsed: The Car Wash CRM](https://www.rfrinsed.com/)** and its
+    **[Rinsed: The Car Wash CRM](https://www.rinsed.co/)** and its
     reporting metrics as closely as possible.  Rinsed is the system of record
     for WashU membership and conversion reporting, so matching its numbers is
     the primary accuracy benchmark for this library.

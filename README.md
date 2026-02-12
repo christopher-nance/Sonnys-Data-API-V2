@@ -305,7 +305,7 @@ transaction detail plus v2 enrichment fields.
 
 Unlike other resources that wrap REST endpoints directly, `client.stats`
 computes business analytics by fetching raw data and aggregating it locally.
-Calculations are designed to align with **[Rinsed: The Car Wash CRM](https://www.rfrinsed.com/)** reporting as closely as possible.
+Calculations are designed to align with **[Rinsed: The Car Wash CRM](https://www.rinsed.co/)** reporting as closely as possible.
 All methods accept a date range as ISO-8601 strings or `datetime` objects:
 
 ```python
