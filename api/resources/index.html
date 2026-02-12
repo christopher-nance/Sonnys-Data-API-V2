@@ -3293,10 +3293,17 @@ print(f&quot;Retail washes: {count}&quot;)
 
         <p>Count new membership sales for a date range.</p>
 <p>Fetches enriched v2 transactions and counts those flagged as
-<code>is_recurring_plan_sale</code>.  This captures both brand-new sign-ups
-and reactivations — any transaction where a recurring plan was sold.
-The returned count serves as the numerator for conversion rate
-calculations.</p>
+<code>is_recurring_plan_sale</code>.  This captures brand-new sign-ups,
+reactivations, and plan upgrades/switches — any transaction where
+the v2 API sets the recurring plan sale flag.</p>
+<p>.. note::</p>
+<div class="highlight"><pre><span></span><code>May overcount by ~2-3% vs Rinsed because the v2
+``is_recurring_plan_sale`` flag includes plan upgrades
+(e.g. Express → Clean) that Rinsed excludes from its
+&quot;Sales&quot; metric.  The v1 ``is_recurring_sale`` flag
+distinguishes the two but requires per-transaction
+detail fetches.
+</code></pre></div>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>

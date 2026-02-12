@@ -1307,9 +1307,25 @@ yourself.</p>
 as possible.  Wash classification uses a combination of v2 transaction
 flags (<code>is_recurring_plan_sale</code>, <code>is_recurring_plan_redemption</code>) and v1
 type endpoints (<code>type=wash</code>, <code>type=recurring</code>) to accurately distinguish
-car washes from recharges and refunds.  In validation testing across 10
-days of JOLIET data, <strong>7/10 days matched Rinsed exactly</strong> on all wash
-metrics, with remaining days off by only 1-2 counts.</p>
+car washes from recharges and refunds.  In validation testing across 31
+days of JOLIET data (January 2026):</p>
+<ul>
+<li><strong>Member washes</strong> and <strong>free washes</strong>: 31/31 days exact match (100%)</li>
+<li><strong>Total washes</strong>: 22/31 days exact match, cumulative gap +11 (0.09%)</li>
+<li><strong>New memberships</strong>: 21/31 days exact match, cumulative gap +12 (2.74%)</li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Known limitation: membership overcounting</p>
+<p><code>new_memberships_sold()</code> uses the v2 <code>is_recurring_plan_sale</code> flag, which
+includes both genuine new membership sales <strong>and</strong> plan upgrades/switches
+(e.g. upgrading from Express to Clean).  Rinsed excludes plan upgrades
+from its "Sales" metric.  The v1 detail endpoint exposes a separate
+<code>is_recurring_sale</code> flag that distinguishes the two, but fetching it
+requires an individual API call per transaction.  As a result, membership
+counts may overcount by roughly <strong>2--3%</strong> compared to Rinsed.  This also
+affects <code>conversion_rate()</code> and the <code>new_memberships</code> field on
+<code>report()</code>.</p>
 </div>
 <h2 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h2>
 <p>The stats resource offers six methods. Pick the one that matches your use case:</p>
@@ -1509,8 +1525,10 @@ transaction that is neither a recurring plan sale nor a recurring redemption.</p
 </code></pre></div>
 <h3 id="new_memberships_soldstart-end-int"><code>new_memberships_sold(start, end) -&gt; int</code><a class="headerlink" href="#new_memberships_soldstart-end-int" title="Permanent link">&para;</a></h3>
 <p>Count new membership sales for a date range. Fetches v2 transactions and counts
-those flagged as <code>is_recurring_plan_sale</code>. This captures both brand-new
-sign-ups and reactivations -- any transaction where a recurring plan was sold.</p>
+those flagged as <code>is_recurring_plan_sale</code>. This captures brand-new sign-ups,
+reactivations, and plan upgrades/switches -- any transaction where the v2 API
+sets the recurring plan sale flag. See the known limitation note above
+regarding ~2-3% overcounting vs Rinsed due to plan upgrades being included.</p>
 <div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">new_memberships_sold</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New memberships sold: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
