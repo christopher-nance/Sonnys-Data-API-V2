@@ -4,7 +4,7 @@ from sonnys_data_client._client import SonnysClient
 from sonnys_data_client._version import __version__
 from sonnys_data_client.resources import Customers, Employees, Giftcards, Items, RecurringAccounts, Sites, StatsResource, Transactions, Washbooks
 
-from sonnys_data_client.types import SalesResult, WashResult, ConversionResult, StatsReport
+from sonnys_data_client.types import CostPerCarResult, ConversionResult, LaborCostResult, SalesResult, StatsReport, WashResult
 
 from sonnys_data_client._exceptions import (
     APIConnectionError,
@@ -28,6 +28,8 @@ __all__ = [
     "Items",
     "RecurringAccounts",
     "ConversionResult",
+    "CostPerCarResult",
+    "LaborCostResult",
     "SalesResult",
     "Sites",
     "WashResult",
