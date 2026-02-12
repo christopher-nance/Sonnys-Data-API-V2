@@ -3292,18 +3292,10 @@ print(f&quot;Retail washes: {count}&quot;)
     <div class="doc doc-contents ">
 
         <p>Count new membership sales for a date range.</p>
-<p>Fetches enriched v2 transactions and counts those flagged as
-<code>is_recurring_plan_sale</code>.  This captures brand-new sign-ups,
-reactivations, and plan upgrades/switches — any transaction where
-the v2 API sets the recurring plan sale flag.</p>
-<p>.. note::</p>
-<div class="highlight"><pre><span></span><code>May overcount by ~2-3% vs Rinsed because the v2
-``is_recurring_plan_sale`` flag includes plan upgrades
-(e.g. Express → Clean) that Rinsed excludes from its
-&quot;Sales&quot; metric.  The v1 ``is_recurring_sale`` flag
-distinguishes the two but requires per-transaction
-detail fetches.
-</code></pre></div>
+<p>Fetches enriched v2 transactions and identifies those flagged as
+<code>is_recurring_plan_sale</code>, then verifies each via the v1 detail
+endpoint to exclude plan upgrades/switches.  Only transactions
+where the v1 <code>is_recurring_sale</code> flag is <code>True</code> are counted.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3370,7 +3362,7 @@ or :class:<code>~datetime.datetime</code>.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The number of recurring plan sales in the date range.</p>
+                <p>The number of genuine new membership sales in the date range.</p>
               </div>
             </td>
           </tr>
@@ -3858,12 +3850,11 @@ print(f&quot;Eligible washes: {result.eligible_washes}&quot;)
     <div class="doc doc-contents ">
 
         <p>Compute all KPIs for a date range in a single call.</p>
-<p>Fetches v2 transactions, v1 <code>type=wash</code>, and v1 <code>type=recurring</code>
-with <strong>3 API calls</strong> and computes every KPI locally, compared to the
-<strong>12 API calls</strong> that would result from calling
-:meth:<code>total_sales</code>, :meth:<code>total_washes</code>,
-:meth:<code>new_memberships_sold</code>, and :meth:<code>conversion_rate</code>
-individually.</p>
+<p>Fetches v2 transactions, v1 <code>type=wash</code>, v1 <code>type=recurring</code>,
+and verifies each plan sale candidate via <code>get()</code> to exclude
+plan upgrades/switches.  Makes <strong>3 bulk API calls</strong> plus
+<strong>~N detail calls</strong> (one per v2 plan sale candidate, typically
+~15/day) and computes every KPI locally.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>

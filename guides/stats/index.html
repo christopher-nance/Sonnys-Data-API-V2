@@ -1307,25 +1307,14 @@ yourself.</p>
 as possible.  Wash classification uses a combination of v2 transaction
 flags (<code>is_recurring_plan_sale</code>, <code>is_recurring_plan_redemption</code>) and v1
 type endpoints (<code>type=wash</code>, <code>type=recurring</code>) to accurately distinguish
-car washes from recharges and refunds.  In validation testing across 31
-days of JOLIET data (January 2026):</p>
+car washes from recharges and refunds.  Membership counts are verified
+via v1 detail lookups to exclude plan upgrades/switches.  In validation
+testing across 31 days of JOLIET data (January 2026):</p>
 <ul>
-<li><strong>Member washes</strong> and <strong>free washes</strong>: 31/31 days exact match (100%)</li>
+<li><strong>Member washes</strong>, <strong>free washes</strong>, and <strong>new memberships</strong>: 31/31 days exact match (100%)</li>
 <li><strong>Total washes</strong>: 22/31 days exact match, cumulative gap +11 (0.09%)</li>
-<li><strong>New memberships</strong>: 21/31 days exact match, cumulative gap +12 (2.74%)</li>
+<li><strong>Perfect match (all 5 metrics)</strong>: 22/31 days (71%)</li>
 </ul>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Known limitation: membership overcounting</p>
-<p><code>new_memberships_sold()</code> uses the v2 <code>is_recurring_plan_sale</code> flag, which
-includes both genuine new membership sales <strong>and</strong> plan upgrades/switches
-(e.g. upgrading from Express to Clean).  Rinsed excludes plan upgrades
-from its "Sales" metric.  The v1 detail endpoint exposes a separate
-<code>is_recurring_sale</code> flag that distinguishes the two, but fetching it
-requires an individual API call per transaction.  As a result, membership
-counts may overcount by roughly <strong>2--3%</strong> compared to Rinsed.  This also
-affects <code>conversion_rate()</code> and the <code>new_memberships</code> field on
-<code>report()</code>.</p>
 </div>
 <h2 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h2>
 <p>The stats resource offers six methods. Pick the one that matches your use case:</p>
@@ -1360,26 +1349,29 @@ affects <code>conversion_rate()</code> and the <code>new_memberships</code> fiel
 <tr>
 <td><code>new_memberships_sold(start, end)</code></td>
 <td><code>int</code></td>
-<td>Count of recurring plan sales</td>
-<td>1</td>
+<td>Count of genuine new membership sales</td>
+<td>1 + ~N</td>
 </tr>
 <tr>
 <td><code>conversion_rate(start, end)</code></td>
 <td><code>ConversionResult</code></td>
 <td>Membership conversion rate KPI</td>
-<td>4</td>
+<td>4 + ~N</td>
 </tr>
 <tr>
 <td><code>report(start, end)</code></td>
 <td><code>StatsReport</code></td>
 <td>All KPIs in a single call (most efficient)</td>
-<td>3</td>
+<td>3 + ~N</td>
 </tr>
 </tbody>
 </table>
+<p>Where <strong>~N</strong> is the number of v2 plan sale candidates verified via <code>get()</code>
+(typically ~15/day).  This verification excludes plan upgrades/switches from
+membership counts to match Rinsed exactly.</p>
 <p>Use individual methods when you need a single metric. Use <code>report()</code> when you
-need multiple KPIs -- it makes <strong>3 API calls</strong> instead of the <strong>11</strong> that
-would result from calling the individual methods separately.</p>
+need multiple KPIs -- it shares bulk data fetches across KPIs and only
+verifies plan sales once.</p>
 <h2 id="date-range-input">Date Range Input<a class="headerlink" href="#date-range-input" title="Permanent link">&para;</a></h2>
 <p>All stats methods accept a <code>start</code> and <code>end</code> parameter for the date range. You
 can pass either an ISO-8601 date string or a Python <code>datetime</code> object:</p>
@@ -1524,11 +1516,11 @@ transaction that is neither a recurring plan sale nor a recurring redemption.</p
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retail washes: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="new_memberships_soldstart-end-int"><code>new_memberships_sold(start, end) -&gt; int</code><a class="headerlink" href="#new_memberships_soldstart-end-int" title="Permanent link">&para;</a></h3>
-<p>Count new membership sales for a date range. Fetches v2 transactions and counts
-those flagged as <code>is_recurring_plan_sale</code>. This captures brand-new sign-ups,
-reactivations, and plan upgrades/switches -- any transaction where the v2 API
-sets the recurring plan sale flag. See the known limitation note above
-regarding ~2-3% overcounting vs Rinsed due to plan upgrades being included.</p>
+<p>Count genuine new membership sales for a date range. Fetches v2 transactions
+to identify plan sale candidates, then verifies each via the v1 detail
+endpoint (<code>is_recurring_sale</code>) to exclude plan upgrades/switches (e.g.
+upgrading from Express to Clean). Only brand-new sign-ups and reactivations
+are counted.</p>
 <div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">new_memberships_sold</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New memberships sold: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -1564,7 +1556,7 @@ non-negative transaction types.</p>
 <tr>
 <td><code>new_memberships</code></td>
 <td><code>int</code></td>
-<td>Number of recurring plan sales</td>
+<td>Number of genuine new membership sales</td>
 </tr>
 <tr>
 <td><code>eligible_washes</code></td>
@@ -1574,11 +1566,10 @@ non-negative transaction types.</p>
 </tbody>
 </table>
 <h3 id="reportstart-end-statsreport"><code>report(start, end) -&gt; StatsReport</code><a class="headerlink" href="#reportstart-end-statsreport" title="Permanent link">&para;</a></h3>
-<p>Compute all KPIs for a date range in a single call. This is the most efficient
-way to retrieve multiple stats -- it makes <strong>3 API calls</strong> and computes every
-KPI locally, compared to the <strong>11 API calls</strong> that would result from calling
-<code>total_sales()</code>, <code>total_washes()</code>, <code>new_memberships_sold()</code>, and
-<code>conversion_rate()</code> individually.</p>
+<p>Compute all KPIs for a date range in a single call. Makes <strong>3 bulk API calls</strong>
+plus <strong>~N detail calls</strong> (one per plan sale candidate, typically ~15/day) to
+verify memberships.  This is far more efficient than calling each method
+individually, which would duplicate bulk fetches and detail lookups.</p>
 <div class="highlight"><pre><span></span><code><span class="n">rpt</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Period: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">period_start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">period_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1684,20 +1675,20 @@ calls:</p>
 <div class="admonition tip">
 <p class="admonition-title">Use <code>report()</code> when you need multiple KPIs</p>
 <p>Calling <code>total_sales()</code>, <code>total_washes()</code>, <code>new_memberships_sold()</code>, and
-<code>conversion_rate()</code> individually results in <strong>11 API calls</strong> because some
-underlying data fetches overlap. The <code>report()</code> method shares data fetches
-across KPIs and computes everything in just <strong>3 API calls</strong>:</p>
+<code>conversion_rate()</code> individually duplicates bulk data fetches and plan sale
+verification calls.  The <code>report()</code> method shares all data across KPIs:</p>
 <ol>
 <li><code>transactions.list_v2()</code> -- enriched transactions with membership flags</li>
 <li><code>transactions.list_by_type("wash")</code> -- identifies actual car washes</li>
 <li><code>transactions.list_by_type("recurring")</code> -- identifies recharges to exclude</li>
+<li><code>transactions.get()</code> x ~N -- verifies each plan sale candidate (~15/day)</li>
 </ol>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Use individual methods for single metrics</p>
 <p>If you only need one stat, calling the individual method is more efficient
 than <code>report()</code>. For example, <code>total_sales()</code> makes just <strong>1 API call</strong>,
-while <code>report()</code> always makes 3.</p>
+while <code>report()</code> always makes 3 + ~N.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">No caching between calls</p>
