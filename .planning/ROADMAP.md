@@ -46,7 +46,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 30-01: TBD
+- [x] 30-01: cost_per_car() implementation
 
 #### Phase 31: Report Integration
 **Goal**: Add labor CPC to `StatsReport` and `report()` method with shared data fetching
@@ -184,7 +184,7 @@ Client-side business analytics via `client.stats.*` — six stat methods with ty
 | 27. Labor Data Layer | v1.3 | 2/2 | Complete | 2026-02-12 |
 | 28. Labor Cost Result Models | v1.3 | 1/1 | Complete | 2026-02-12 |
 | 29. Labor Cost Computation | v1.3 | 1/1 | Complete | 2026-02-12 |
-| 30. CPC Computation | v1.3 | 0/? | Not started | - |
+| 30. CPC Computation | v1.3 | 1/1 | Complete | 2026-02-12 |
 | 31. Report Integration | v1.3 | 0/? | Not started | - |
 | 32. Stats Guide Update | v1.3 | 0/? | Not started | - |
 | 33. Unit Tests | v1.3 | 0/? | Not started | - |
