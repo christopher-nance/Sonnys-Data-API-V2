@@ -166,7 +166,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -284,7 +284,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -761,6 +761,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#total_labor_coststart-end-laborcostresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        total_labor_cost(start, end) -&gt; LaborCostResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost_per_carstart-end-costpercarresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cost_per_car(start, end) -&gt; CostPerCarResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#reportstart-end-statsreport" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1198,6 +1220,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#total_labor_coststart-end-laborcostresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        total_labor_cost(start, end) -&gt; LaborCostResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost_per_carstart-end-costpercarresult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cost_per_car(start, end) -&gt; CostPerCarResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#reportstart-end-statsreport" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1369,7 +1413,7 @@ Sonny's API and Rinsed's data pipeline.  Eligible washes inherit the same
 gap since <code>eligible = total − member − free</code>.</p>
 </div>
 <h2 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h2>
-<p>The stats resource offers six methods. Pick the one that matches your use case:</p>
+<p>The stats resource offers eight methods. Pick the one that matches your use case:</p>
 <table>
 <thead>
 <tr>
@@ -1411,10 +1455,22 @@ gap since <code>eligible = total − member − free</code>.</p>
 <td>4 + ~N</td>
 </tr>
 <tr>
+<td><code>total_labor_cost(start, end)</code></td>
+<td><code>LaborCostResult</code></td>
+<td>Labor cost breakdown (regular/overtime) from clock entries</td>
+<td>N_emp x ceil(days/14) + 1</td>
+</tr>
+<tr>
+<td><code>cost_per_car(start, end)</code></td>
+<td><code>CostPerCarResult</code></td>
+<td>Labor cost per car washed</td>
+<td>N_emp x ceil(days/14) + 4</td>
+</tr>
+<tr>
 <td><code>report(start, end)</code></td>
 <td><code>StatsReport</code></td>
 <td>All KPIs in a single call (most efficient)</td>
-<td>3 + ~N</td>
+<td>4 + N_emp x ceil(days/14) + ~N</td>
 </tr>
 </tbody>
 </table>
@@ -1617,11 +1673,114 @@ non-negative transaction types.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="total_labor_coststart-end-laborcostresult"><code>total_labor_cost(start, end) -&gt; LaborCostResult</code><a class="headerlink" href="#total_labor_coststart-end-laborcostresult" title="Permanent link">&para;</a></h3>
+<p>Compute labor cost breakdown for a date range. Fetches clock entries for all
+employees via a 14-day windowed bulk fetch (the API's hard maximum per
+request), then aggregates regular and overtime costs in a single pass. Each
+entry's cost is computed as <code>rate * hours</code> for the corresponding pay type.
+Site-code filtering is applied locally after fetching, because the
+clock-entries endpoint does not support a site filter.</p>
+<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">total_labor_cost</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total labor cost: $</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Regular: $</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">regular_cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">regular_hours</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">h)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Overtime: $</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">overtime_cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">overtime_hours</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">h)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total hours: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_hours</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Clock entries: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">entry_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong><code>LaborCostResult</code> fields:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>total_cost</code></td>
+<td><code>float</code></td>
+<td>Combined regular and overtime cost</td>
+</tr>
+<tr>
+<td><code>regular_cost</code></td>
+<td><code>float</code></td>
+<td>Sum of <code>regular_rate * regular_hours</code> across all entries</td>
+</tr>
+<tr>
+<td><code>overtime_cost</code></td>
+<td><code>float</code></td>
+<td>Sum of <code>overtime_rate * overtime_hours</code> across all entries</td>
+</tr>
+<tr>
+<td><code>regular_hours</code></td>
+<td><code>float</code></td>
+<td>Total regular hours worked</td>
+</tr>
+<tr>
+<td><code>overtime_hours</code></td>
+<td><code>float</code></td>
+<td>Total overtime hours worked</td>
+</tr>
+<tr>
+<td><code>total_hours</code></td>
+<td><code>float</code></td>
+<td>Combined hours (<code>regular_hours + overtime_hours</code>)</td>
+</tr>
+<tr>
+<td><code>entry_count</code></td>
+<td><code>int</code></td>
+<td>Number of clock entries aggregated</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost_per_carstart-end-costpercarresult"><code>cost_per_car(start, end) -&gt; CostPerCarResult</code><a class="headerlink" href="#cost_per_carstart-end-costpercarresult" title="Permanent link">&para;</a></h3>
+<p>Compute labor cost per car for a date range. Divides total labor cost by total
+wash volume to measure labor efficiency. A value of <code>4.25</code> means the site spent
+$4.25 in labor for each car washed. When there are zero washes the result is
+<code>0.0</code> (division-by-zero safe).</p>
+<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">cost_per_car</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cost per car: $</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">cost_per_car</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total labor cost: $</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_labor_cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total washes: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_washes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong><code>CostPerCarResult</code> fields:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cost_per_car</code></td>
+<td><code>float</code></td>
+<td>Total labor cost divided by total washes (<code>0.0</code> when no washes)</td>
+</tr>
+<tr>
+<td><code>total_labor_cost</code></td>
+<td><code>float</code></td>
+<td>Aggregate labor cost from <code>LaborCostResult</code></td>
+</tr>
+<tr>
+<td><code>total_washes</code></td>
+<td><code>int</code></td>
+<td>Wash count from <code>WashResult</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="reportstart-end-statsreport"><code>report(start, end) -&gt; StatsReport</code><a class="headerlink" href="#reportstart-end-statsreport" title="Permanent link">&para;</a></h3>
-<p>Compute all KPIs for a date range in a single call. Makes <strong>3 bulk API calls</strong>
-plus <strong>~N detail calls</strong> (one per plan sale candidate, typically ~15/day) to
-verify memberships.  This is far more efficient than calling each method
-individually, which would duplicate bulk fetches and detail lookups.</p>
+<p>Compute all KPIs for a date range in a single call, including sales, washes,
+memberships, conversion rate, labor costs, and cost per car. Makes <strong>4 bulk
+API calls</strong> (3 transaction + 1 employee list) plus <strong>N_emp x ceil(days/14)
+clock-entry calls</strong> and <strong>~N detail calls</strong> (one per plan sale candidate,
+typically ~15/day) to verify memberships. This is far more efficient than
+calling each method individually, which would duplicate bulk fetches, clock
+entry iterations, and detail lookups.</p>
 <div class="highlight"><pre><span></span><code><span class="n">rpt</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Period: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">period_start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">period_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1630,6 +1789,8 @@ individually, which would duplicate bulk fetches and detail lookups.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Eligible: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">eligible_wash_count</span><span class="si">}</span><span class="s2">, Free: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">free_wash_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New memberships: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">new_memberships</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conversion rate: </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">conversion</span><span class="o">.</span><span class="n">rate</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Labor cost: $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">labor</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cost per car: $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">cost_per_car</span><span class="o">.</span><span class="n">cost_per_car</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p><strong><code>StatsReport</code> fields:</strong></p>
 <table>
@@ -1662,6 +1823,16 @@ individually, which would duplicate bulk fetches and detail lookups.</p>
 <td>Conversion rate KPI (see <code>conversion_rate()</code> above)</td>
 </tr>
 <tr>
+<td><code>labor</code></td>
+<td><code>LaborCostResult</code></td>
+<td>Labor cost breakdown (see <code>total_labor_cost()</code> above)</td>
+</tr>
+<tr>
+<td><code>cost_per_car</code></td>
+<td><code>CostPerCarResult</code></td>
+<td>Labor cost per car KPI (see <code>cost_per_car()</code> above)</td>
+</tr>
+<tr>
 <td><code>period_start</code></td>
 <td><code>str</code></td>
 <td>ISO-8601 date string for start of report range</td>
@@ -1692,6 +1863,10 @@ individually, which would duplicate bulk fetches and detail lookups.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Free:        </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">washes</span><span class="o">.</span><span class="n">free_wash_count</span><span class="si">:</span><span class="s2">&gt;10,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New members:   </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">new_memberships</span><span class="si">:</span><span class="s2">&gt;10,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conversion:    </span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">conversion</span><span class="o">.</span><span class="n">rate</span><span class="si">:</span><span class="s2">&gt;9.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Labor:         $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">labor</span><span class="o">.</span><span class="n">total_cost</span><span class="si">:</span><span class="s2">&gt;10,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Regular:     $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">labor</span><span class="o">.</span><span class="n">regular_cost</span><span class="si">:</span><span class="s2">&gt;10,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Overtime:    $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">labor</span><span class="o">.</span><span class="n">overtime_cost</span><span class="si">:</span><span class="s2">&gt;10,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cost/car:      $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">cost_per_car</span><span class="o">.</span><span class="n">cost_per_car</span><span class="si">:</span><span class="s2">&gt;10.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="compare-two-periods">Compare two periods<a class="headerlink" href="#compare-two-periods" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
@@ -1741,6 +1916,16 @@ verification calls.  The <code>report()</code> method shares all data across KPI
 <p>If you only need one stat, calling the individual method is more efficient
 than <code>report()</code>. For example, <code>total_sales()</code> makes just <strong>1 API call</strong>,
 while <code>report()</code> always makes 3 + ~N.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Clock entry API cost</p>
+<p>Fetching clock entries requires <strong>1 employee list call</strong> plus
+<strong>N_employees x ceil(days/14) clock entry calls</strong>. For 20 employees over
+31 days, that is 1 + 20 x 3 = <strong>61 API calls</strong>. Use <code>report()</code> when you
+need labor data alongside other KPIs -- it shares the clock entry fetch
+with all other computations. For labor-only queries,
+<code>total_labor_cost()</code> is sufficient and avoids the extra transaction
+fetches.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">No caching between calls</p>

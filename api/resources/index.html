@@ -166,7 +166,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -284,7 +284,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -1202,6 +1202,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#sonnys_data_client.resources.StatsResource.total_labor_cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        total_labor_cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.resources.StatsResource.cost_per_car" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cost_per_car
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sonnys_data_client.resources.StatsResource.report" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1671,6 +1693,28 @@
     <span class="md-ellipsis">
       
         conversion_rate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.resources.StatsResource.total_labor_cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        total_labor_cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sonnys_data_client.resources.StatsResource.cost_per_car" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cost_per_car
       
     </span>
   </a>
@@ -3837,6 +3881,292 @@ print(f&quot;Eligible washes: {result.eligible_washes}&quot;)
 <div class="doc doc-object doc-function">
 
 
+<h4 id="sonnys_data_client.resources.StatsResource.total_labor_cost" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">total_labor_cost</span>
+
+
+<a href="#sonnys_data_client.resources.StatsResource.total_labor_cost" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">total_labor_cost</span><span class="p">(</span>
+    <span class="n">start</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">datetime</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LaborCostResult</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compute labor cost breakdown for a date range.</p>
+<p>Fetches all clock entries via
+:meth:<code>_fetch_all_clock_entries</code> and aggregates regular and
+overtime costs in a single pass.  Each entry's cost is computed
+as <code>rate * hours</code> for the corresponding pay type.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>start</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | <span title="datetime.datetime">datetime</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Range start as an ISO-8601 string (e.g. <code>"2026-01-01"</code>)
+or :class:<code>~datetime.datetime</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>end</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | <span title="datetime.datetime">datetime</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Range end as an ISO-8601 string or
+:class:<code>~datetime.datetime</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>A</code></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="LaborCostResult (sonnys_data_client.types._stats.LaborCostResult)" href="../models/#sonnys_data_client.types.LaborCostResult">LaborCostResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>class:<code>~sonnys_data_client.types.LaborCostResult</code> containing</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="LaborCostResult (sonnys_data_client.types._stats.LaborCostResult)" href="../models/#sonnys_data_client.types.LaborCostResult">LaborCostResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>the total cost, regular/overtime breakdowns, hours, and entry</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="LaborCostResult (sonnys_data_client.types._stats.LaborCostResult)" href="../models/#sonnys_data_client.types.LaborCostResult">LaborCostResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>count.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If <em>start</em> is after <em>end</em>, or if a string cannot
+be parsed as a valid ISO-8601 date/datetime.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <p>Example::</p>
+<div class="highlight"><pre><span></span><code>result = client.stats.total_labor_cost(&quot;2026-01-01&quot;, &quot;2026-01-31&quot;)
+print(f&quot;Total: ${result.total_cost:.2f}&quot;)
+print(f&quot;Regular: ${result.regular_cost:.2f} ({result.regular_hours:.1f}h)&quot;)
+print(f&quot;Overtime: ${result.overtime_cost:.2f} ({result.overtime_hours:.1f}h)&quot;)
+</code></pre></div>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="sonnys_data_client.resources.StatsResource.cost_per_car" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">cost_per_car</span>
+
+
+<a href="#sonnys_data_client.resources.StatsResource.cost_per_car" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">cost_per_car</span><span class="p">(</span>
+    <span class="n">start</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">datetime</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CostPerCarResult</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compute labor cost per car for a date range.</p>
+<p>Divides total labor cost by total wash volume to measure labor
+efficiency.  A value of <code>4.25</code> means the site spent $4.25 in
+labor for each car washed.  When there are zero washes the
+result is <code>0.0</code> (division-by-zero safe).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>start</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | <span title="datetime.datetime">datetime</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Range start as an ISO-8601 string (e.g. <code>"2026-01-01"</code>)
+or :class:<code>~datetime.datetime</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>end</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | <span title="datetime.datetime">datetime</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Range end as an ISO-8601 string or
+:class:<code>~datetime.datetime</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>A</code></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="CostPerCarResult (sonnys_data_client.types._stats.CostPerCarResult)" href="../models/#sonnys_data_client.types.CostPerCarResult">CostPerCarResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>class:<code>~sonnys_data_client.types.CostPerCarResult</code> containing</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="CostPerCarResult (sonnys_data_client.types._stats.CostPerCarResult)" href="../models/#sonnys_data_client.types.CostPerCarResult">CostPerCarResult</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>the cost per car, total labor cost, and total wash count.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="ValueError">ValueError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If <em>start</em> is after <em>end</em>, or if a string cannot
+be parsed as a valid ISO-8601 date/datetime.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <p>Example::</p>
+<div class="highlight"><pre><span></span><code>result = client.stats.cost_per_car(&quot;2026-01-01&quot;, &quot;2026-01-31&quot;)
+print(f&quot;Cost per car: ${result.cost_per_car:.2f}&quot;)
+print(f&quot;Labor cost: ${result.total_labor_cost:.2f}&quot;)
+print(f&quot;Total washes: {result.total_washes}&quot;)
+</code></pre></div>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
 <h4 id="sonnys_data_client.resources.StatsResource.report" class="doc doc-heading">
             <span class="doc doc-object-name doc-function-name">report</span>
 
@@ -3851,10 +4181,12 @@ print(f&quot;Eligible washes: {result.eligible_washes}&quot;)
 
         <p>Compute all KPIs for a date range in a single call.</p>
 <p>Fetches v2 transactions, v1 <code>type=wash</code>, v1 <code>type=recurring</code>,
-and verifies each plan sale candidate via <code>get()</code> to exclude
-plan upgrades/switches.  Makes <strong>3 bulk API calls</strong> plus
+clock entries for all employees, and verifies each plan sale
+candidate via <code>get()</code> to exclude plan upgrades/switches.  Makes
+<strong>4 bulk API calls</strong> (3 transaction + 1 employee list) plus
+<strong>N_employees x ceil(days/14) clock-entry calls</strong> and
 <strong>~N detail calls</strong> (one per v2 plan sale candidate, typically
-~15/day) and computes every KPI locally.</p>
+~15/day), then computes every KPI locally.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3941,7 +4273,17 @@ or :class:<code>~datetime.datetime</code>.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p><code>period_start</code>, and <code>period_end</code>.</p>
+                <p><code>labor</code>, <code>cost_per_car</code>, <code>period_start</code>, and</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td></td>            <td>
+                  <code><a class="autorefs autorefs-internal" title="StatsReport (sonnys_data_client.types._stats.StatsReport)" href="../models/#sonnys_data_client.types.StatsReport">StatsReport</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><code>period_end</code>.</p>
               </div>
             </td>
           </tr>
@@ -3977,6 +4319,8 @@ print(f&quot;Revenue: ${rpt.sales.total:.2f}&quot;)
 print(f&quot;Washes: {rpt.washes.total}&quot;)
 print(f&quot;New members: {rpt.new_memberships}&quot;)
 print(f&quot;Conversion: {rpt.conversion.rate:.1%}&quot;)
+print(f&quot;Labor cost: ${rpt.labor.total_cost:.2f}&quot;)
+print(f&quot;Cost per car: ${rpt.cost_per_car.cost_per_car:.2f}&quot;)
 </code></pre></div>
 
 
