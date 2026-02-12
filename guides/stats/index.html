@@ -1303,18 +1303,70 @@ memberships, and conversion rates without writing any aggregation logic
 yourself.</p>
 <div class="admonition note">
 <p class="admonition-title">Rinsed alignment</p>
-<p>Stats calculations are designed to match <strong>Rinsed</strong> reporting as closely
-as possible.  Wash classification uses a combination of v2 transaction
-flags (<code>is_recurring_plan_sale</code>, <code>is_recurring_plan_redemption</code>) and v1
-type endpoints (<code>type=wash</code>, <code>type=recurring</code>) to accurately distinguish
-car washes from recharges and refunds.  Membership counts are verified
-via v1 detail lookups to exclude plan upgrades/switches.  In validation
-testing across 31 days of JOLIET data (January 2026):</p>
-<ul>
-<li><strong>Member washes</strong>, <strong>free washes</strong>, and <strong>new memberships</strong>: 31/31 days exact match (100%)</li>
-<li><strong>Total washes</strong>: 22/31 days exact match, cumulative gap +11 (0.09%)</li>
-<li><strong>Perfect match (all 5 metrics)</strong>: 22/31 days (71%)</li>
-</ul>
+<p>Stats calculations are designed to align with
+<strong><a href="https://www.rfrinsed.com/">Rinsed: The Car Wash CRM</a></strong> and its
+reporting metrics as closely as possible.  Rinsed is the system of record
+for WashU membership and conversion reporting, so matching its numbers is
+the primary accuracy benchmark for this library.</p>
+<p>Wash classification uses a combination of v2 transaction flags
+(<code>is_recurring_plan_sale</code>, <code>is_recurring_plan_redemption</code>) and v1 type
+endpoints (<code>type=wash</code>, <code>type=recurring</code>) to accurately distinguish car
+washes from recharges and refunds.  Membership counts are verified via v1
+detail lookups to exclude plan upgrades/switches.</p>
+<p>In validation testing across 31 days of JOLIET data (January 2026),
+compared against the Rinsed <em>Daily Conversion Detail</em> report:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: center;">Exact-match days</th>
+<th style="text-align: center;">Monthly gap</th>
+<th style="text-align: center;">Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Member washes</strong></td>
+<td style="text-align: center;">31/31 (100%)</td>
+<td style="text-align: center;">0 of 8,506</td>
+<td style="text-align: center;">100%</td>
+</tr>
+<tr>
+<td><strong>Free washes</strong></td>
+<td style="text-align: center;">31/31 (100%)</td>
+<td style="text-align: center;">0 of 319</td>
+<td style="text-align: center;">100%</td>
+</tr>
+<tr>
+<td><strong>New memberships</strong></td>
+<td style="text-align: center;">31/31 (100%)</td>
+<td style="text-align: center;">0 of 438</td>
+<td style="text-align: center;">100%</td>
+</tr>
+<tr>
+<td><strong>Total washes</strong></td>
+<td style="text-align: center;">22/31 (71%)</td>
+<td style="text-align: center;">+11 of 12,097</td>
+<td style="text-align: center;">99.91%</td>
+</tr>
+<tr>
+<td><strong>Eligible washes</strong></td>
+<td style="text-align: center;">22/31 (71%)</td>
+<td style="text-align: center;">+11 of 3,272</td>
+<td style="text-align: center;">99.66%</td>
+</tr>
+<tr>
+<td><strong>Perfect match (all 5)</strong></td>
+<td style="text-align: center;"><strong>22/31 (71%)</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p>The +11 total-wash gap (spread across 9 days, each off by 1–2 washes)
+likely reflects transaction-boundary timing differences between the
+Sonny's API and Rinsed's data pipeline.  Eligible washes inherit the same
+gap since <code>eligible = total − member − free</code>.</p>
 </div>
 <h2 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h2>
 <p>The stats resource offers six methods. Pick the one that matches your use case:</p>
