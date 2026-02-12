@@ -4,7 +4,7 @@
 
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Pydantic v2](https://img.shields.io/badge/pydantic-v2-green)
-![License: MIT](https://img.shields.io/badge/license-MIT-yellow)
+![License: PolyForm Noncommercial](https://img.shields.io/badge/license-PolyForm%20Noncommercial-orange)
 ![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-brightgreen)
 
 `sonnys-data-client` wraps the Sonny's Carwash Controls REST API with a
