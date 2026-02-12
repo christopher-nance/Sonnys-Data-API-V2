@@ -8,7 +8,7 @@ parameters; this module ensures consistent handling.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Literal
 from zoneinfo import ZoneInfo
 
@@ -50,6 +50,46 @@ def parse_date_range(
         raise ValueError("start must be before or equal to end")
 
     return start_dt, end_dt
+
+
+def build_date_chunks(
+    start: str,
+    end: str,
+    max_days: int = 14,
+) -> list[tuple[str, str]]:
+    """Split a date range into chunks of at most *max_days* days (inclusive).
+
+    The Sonny's clock-entries API enforces a hard 14-day maximum on date
+    range queries.  This helper lets callers pass any arbitrary range and
+    receive back a list of ``(start, end)`` string pairs that each fit
+    within the API limit.
+
+    Args:
+        start: Range start as a ``YYYY-MM-DD`` string.
+        end: Range end as a ``YYYY-MM-DD`` string (inclusive).
+        max_days: Maximum number of days per chunk (default 14).
+
+    Returns:
+        A list of ``(start, end)`` string tuples where each chunk spans
+        at most *max_days* days inclusive.
+
+    Raises:
+        ValueError: If *start* is after *end*.
+    """
+    start_date = date.fromisoformat(start)
+    end_date = date.fromisoformat(end)
+
+    if start_date > end_date:
+        raise ValueError("start must be before or equal to end")
+
+    chunks: list[tuple[str, str]] = []
+    current = start_date
+    while current <= end_date:
+        chunk_end = min(current + timedelta(days=max_days - 1), end_date)
+        chunks.append((current.isoformat(), chunk_end.isoformat()))
+        current = chunk_end + timedelta(days=1)
+
+    return chunks
 
 
 def _normalize(
