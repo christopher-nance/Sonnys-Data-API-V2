@@ -393,8 +393,8 @@ class StatsResource(BaseResource):
                 retail += txn.total
                 retail_count += 1
 
-        total = recurring_plan_sales + recurring_redemptions + retail
-        count = recurring_plan_sales_count + recurring_redemptions_count + retail_count
+        total = recurring_plan_sales + retail
+        count = recurring_plan_sales_count + retail_count
 
         return SalesResult(
             total=total,
@@ -736,10 +736,8 @@ class StatsResource(BaseResource):
                     if txn.total == 0:
                         free_wash_count += 1
 
-        sales_total = recurring_plan_sales + recurring_redemptions + retail
-        sales_count = (
-            recurring_plan_sales_count + recurring_redemptions_count + retail_count
-        )
+        sales_total = recurring_plan_sales + retail
+        sales_count = recurring_plan_sales_count + retail_count
 
         # --- 3. SalesResult ---
         sales = SalesResult(
