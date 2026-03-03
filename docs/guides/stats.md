@@ -99,7 +99,11 @@ do not generate revenue.  Redemption data is still tracked in the
     `total` is designed to align with the Sonny's Back Office *Transaction
     Total*.  It may be slightly higher (<1%) due to customer overpayments --
     the API includes overpaid amounts in transaction totals, while Back Office
-    tracks them as a separate "Over Paid" line item.
+    tracks them as a separate "Over Paid" line item.  Correcting for this
+    would require fetching full transaction details (tenders and items) for
+    every transaction to compute the overpaid delta -- potentially hundreds
+    of additional API calls per query -- which is not practical given the
+    20-request-per-15-second rate limit.
 
 ```python
 result = client.stats.total_sales("2026-01-01", "2026-01-31")

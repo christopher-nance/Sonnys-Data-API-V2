@@ -365,7 +365,10 @@ class StatsResource(BaseResource):
            Office *Transaction Total* due to customer overpayments.  The
            API includes overpaid amounts in transaction totals, while
            Back Office tracks them as a separate line item.  The typical
-           difference is <1%.
+           difference is <1%.  Correcting for this would require
+           fetching full transaction details for every transaction to
+           compute the overpaid delta, which is not practical given the
+           API rate limit.
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
