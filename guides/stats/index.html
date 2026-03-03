@@ -1511,7 +1511,11 @@ do not generate revenue.  Redemption data is still tracked in the
 <p><code>total</code> is designed to align with the Sonny's Back Office <em>Transaction
 Total</em>.  It may be slightly higher (&lt;1%) due to customer overpayments --
 the API includes overpaid amounts in transaction totals, while Back Office
-tracks them as a separate "Over Paid" line item.</p>
+tracks them as a separate "Over Paid" line item.  Correcting for this
+would require fetching full transaction details (tenders and items) for
+every transaction to compute the overpaid delta -- potentially hundreds
+of additional API calls per query -- which is not practical given the
+20-request-per-15-second rate limit.</p>
 </div>
 <div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">total_sales</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 

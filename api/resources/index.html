@@ -3478,7 +3478,10 @@ breakdown fields.</p>
    Office <em>Transaction Total</em> due to customer overpayments.  The
    API includes overpaid amounts in transaction totals, while
    Back Office tracks them as a separate line item.  The typical
-   difference is &lt;1%.</p>
+   difference is &lt;1%.  Correcting for this would require
+   fetching full transaction details for every transaction to
+   compute the overpaid delta, which is not practical given the
+   API rate limit.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
