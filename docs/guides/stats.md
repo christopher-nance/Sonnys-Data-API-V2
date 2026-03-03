@@ -90,6 +90,17 @@ Compute a revenue breakdown for a date range. Fetches all transactions via the
 enriched v2 endpoint and categorizes them into three buckets: recurring plan
 sales, recurring redemptions, and retail.
 
+The `total` and `count` fields **exclude** membership redemptions
+(`is_recurring_plan_redemption=True`), since redemptions are usage events that
+do not generate revenue.  Redemption data is still tracked in the
+`recurring_redemptions` and `recurring_redemptions_count` breakdown fields.
+
+!!! info "Alignment with Sonny's Back Office"
+    `total` is designed to align with the Sonny's Back Office *Transaction
+    Total*.  It may be slightly higher (<1%) due to customer overpayments --
+    the API includes overpaid amounts in transaction totals, while Back Office
+    tracks them as a separate "Over Paid" line item.
+
 ```python
 result = client.stats.total_sales("2026-01-01", "2026-01-31")
 
@@ -103,12 +114,12 @@ print(f"Retail: ${result.retail:.2f} ({result.retail_count})")
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `total` | `float` | Grand total revenue |
-| `count` | `int` | Total transaction count |
+| `total` | `float` | Revenue total (plan sales + retail, excludes redemptions) |
+| `count` | `int` | Transaction count (plan sales + retail, excludes redemptions) |
 | `recurring_plan_sales` | `float` | Revenue from recurring plan sales |
 | `recurring_plan_sales_count` | `int` | Number of recurring plan sale transactions |
-| `recurring_redemptions` | `float` | Revenue from recurring redemptions |
-| `recurring_redemptions_count` | `int` | Number of recurring redemption transactions |
+| `recurring_redemptions` | `float` | Gross value of recurring redemptions (not included in `total`) |
+| `recurring_redemptions_count` | `int` | Number of recurring redemption transactions (not included in `count`) |
 | `retail` | `float` | Revenue from retail transactions |
 | `retail_count` | `int` | Number of retail transactions |
 

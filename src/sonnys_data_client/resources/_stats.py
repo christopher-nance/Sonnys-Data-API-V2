@@ -349,8 +349,23 @@ class StatsResource(BaseResource):
         Fetches all transactions via the enriched v2 endpoint and
         categorizes them into three buckets: recurring plan sales,
         recurring redemptions, and retail.  Returns a
-        :class:`~sonnys_data_client.types.SalesResult` with grand totals
-        and per-bucket revenue and count.
+        :class:`~sonnys_data_client.types.SalesResult` with per-bucket
+        breakdowns.
+
+        The ``total`` and ``count`` fields **exclude** membership
+        redemptions (``is_recurring_plan_redemption=True``), since
+        redemptions are $0-value usage events that do not generate
+        revenue.  Redemption data is still available in the
+        ``recurring_redemptions`` and ``recurring_redemptions_count``
+        breakdown fields.
+
+        .. note::
+
+           The ``total`` may be slightly higher than the Sonny's Back
+           Office *Transaction Total* due to customer overpayments.  The
+           API includes overpaid amounts in transaction totals, while
+           Back Office tracks them as a separate line item.  The typical
+           difference is <1%.
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
@@ -360,8 +375,8 @@ class StatsResource(BaseResource):
 
         Returns:
             A :class:`~sonnys_data_client.types.SalesResult` containing
-            the grand total, transaction count, and per-category
-            breakdowns.
+            the grand total (excluding redemptions), transaction count,
+            and per-category breakdowns.
 
         Raises:
             ValueError: If *start* is after *end*, or if a string cannot
@@ -658,6 +673,10 @@ class StatsResource(BaseResource):
         **N_employees x ceil(days/14) clock-entry calls** and
         **~N detail calls** (one per v2 plan sale candidate, typically
         ~15/day), then computes every KPI locally.
+
+        The ``sales.total`` field **excludes** membership redemptions
+        to align with the Sonny's Back Office *Transaction Total*.  See
+        :meth:`total_sales` for details.
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
