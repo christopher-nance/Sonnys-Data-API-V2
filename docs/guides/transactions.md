@@ -53,6 +53,12 @@ accept the same query parameters:
     before sending them to the API. You can pass either format — the SDK
     handles the conversion transparently.
 
+!!! warning "31-day maximum date range"
+    The API rejects requests where `startDate` and `endDate` are more than
+    1 month apart.  The SDK validates this before sending the request and
+    raises `ValueError` with a clear message.  For longer periods, split
+    your queries into ≤ 31-day chunks.
+
 !!! info "`get()` takes no query parameters"
     The `get()` method accepts only a positional `trans_id` argument and does
     not support any query parameters. Pass the transaction ID directly:

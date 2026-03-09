@@ -65,6 +65,17 @@ class Transactions(ListableResource, GettableResource):
                 if dt.tzinfo is None:
                     dt = dt.replace(tzinfo=timezone.utc)
                 converted[key] = int(dt.timestamp())
+        # Validate 1-month max range
+        start_ts = converted.get("startDate")
+        end_ts = converted.get("endDate")
+        if start_ts is not None and end_ts is not None:
+            days = (int(end_ts) - int(start_ts)) / 86400
+            if days > 31:
+                raise ValueError(
+                    f"Date range cannot exceed 31 days (got {int(days)} days). "
+                    "The Sonny's API requires startDate and endDate to be "
+                    "within 1 month of each other."
+                )
         return converted
 
     def list(self, **params: object) -> list[TransactionListItem]:

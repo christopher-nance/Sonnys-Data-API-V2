@@ -571,9 +571,15 @@ fewer requests. The tradeoff is more iterations if you need a wide range.
 
 | Method | Recommended Range | Reason |
 |--------|-------------------|--------|
-| `list()` | Up to 30 days | Fast pagination, no caching complications |
-| `list_v2()` | Up to 30 days | 10-min cache; repeated calls within cache window return stale data |
+| `list()` | Up to 31 days | **Hard limit** -- API rejects ranges over 1 month |
+| `list_v2()` | Up to 31 days | **Hard limit** -- same 1-month cap; also has 10-min cache |
 | `load_job()` | Exactly 1 day | **Required** -- max 24-hour range per call |
+| `stats.*` methods | Up to 31 days | **Hard limit** -- uses `list_v2()` internally |
+
+!!! warning "31-Day Maximum"
+    The API returns a `PayloadValidationError` if `startDate` and `endDate` are
+    more than 1 month apart.  The client raises `ValueError` before sending the
+    request so you get a clear message instead of a cryptic 400 error.
 
 For `load_job()` exports spanning multiple days, iterate day by day. The
 [Transactions guide](transactions.md#multi-day-exports) shows this pattern in

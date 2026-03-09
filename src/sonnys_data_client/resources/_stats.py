@@ -56,8 +56,9 @@ class StatsResource(BaseResource):
             Unix timestamps (int), ready to pass as query parameters.
 
         Raises:
-            ValueError: If *start* is after *end*, or if a string cannot
-                be parsed as a valid ISO-8601 date/datetime.
+            ValueError: If *start* is after *end*, if the range exceeds
+                31 days, or if a string cannot be parsed as a valid
+                ISO-8601 date/datetime.
         """
         tz = self._client.site_timezone
         start_dt, end_dt = parse_date_range(start, end, tz=tz)
@@ -66,6 +67,13 @@ class StatsResource(BaseResource):
         now = datetime.now(timezone.utc)
         if end_dt > now:
             end_dt = now
+        # The API rejects date ranges exceeding 1 month
+        if (end_dt - start_dt).days > 31:
+            raise ValueError(
+                f"Date range cannot exceed 31 days (got {(end_dt - start_dt).days} days). "
+                "The Sonny's API requires startDate and endDate to be "
+                "within 1 month of each other."
+            )
         return {
             "startDate": int(start_dt.timestamp()),
             "endDate": int(end_dt.timestamp()),
