@@ -2114,21 +2114,32 @@ fewer requests. The tradeoff is more iterations if you need a wide range.</p>
 <tbody>
 <tr>
 <td><code>list()</code></td>
-<td>Up to 30 days</td>
-<td>Fast pagination, no caching complications</td>
+<td>Up to 31 days</td>
+<td><strong>Hard limit</strong> -- API rejects ranges over 1 month</td>
 </tr>
 <tr>
 <td><code>list_v2()</code></td>
-<td>Up to 30 days</td>
-<td>10-min cache; repeated calls within cache window return stale data</td>
+<td>Up to 31 days</td>
+<td><strong>Hard limit</strong> -- same 1-month cap; also has 10-min cache</td>
 </tr>
 <tr>
 <td><code>load_job()</code></td>
 <td>Exactly 1 day</td>
 <td><strong>Required</strong> -- max 24-hour range per call</td>
 </tr>
+<tr>
+<td><code>stats.*</code> methods</td>
+<td>Up to 31 days</td>
+<td><strong>Hard limit</strong> -- uses <code>list_v2()</code> internally</td>
+</tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">31-Day Maximum</p>
+<p>The API returns a <code>PayloadValidationError</code> if <code>startDate</code> and <code>endDate</code> are
+more than 1 month apart.  The client raises <code>ValueError</code> before sending the
+request so you get a clear message instead of a cryptic 400 error.</p>
+</div>
 <p>For <code>load_job()</code> exports spanning multiple days, iterate day by day. The
 <a href="../transactions/#multi-day-exports">Transactions guide</a> shows this pattern in
 detail. Here is the performance-optimized version with request spacing:</p>

@@ -1818,6 +1818,13 @@ auto-pagination logic -- you do not need to set these manually. For
 before sending them to the API. You can pass either format — the SDK
 handles the conversion transparently.</p>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">31-day maximum date range</p>
+<p>The API rejects requests where <code>startDate</code> and <code>endDate</code> are more than
+1 month apart.  The SDK validates this before sending the request and
+raises <code>ValueError</code> with a clear message.  For longer periods, split
+your queries into ≤ 31-day chunks.</p>
+</div>
 <div class="admonition info">
 <p class="admonition-title"><code>get()</code> takes no query parameters</p>
 <p>The <code>get()</code> method accepts only a positional <code>trans_id</code> argument and does
