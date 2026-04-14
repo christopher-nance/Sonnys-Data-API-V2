@@ -134,12 +134,12 @@ at different sites.
 |-------|------|-------------|
 | `date_in` | `str` | ISO `YYYY-MM-DD` clock-in date |
 | `time_in` | `str` | Local time string, e.g. `"2:10 PM"` |
-| `date_out` | `str` | ISO `YYYY-MM-DD` clock-out date |
-| `time_out` | `str` | Local time string |
+| `date_out` | `str \| None` | ISO `YYYY-MM-DD` clock-out date. `None` for **open shifts** (employee still on the clock — see below). |
+| `time_out` | `str \| None` | Clock-out local time string. `None` for open shifts. |
 | `timezone` | `str` | Timezone abbreviation (e.g. `"CST"`) from the report |
 | `site_code` | `str` | Site the shift was worked at |
 | `regular_rate` | `float` | Hourly rate for regular hours (0.0 when the cell shows `$0.00`) |
-| `regular_hours` | `float` | Regular hours worked |
+| `regular_hours` | `float` | Regular hours worked (partial-to-now for open shifts) |
 | `regular_wages` | `float` | Regular hours × regular rate |
 | `overtime_rate` | `float \| None` | `None` when `n/a` (not OT-eligible) |
 | `overtime_hours` | `float \| None` | `None` when `n/a` |
@@ -148,6 +148,28 @@ at different sites.
 | `was_modified` | `bool` | `True` for rows with the yellow "modified" warning class |
 | `was_created_in_back_office` | `bool` | `True` for rows that a manager added manually from Back Office |
 | `comment` | `str \| None` | Audit comment from the preceding `addon-row-comment` row (e.g. *"Unable to punch in..."*) |
+| `is_open` | `bool` (property) | Convenience: `True` when `date_out is None` (employee still clocked in at the moment the report was rendered) |
+
+!!! info "Open shifts (still clocked in)"
+    When `timeclock()` is called for a date range that includes today,
+    employees who are still on the clock appear as **open shifts** —
+    BackOffice renders a literal `"-"` in the Date Out and Time Out
+    columns and the scraper surfaces that as `date_out=None` /
+    `time_out=None`. The BackOffice report **still accumulates**
+    partial hours and wages up to the moment the page was rendered, so
+    `regular_hours`, `regular_wages`, and `total_wages` are all
+    populated and the employee-level / period-level rollup totals
+    include them. Check `shift.is_open` to branch on "finished vs. in
+    progress":
+
+    ```python
+    for emp in result.employees:
+        for shift in emp.shifts:
+            if shift.is_open:
+                print(f"{emp.employee_name} is still on the clock at "
+                      f"{shift.site_code} (in at {shift.time_in}, "
+                      f"{shift.regular_hours:.2f}h so far)")
+    ```
 
 ## Errors
 
@@ -209,6 +231,34 @@ with SonnysClient(
             f"${emp.total_wages:>10,.2f}   "
             f"{emp.total_regular_hours:>6.2f}h   "
             f"{shifts_count} shifts at {', '.join(sorted(sites))}"
+        )
+```
+
+### Who is on the clock right now?
+
+```python
+from sonnys_data_client import SonnysClient
+from datetime import date
+
+today = date.today().isoformat()
+
+with SonnysClient(
+    api_id="washu", api_key="key",
+    backoffice_username="...", backoffice_password="...",
+) as client:
+    result = client.backoffice.timeclock(today, today)
+
+    on_clock = [
+        (emp, shift)
+        for emp in result.employees
+        for shift in emp.shifts
+        if shift.is_open
+    ]
+    print(f"{len(on_clock)} employees currently on the clock:")
+    for emp, shift in on_clock:
+        print(
+            f"  {emp.employee_name:<30} @ {shift.site_code:<8} "
+            f"in at {shift.time_in} ({shift.regular_hours:.2f}h so far)"
         )
 ```
 

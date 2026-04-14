@@ -14,12 +14,19 @@ class TimesheetShift(SonnysModel):
 
     One BackOffice detail row = one shift. Employees can have multiple
     shifts per day, potentially at different sites.
+
+    When an employee is still clocked in at the moment the report was
+    rendered (i.e. the shift is in progress), ``date_out`` and
+    ``time_out`` are ``None``. Use :attr:`is_open` to test for this
+    cleanly. BackOffice still reports ``regular_hours``, ``regular_wages``,
+    and ``total_wages`` for open shifts based on elapsed time up to the
+    moment the page was rendered.
     """
 
     date_in: str
     time_in: str
-    date_out: str
-    time_out: str
+    date_out: str | None = None
+    time_out: str | None = None
     timezone: str
     site_code: str
     regular_rate: float
@@ -32,6 +39,12 @@ class TimesheetShift(SonnysModel):
     was_modified: bool = False
     was_created_in_back_office: bool = False
     comment: str | None = None
+
+    @property
+    def is_open(self) -> bool:
+        """``True`` when the shift has no clock-out yet (employee is
+        still on the clock at the moment the report was rendered)."""
+        return self.date_out is None
 
 
 class EmployeeTimesheet(SonnysModel):

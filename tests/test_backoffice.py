@@ -33,6 +33,9 @@ from sonnys_data_client.resources._backoffice import (
 )
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "backoffice_timesheets_sample.html"
+OPEN_SHIFT_FIXTURE_PATH = (
+    Path(__file__).parent / "fixtures" / "backoffice_timesheets_open_shifts.html"
+)
 
 
 @pytest.fixture()
@@ -43,6 +46,16 @@ def sample_html() -> str:
 @pytest.fixture()
 def parsed(sample_html: str) -> BackOfficeTimeclockResult:
     return _parse_timesheet_page(sample_html)
+
+
+@pytest.fixture()
+def open_shift_html() -> str:
+    return OPEN_SHIFT_FIXTURE_PATH.read_text(encoding="utf-8")
+
+
+@pytest.fixture()
+def parsed_open(open_shift_html: str) -> BackOfficeTimeclockResult:
+    return _parse_timesheet_page(open_shift_html)
 
 
 # ---------------------------------------------------------------------------
@@ -310,3 +323,116 @@ class TestFormatDateForUrl:
 
     def test_december(self) -> None:
         assert _format_date_for_url(date(2025, 12, 31)) == "Dec+31%2C+2025"
+
+
+# ---------------------------------------------------------------------------
+# Open-shift (still clocked in) fixture
+# ---------------------------------------------------------------------------
+
+
+class TestOpenShiftPeriodAndCount:
+    """Fixture captures a present-day report with in-progress shifts."""
+
+    def test_period(self, parsed_open: BackOfficeTimeclockResult) -> None:
+        assert parsed_open.period_start == "2026-04-14"
+        assert parsed_open.period_end == "2026-04-14"
+
+    def test_employees(self, parsed_open: BackOfficeTimeclockResult) -> None:
+        names = [e.employee_name for e in parsed_open.employees]
+        assert names == [
+            "Alvarez, Jaime",
+            "Anderson, Tre",
+            "Austin, Brianna",
+            "Banks, Gregory",
+            "Barker, Jacob",
+        ]
+
+
+class TestFullyOpenShift:
+    """Anderson, Tre -- single shift, still clocked in, n/a overtime."""
+
+    def test_is_open(self, parsed_open: BackOfficeTimeclockResult) -> None:
+        emp = next(e for e in parsed_open.employees if e.employee_name == "Anderson, Tre")
+        assert len(emp.shifts) == 1
+        shift = emp.shifts[0]
+        assert shift.is_open is True
+        assert shift.date_out is None
+        assert shift.time_out is None
+        # Clock-in data is still populated
+        assert shift.date_in == "2026-04-14"
+        assert shift.time_in == "6:55 AM"
+        assert shift.timezone == "CDT"
+        assert shift.site_code == "WHEAT"
+        # BackOffice accumulates partial hours/wages for the open shift
+        assert shift.regular_hours == pytest.approx(5.05)
+        assert shift.regular_wages == pytest.approx(0.0)
+        assert shift.overtime_rate is None
+        assert shift.overtime_hours is None
+
+
+class TestMixedClosedAndOpenShifts:
+    """Alvarez, Jaime -- one closed shift + one open shift on the same day."""
+
+    def test_two_shifts_one_open(self, parsed_open: BackOfficeTimeclockResult) -> None:
+        emp = next(
+            e for e in parsed_open.employees if e.employee_name == "Alvarez, Jaime"
+        )
+        assert len(emp.shifts) == 2
+
+        closed, open_shift = emp.shifts
+        assert closed.is_open is False
+        assert closed.date_out == "2026-04-14"
+        assert closed.time_out == "11:05 AM"
+        assert closed.regular_hours == pytest.approx(4.38)
+        assert closed.regular_wages == pytest.approx(70.08)
+
+        assert open_shift.is_open is True
+        assert open_shift.date_out is None
+        assert open_shift.time_out is None
+        assert open_shift.date_in == "2026-04-14"
+        assert open_shift.time_in == "11:35 AM"
+        assert open_shift.regular_hours == pytest.approx(0.38)
+        assert open_shift.regular_wages == pytest.approx(6.08)
+
+    def test_employee_rollup_includes_open_shift_wages(
+        self, parsed_open: BackOfficeTimeclockResult
+    ) -> None:
+        """BackOffice sums partial open-shift wages into the employee total."""
+        emp = next(
+            e for e in parsed_open.employees if e.employee_name == "Alvarez, Jaime"
+        )
+        assert emp.total_regular_hours == pytest.approx(4.76)
+        assert emp.total_regular_wages == pytest.approx(76.16)
+        assert emp.total_wages == pytest.approx(76.16)
+
+
+class TestOpenShiftPreservesMetadata:
+    """Open shifts still report ADP IDs, site codes, and paid-rate data."""
+
+    def test_adp_id_with_open_shift(
+        self, parsed_open: BackOfficeTimeclockResult
+    ) -> None:
+        emp = next(e for e in parsed_open.employees if e.employee_name == "Barker, Jacob")
+        assert emp.adp_id == "1140"
+        assert len(emp.shifts) == 1
+        assert emp.shifts[0].is_open is True
+
+    def test_paid_rate_on_open_shift(
+        self, parsed_open: BackOfficeTimeclockResult
+    ) -> None:
+        emp = next(e for e in parsed_open.employees if e.employee_name == "Banks, Gregory")
+        shift = emp.shifts[0]
+        assert shift.is_open is True
+        assert shift.regular_rate == pytest.approx(20.0)
+        assert shift.regular_hours == pytest.approx(6.48)
+        assert shift.regular_wages == pytest.approx(129.60)
+        assert shift.overtime_rate == pytest.approx(30.0)
+
+
+class TestOpenShiftGrandTotals:
+    """Period grand totals parse correctly on a present-day report."""
+
+    def test_grand_totals(self, parsed_open: BackOfficeTimeclockResult) -> None:
+        assert parsed_open.total_regular_hours == pytest.approx(131.54)
+        assert parsed_open.total_regular_wages == pytest.approx(1747.15)
+        assert parsed_open.total_wages == pytest.approx(1747.15)

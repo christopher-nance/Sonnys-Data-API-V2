@@ -18,12 +18,17 @@ All notable changes to `sonnys-data-client` are documented in this file.
   the BackOffice subdomain, so no new subdomain parameter is needed.
 - New response models: `TimesheetShift`, `EmployeeTimesheet`,
   `BackOfficeTimeclockResult` (exposed from the top-level package).
+- `TimesheetShift.is_open` property — `True` when the employee was
+  still on the clock at the moment the report was rendered
+  (`date_out` / `time_out` are `None` for open shifts). Partial
+  hours and wages accumulated so far are still populated and rolled
+  up into the employee and period totals.
 - New exception classes: `BackOfficeError`, `BackOfficeCredentialsError`,
   `BackOfficeLoginError`, `BackOfficeScrapeError` (all inherit from
   `SonnysError`).
 - `beautifulsoup4` added to core dependencies (~1MB, no native deps).
 - Full docs guide at `docs/guides/backoffice.md` covering credentials,
-  method signature, return types, errors, and performance.
+  method signature, return types, open shifts, errors, and performance.
 
 ### Fixed
 

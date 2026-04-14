@@ -424,12 +424,21 @@ def _parse_shift_row(
     total_wages = _parse_dollar(tds[11].get_text(strip=True))
 
     time_in, tz_in = _split_time_and_tz(time_in_text)
-    time_out, _ = _split_time_and_tz(time_out_text)
+
+    # Open shift: employee is still clocked in. BackOffice renders both
+    # the Date Out and Time Out cells as a literal "-".
+    if _is_open_sentinel(date_out_text) or _is_open_sentinel(time_out_text):
+        date_out: str | None = None
+        time_out: str | None = None
+    else:
+        date_out = _parse_date_mdy(date_out_text)
+        t, _ = _split_time_and_tz(time_out_text)
+        time_out = t
 
     return TimesheetShift(
         date_in=_parse_date_mdy(date_in_text),
         time_in=time_in,
-        date_out=_parse_date_mdy(date_out_text),
+        date_out=date_out,
         time_out=time_out,
         timezone=tz_in,
         site_code=site_code,
@@ -444,6 +453,15 @@ def _parse_shift_row(
         was_created_in_back_office="danger" in classes,
         comment=comment,
     )
+
+
+def _is_open_sentinel(text: str) -> bool:
+    """Return True when a Date Out / Time Out cell marks an open shift.
+
+    BackOffice renders both cells as a literal ``"-"`` when the employee
+    is still on the clock at report-render time.
+    """
+    return text.strip() == "-"
 
 
 def _parse_employee_rollup_row(tr: Tag) -> dict[str, float | None]:
