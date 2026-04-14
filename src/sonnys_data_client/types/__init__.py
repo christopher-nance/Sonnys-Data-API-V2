@@ -51,6 +51,12 @@ from sonnys_data_client.types._sites import Site
 
 from sonnys_data_client.types._stats import SalesResult, WashResult, ConversionResult, LaborCostResult, CostPerCarResult, StatsReport
 
+from sonnys_data_client.types._backoffice import (
+    TimesheetShift,
+    EmployeeTimesheet,
+    BackOfficeTimeclockResult,
+)
+
 __all__ = [
     "SonnysModel",
     "TransactionTender",
@@ -88,4 +94,7 @@ __all__ = [
     "LaborCostResult",
     "CostPerCarResult",
     "StatsReport",
+    "TimesheetShift",
+    "EmployeeTimesheet",
+    "BackOfficeTimeclockResult",
 ]

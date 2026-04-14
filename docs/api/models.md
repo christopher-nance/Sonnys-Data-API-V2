@@ -191,3 +191,22 @@ print(customer.model_dump(by_alias=True))  # camelCase dict
     options:
       show_source: false
       heading_level: 3
+
+---
+
+## BackOffice
+
+::: sonnys_data_client.types.TimesheetShift
+    options:
+      show_source: false
+      heading_level: 3
+
+::: sonnys_data_client.types.EmployeeTimesheet
+    options:
+      show_source: false
+      heading_level: 3
+
+::: sonnys_data_client.types.BackOfficeTimeclockResult
+    options:
+      show_source: false
+      heading_level: 3

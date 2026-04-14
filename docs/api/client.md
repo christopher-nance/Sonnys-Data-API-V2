@@ -12,6 +12,7 @@
         - transactions
         - washbooks
         - recurring
+        - backoffice
         - close
         - __enter__
         - __exit__

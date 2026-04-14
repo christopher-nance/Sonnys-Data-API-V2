@@ -98,6 +98,41 @@ class ServerError(APIStatusError):
 
 
 # ---------------------------------------------------------------------------
+# BackOffice scraper errors
+# ---------------------------------------------------------------------------
+
+
+class BackOfficeError(SonnysError):
+    """Base class for errors raised by the BackOffice web-UI scraper."""
+
+
+class BackOfficeCredentialsError(BackOfficeError):
+    """BackOffice methods were called without credentials supplied at
+    client construction. Construct the client with
+    ``backoffice_username`` and ``backoffice_password`` to enable the
+    BackOffice resource.
+    """
+
+
+class BackOfficeLoginError(BackOfficeError):
+    """Authentication with the BackOffice web UI failed.
+
+    Raised when the login form rejects the credentials (the server
+    redirects back to ``/login``) or when the login endpoint is
+    unreachable.
+    """
+
+
+class BackOfficeScrapeError(BackOfficeError):
+    """The BackOffice report page did not match the expected structure.
+
+    Raised when required HTML elements (the period header, employee
+    blocks, or the timesheet-total footer) are missing — usually a sign
+    that the page layout has changed.
+    """
+
+
+# ---------------------------------------------------------------------------
 # Status code to exception class mapping
 # ---------------------------------------------------------------------------
 

@@ -9,11 +9,12 @@ your application within the API's request window.
 
 ## Features
 
-- **8 resource types** -- Customers, Employees, Giftcards, Items, Recurring Accounts, Sites, Transactions, and Washbooks
+- **9 resource types** -- Customers, Employees, Giftcards, Items, Recurring Accounts, Sites, Transactions, Washbooks, and the BackOffice scraper
 - **Auto-pagination** -- `.list()` calls transparently fetch all pages
 - **Rate limiting** -- Built-in rate limiter with exponential-backoff retry
 - **Pydantic v2 models** -- Fully typed responses with validation
 - **Batch jobs** -- Long-running export operations with polling support
+- **BackOffice scraper** -- `client.backoffice.timeclock()` pulls per-shift timeclock data directly from the manager portal, orders of magnitude faster than the Data API labor path
 
 ## Installation
 

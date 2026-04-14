@@ -392,6 +392,17 @@ with SonnysClient(api_id="your-api-id", api_key="your-api-key",
     `total_labor_cost()` is sufficient and avoids the extra transaction
     fetches.
 
+!!! tip "Faster alternative: `client.backoffice.timeclock()`"
+    For large date ranges or multi-site operators, consider the
+    [BackOffice scraper](backoffice.md) instead. The
+    `/report/employee-timesheets` page renders every employee across
+    every site for a whole month in a single authenticated HTTP request
+    — typically orders of magnitude faster than the Data API path and
+    with no rate-limit pressure. It also exposes **per-shift** detail
+    (site, punch-in/out times, modification flags) that
+    `LaborCostResult` does not. Requires an extra BackOffice
+    administrator credential at client construction.
+
 !!! note "No caching between calls"
     Stats methods do not cache results between calls. Each invocation fetches
     fresh data from the API. If you need the same stats multiple times, store
