@@ -5,7 +5,7 @@
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Pydantic v2](https://img.shields.io/badge/pydantic-v2-green)
 ![License: Wash Associates Internal Use](https://img.shields.io/badge/license-Wash%20Associates%20Internal%20Use-blue)
-![Version 1.3.1](https://img.shields.io/badge/version-1.3.1-brightgreen)
+![Version 1.4.0](https://img.shields.io/badge/version-1.4.0-brightgreen)
 
 `sonnys-data-client` wraps the Sonny's Carwash Controls REST API with a
 resource-based interface (`client.transactions.list()`,
@@ -29,6 +29,7 @@ with exponential-backoff retry keeps your application within the API's
   - [Recurring Accounts](#recurring-accounts)
   - [Transactions](#transactions)
   - [Stats](#stats)
+- [BackOffice](#backoffice)
 - [Error Handling](#error-handling)
 - [Logging](#logging)
 - [Multi-Site Usage](#multi-site-usage)
@@ -65,6 +66,8 @@ SonnysClient(
     site_code: str | None = None,
     *,
     max_retries: int = 3,
+    backoffice_username: str | None = None,
+    backoffice_password: str | None = None,
 )
 ```
 
@@ -72,10 +75,12 @@ SonnysClient(
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `api_id` | `str` | *required* | Sonny's API ID credential |
+| `api_id` | `str` | *required* | Sonny's API ID credential. Also doubles as the BackOffice subdomain (e.g. `"washu"` -> `washu.sonnyscontrols.com`) when the BackOffice resource is used |
 | `api_key` | `str` | *required* | Sonny's API key credential |
-| `site_code` | `str \| None` | `None` | Optional site code to scope all requests to a single site |
+| `site_code` | `str \| None` | `None` | Optional site code to scope all Data API requests to a single site (ignored by the BackOffice resource) |
 | `max_retries` | `int` | `3` | Maximum retry attempts for 429 rate-limit responses (uses exponential backoff) |
+| `backoffice_username` | `str \| None` | `None` | BackOffice (manager portal) username. Required to use `client.backoffice.*`. Distinct from the API credentials. |
+| `backoffice_password` | `str \| None` | `None` | BackOffice (manager portal) password. |
 
 ### Context Manager
 
@@ -118,6 +123,7 @@ Credentials are sent as HTTP headers on every request:
 | `client.recurring` | `list(**params)`, `get(id)`, `list_status_changes(**params)`, `list_modifications(**params)`, `list_details(**params)` |
 | `client.transactions` | `list(**params)`, `get(id)`, `list_by_type(item_type, **params)`, `list_v2(**params)`, `load_job(*, poll_interval, timeout, **params)` |
 | `client.stats` | `total_sales(start, end)`, `total_washes(start, end)`, `retail_wash_count(start, end)`, `new_memberships_sold(start, end)`, `conversion_rate(start, end)`, `total_labor_cost(start, end)`, `cost_per_car(start, end)`, `report(start, end)` |
+| `client.backoffice` | `timeclock(start, end, *, site_id=None)` (requires `backoffice_username` / `backoffice_password`) |
 
 All `list()` methods auto-paginate by default -- every page is fetched
 transparently and the complete result set is returned. Common query parameters
@@ -347,6 +353,59 @@ include `rate`, `new_memberships`, `eligible_washes`. `LaborCostResult` from
 `report()` -- bundles `sales`, `washes`, `new_memberships`, `conversion`,
 `labor`, `cost_per_car`, `period_start`, `period_end`.
 
+### BackOffice
+
+**Methods:** `timeclock(start, end, *, site_id=None)`
+
+The `client.backoffice` resource scrapes the Sonny's BackOffice web UI
+(e.g. `https://washu.sonnyscontrols.com`) to retrieve per-shift timeclock
+data far faster than `client.stats.total_labor_cost()` can. The
+`/report/employee-timesheets` page returns every employee across every
+site for a whole month in a single authenticated page load.
+
+```python
+from sonnys_data_client import SonnysClient
+
+with SonnysClient(
+    api_id="washu",                         # doubles as BackOffice subdomain
+    api_key="your-api-key",
+    backoffice_username="your.manager.login",
+    backoffice_password="your-backoffice-password",
+) as client:
+    result = client.backoffice.timeclock("2026-03-01", "2026-03-31")
+
+    print(f"{len(result.employees)} employees, ${result.total_wages:,.2f}")
+    for emp in result.employees[:5]:
+        for shift in emp.shifts:
+            print(
+                f"  {emp.employee_name} {shift.date_in} "
+                f"{shift.time_in}-{shift.time_out} @ {shift.site_code} "
+                f"({shift.regular_hours:.2f}h)"
+            )
+```
+
+**Returns:** `BackOfficeTimeclockResult` -- fields include
+`period_start`, `period_end`, `employees` (list of `EmployeeTimesheet`),
+`total_regular_hours`, `total_regular_wages`, `total_overtime_hours`,
+`total_overtime_wages`, `total_wages`.
+
+Each `EmployeeTimesheet` contains `employee_name`, `employee_number`,
+`adp_id`, `shifts` (list of `TimesheetShift`), plus per-employee rollup
+totals. Each `TimesheetShift` preserves the raw punch-in/out times, the
+site code, the pay rate and hours, and flags (`was_modified`,
+`was_created_in_back_office`, `comment`) for audit entries.
+
+**Credentials:** The BackOffice user is a separate manager-portal
+account, not the API credentials. Supply both `backoffice_username` and
+`backoffice_password` at client construction. Calling
+`client.backoffice.timeclock()` without them raises
+`BackOfficeCredentialsError`. Existing code that constructs
+`SonnysClient(api_id, api_key)` without BackOffice credentials is
+unaffected.
+
+See the [BackOffice guide](https://christopher-nance.github.io/Sonnys-Data-API-Client/guides/backoffice/)
+for detailed examples, full field tables, and performance notes.
+
 ## Error Handling
 
 All exceptions inherit from `SonnysError`:
@@ -377,6 +436,10 @@ Exception hierarchy:
       - `ValidationError` -- 400 / 422 bad request
       - `NotFoundError` -- 404 Not Found
       - `ServerError` -- 500+ server errors
+  - `BackOfficeError` -- base for BackOffice scraper errors
+    - `BackOfficeCredentialsError` -- missing `backoffice_username` / `backoffice_password` at client construction
+    - `BackOfficeLoginError` -- BackOffice web UI rejected the credentials or was unreachable
+    - `BackOfficeScrapeError` -- timesheets page HTML did not match expected structure (likely a UI change)
 
 Rate limiting is handled automatically -- the client retries 429 responses with
 exponential backoff (up to `max_retries`, default 3). A built-in rate limiter

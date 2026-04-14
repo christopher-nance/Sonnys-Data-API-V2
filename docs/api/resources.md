@@ -75,3 +75,8 @@ with SonnysClient(api_id, api_key) as client:
     options:
       show_source: false
       heading_level: 3
+
+::: sonnys_data_client.resources.BackOfficeResource
+    options:
+      show_source: false
+      heading_level: 3

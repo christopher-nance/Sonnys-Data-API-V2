@@ -13,6 +13,10 @@ SonnysError
       ValidationError
       NotFoundError
       ServerError
+  BackOfficeError
+    BackOfficeCredentialsError
+    BackOfficeLoginError
+    BackOfficeScrapeError
 ```
 
 Catch `SonnysError` to handle any SDK error, or catch specific subclasses for
@@ -79,6 +83,26 @@ except SonnysError:
       heading_level: 2
 
 ::: sonnys_data_client.ServerError
+    options:
+      show_source: false
+      heading_level: 2
+
+::: sonnys_data_client.BackOfficeError
+    options:
+      show_source: false
+      heading_level: 2
+
+::: sonnys_data_client.BackOfficeCredentialsError
+    options:
+      show_source: false
+      heading_level: 2
+
+::: sonnys_data_client.BackOfficeLoginError
+    options:
+      show_source: false
+      heading_level: 2
+
+::: sonnys_data_client.BackOfficeScrapeError
     options:
       show_source: false
       heading_level: 2

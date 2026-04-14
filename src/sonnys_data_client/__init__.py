@@ -2,9 +2,30 @@
 
 from sonnys_data_client._client import SonnysClient
 from sonnys_data_client._version import __version__
-from sonnys_data_client.resources import Customers, Employees, Giftcards, Items, RecurringAccounts, Sites, StatsResource, Transactions, Washbooks
+from sonnys_data_client.resources import (
+    BackOfficeResource,
+    Customers,
+    Employees,
+    Giftcards,
+    Items,
+    RecurringAccounts,
+    Sites,
+    StatsResource,
+    Transactions,
+    Washbooks,
+)
 
-from sonnys_data_client.types import CostPerCarResult, ConversionResult, LaborCostResult, SalesResult, StatsReport, WashResult
+from sonnys_data_client.types import (
+    BackOfficeTimeclockResult,
+    ConversionResult,
+    CostPerCarResult,
+    EmployeeTimesheet,
+    LaborCostResult,
+    SalesResult,
+    StatsReport,
+    TimesheetShift,
+    WashResult,
+)
 
 from sonnys_data_client._exceptions import (
     APIConnectionError,
@@ -12,6 +33,10 @@ from sonnys_data_client._exceptions import (
     APIStatusError,
     APITimeoutError,
     AuthError,
+    BackOfficeCredentialsError,
+    BackOfficeError,
+    BackOfficeLoginError,
+    BackOfficeScrapeError,
     NotFoundError,
     RateLimitError,
     ServerError,
@@ -22,16 +47,20 @@ from sonnys_data_client._exceptions import (
 __all__ = [
     "SonnysClient",
     "__version__",
+    "BackOfficeResource",
     "Customers",
     "Employees",
     "Giftcards",
     "Items",
     "RecurringAccounts",
+    "BackOfficeTimeclockResult",
     "ConversionResult",
     "CostPerCarResult",
+    "EmployeeTimesheet",
     "LaborCostResult",
     "SalesResult",
     "Sites",
+    "TimesheetShift",
     "WashResult",
     "StatsReport",
     "StatsResource",
@@ -42,6 +71,10 @@ __all__ = [
     "APIStatusError",
     "APITimeoutError",
     "AuthError",
+    "BackOfficeCredentialsError",
+    "BackOfficeError",
+    "BackOfficeLoginError",
+    "BackOfficeScrapeError",
     "NotFoundError",
     "RateLimitError",
     "ServerError",

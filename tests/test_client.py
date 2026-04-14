@@ -240,7 +240,7 @@ class TestRequest429Retry:
 
     @patch("sonnys_data_client._client.time.sleep")
     def test_429_backoff_timing(self, mock_sleep) -> None:
-        """Verify exponential backoff sleep calls: 1s, 2s, 4s."""
+        """Verify 429 retry backoff sleep calls: 2s, 4s, 6s."""
         client = SonnysClient("id", "key", max_retries=3)
         response_429 = _make_response(
             429, json_body={"type": "RequestRateExceedError", "message": "Rate exceeded"}
@@ -255,13 +255,11 @@ class TestRequest429Retry:
         finally:
             client.close()
 
-        # Backoff sleeps: attempt 0 -> 1s, attempt 1 -> 2s, attempt 2 -> 4s
+        # Backoff sleeps: attempt 0 -> 2s, attempt 1 -> 4s, attempt 2 -> 6s
         # (only after 429, not after the final attempt that raises)
-        backoff_calls = [c for c in mock_sleep.call_args_list if c != call(0.0)]
-        # Filter out rate limiter sleeps (0.0) -- only backoff sleeps remain
-        assert call(1.0) in mock_sleep.call_args_list
         assert call(2.0) in mock_sleep.call_args_list
         assert call(4.0) in mock_sleep.call_args_list
+        assert call(6.0) in mock_sleep.call_args_list
 
 
 # ---------------------------------------------------------------------------

@@ -17,6 +17,7 @@ from sonnys_data_client._exceptions import (
     make_status_error,
 )
 from sonnys_data_client._rate_limiter import RateLimiter
+from sonnys_data_client.resources._backoffice import BackOfficeResource
 from sonnys_data_client.resources._customers import Customers
 from sonnys_data_client.resources._employees import Employees
 from sonnys_data_client.resources._giftcards import Giftcards
@@ -35,10 +36,20 @@ class SonnysClient:
     manager or call :meth:`close` explicitly when done.
 
     Args:
-        api_id: Sonny's API ID credential.
+        api_id: Sonny's API ID credential. Also doubles as the BackOffice
+            subdomain (e.g. ``"washu"`` → ``washu.sonnyscontrols.com``)
+            when the BackOffice resource is used.
         api_key: Sonny's API key credential.
         site_code: Optional site code to scope requests to a specific site.
+            Applies only to the Data API path; ignored by the BackOffice
+            resource (every BackOffice shift already carries its own site
+            code).
         max_retries: Maximum number of retries for 429 responses.
+        backoffice_username: Username for a BackOffice (manager portal)
+            user. Required to use :attr:`backoffice`. Distinct from the
+            API credentials because BackOffice is the web UI, not the
+            programmatic API.
+        backoffice_password: Password for the BackOffice user.
     """
 
     BASE_URL = "https://trigonapi.sonnyscontrols.com/v1"
@@ -50,6 +61,8 @@ class SonnysClient:
         site_code: str | None = None,
         *,
         max_retries: int = 3,
+        backoffice_username: str | None = None,
+        backoffice_password: str | None = None,
     ) -> None:
         self.api_id = api_id
         self.api_key = api_key
@@ -66,6 +79,10 @@ class SonnysClient:
         )
         if site_code is not None:
             self._session.headers["X-Sonnys-Site-Code"] = site_code
+
+        self._backoffice_username = backoffice_username
+        self._backoffice_password = backoffice_password
+        self._backoffice_session: requests.Session | None = None
 
     @functools.cached_property
     def site_timezone(self) -> ZoneInfo | None:
@@ -128,6 +145,16 @@ class SonnysClient:
     def recurring(self) -> RecurringAccounts:
         """Access the Recurring Accounts resource."""
         return RecurringAccounts(self)
+
+    @functools.cached_property
+    def backoffice(self) -> BackOfficeResource:
+        """Access the BackOffice web-UI scraper.
+
+        Requires ``backoffice_username`` and ``backoffice_password`` at
+        client construction. See :class:`BackOfficeResource` for the
+        available methods.
+        """
+        return BackOfficeResource(self)
 
     def _request(
         self,
@@ -206,8 +233,11 @@ class SonnysClient:
         raise make_status_error(response)  # pragma: no cover
 
     def close(self) -> None:
-        """Close the underlying HTTP session."""
+        """Close the underlying HTTP sessions (API and BackOffice)."""
         self._session.close()
+        if self._backoffice_session is not None:
+            self._backoffice_session.close()
+            self._backoffice_session = None
 
     def __enter__(self) -> SonnysClient:
         return self

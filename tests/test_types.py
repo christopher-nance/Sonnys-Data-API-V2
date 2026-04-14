@@ -419,9 +419,9 @@ class TestEmployeeModels:
 class TestAllExports:
     """Tests for the __all__ export list completeness."""
 
-    def test_all_has_36_models(self):
-        """__all__ should contain exactly 36 model names."""
-        assert len(types.__all__) == 36
+    def test_all_has_39_models(self):
+        """__all__ should contain exactly 39 model names."""
+        assert len(types.__all__) == 39
 
     def test_all_models_are_importable(self):
         """Every name in __all__ should be importable from the types module."""
