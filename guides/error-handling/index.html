@@ -11,7 +11,7 @@
       
       
       
-        <link rel="prev" href="../stats/">
+        <link rel="prev" href="../backoffice/">
       
       
         <link rel="next" href="../advanced-patterns/">
@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -166,7 +166,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -284,7 +284,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -620,6 +620,34 @@
     
   
     Stats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backoffice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BackOffice
   
 
     
@@ -1716,7 +1744,7 @@ catches all of its children.</p>
 <h3 id="catch-all">Catch-all<a class="headerlink" href="#catch-all" title="Permanent link">&para;</a></h3>
 <p>The simplest approach catches <code>SonnysError</code> to handle any SDK failure in one
 place:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span><span class="p">,</span> <span class="n">SonnysError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span><span class="p">,</span> <span class="n">SonnysError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
@@ -1730,8 +1758,8 @@ place:</p>
 <h3 id="catch-by-category">Catch by category<a class="headerlink" href="#catch-by-category" title="Permanent link">&para;</a></h3>
 <p>Separate network problems from HTTP errors to apply different recovery
 strategies:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">APIConnectionError</span><span class="p">,</span>
     <span class="n">APIStatusError</span><span class="p">,</span>
     <span class="n">SonnysError</span><span class="p">,</span>
@@ -1749,8 +1777,8 @@ strategies:</p>
 </code></pre></div>
 <h3 id="catch-specific-exceptions">Catch specific exceptions<a class="headerlink" href="#catch-specific-exceptions" title="Permanent link">&para;</a></h3>
 <p>For fine-grained control, catch each exception type individually:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AuthError</span><span class="p">,</span>
     <span class="n">NotFoundError</span><span class="p">,</span>
     <span class="n">RateLimitError</span><span class="p">,</span>
@@ -1817,8 +1845,8 @@ strategies:</p>
 </table>
 <p>Access these attributes in your <code>except</code> block to log details or branch on
 the specific error type:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIStatusError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">APIStatusError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
@@ -1938,8 +1966,8 @@ authorization problem.</p>
 <p><strong>Recommended handling:</strong> Do not retry -- fix your credentials or site code
 configuration. Check that your <code>api_id</code>, <code>api_key</code>, and <code>site_code</code> match what
 was provisioned by Sonny's. Use <code>error_type</code> to pinpoint the exact problem.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">AuthError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
     <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
@@ -1983,10 +2011,10 @@ been exhausted (default: 3 attempts with exponential backoff).</p>
 backoff (see <a href="#built-in-retry-behavior">Built-in Retry Behavior</a>). If this
 exception reaches your code, the situation is severe. Back off for a longer
 period before retrying, or stagger your scripts.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">RateLimitError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">RateLimitError</span>
 
 <span class="c1"># Enable logging to see when 429 retries happen internally</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
@@ -2023,8 +2051,8 @@ parameters.</p>
 date strings (<code>"2025-06-01"</code>) or Unix timestamps. Check parameter names and allowed
 values. Use <code>error_type</code> to distinguish between timestamp errors and general payload
 errors.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
@@ -2065,8 +2093,8 @@ not exist.</p>
 site. In batch workflows where you iterate over a list of IDs, catch
 <code>NotFoundError</code> and skip or log the missing record rather than aborting the
 entire loop.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotFoundError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">NotFoundError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="c1"># Gracefully handle missing records in a batch lookup</span>
@@ -2097,9 +2125,9 @@ failure.</p>
 If they persist beyond a few minutes, check with Sonny's support for known
 outages. For automated pipelines, implement retry with backoff (see
 <a href="#custom-retry-patterns">Custom Retry Patterns</a>).</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ServerError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">ServerError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">max_attempts</span> <span class="o">=</span> <span class="mi">3</span>
@@ -2135,9 +2163,9 @@ no response is received.</p>
 <code>status_code</code> or <code>body</code> attributes since no HTTP response was received. For
 automated pipelines, retry a few times with a delay -- the network issue may be
 transient.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIConnectionError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">APIConnectionError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
@@ -2164,8 +2192,8 @@ the timeout period. Also raised when <code>load_job()</code> polling exceeds the
 <p><strong>Recommended handling:</strong> For <code>load_job()</code>, increase the <code>timeout</code> parameter or
 use a shorter date range. For list methods, narrow the date range. Consider
 splitting multi-month queries into smaller chunks.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APITimeoutError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">APITimeoutError</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
@@ -2178,7 +2206,7 @@ splitting multi-month queries into smaller chunks.</p>
     <span class="k">except</span> <span class="n">APITimeoutError</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job timed out -- try a shorter date range or increase timeout&quot;</span><span class="p">)</span>
         <span class="c1"># Fallback: split into smaller chunks</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+        <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
         <span class="n">start</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">end</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">midpoint</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
@@ -2250,11 +2278,11 @@ patterns below.</p>
 <h3 id="retry-on-transient-server-errors">Retry on transient server errors<a class="headerlink" href="#retry-on-transient-server-errors" title="Permanent link">&para;</a></h3>
 <p>Server errors (500, 502, 503) are often transient. Wrap your call in a simple
 retry loop with backoff:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ServerError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">ServerError</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">fetch_with_retry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">base_delay</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">fetch_with_retry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">base_delay</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">retries</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
@@ -2274,11 +2302,11 @@ retry loop with backoff:</p>
 <h3 id="retry-on-connection-and-timeout-errors">Retry on connection and timeout errors<a class="headerlink" href="#retry-on-connection-and-timeout-errors" title="Permanent link">&para;</a></h3>
 <p>Network problems can be intermittent. Retry <code>APIConnectionError</code> and
 <code>APITimeoutError</code> with a short delay:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">fetch_with_network_retry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">5.0</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">fetch_with_network_retry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">retries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">5.0</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">retries</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">customers</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
@@ -2296,16 +2324,16 @@ retry loop with backoff:</p>
 decorator-based retry logic:</p>
 <div class="highlight"><pre><span></span><code>pip install tenacity
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tenacity</span><span class="w"> </span><span class="kn">import</span> <span class="n">retry</span><span class="p">,</span> <span class="n">stop_after_attempt</span><span class="p">,</span> <span class="n">wait_exponential</span><span class="p">,</span> <span class="n">retry_if_exception_type</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span><span class="p">,</span> <span class="n">ServerError</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">tenacity</span> <span class="kn">import</span> <span class="n">retry</span><span class="p">,</span> <span class="n">stop_after_attempt</span><span class="p">,</span> <span class="n">wait_exponential</span><span class="p">,</span> <span class="n">retry_if_exception_type</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span><span class="p">,</span> <span class="n">ServerError</span>
 
 <span class="nd">@retry</span><span class="p">(</span>
     <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">((</span><span class="n">ServerError</span><span class="p">,</span> <span class="n">APIConnectionError</span><span class="p">,</span> <span class="n">APITimeoutError</span><span class="p">)),</span>
     <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
     <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
 <span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">fetch_transactions</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">fetch_transactions</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">transactions</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
         <span class="n">startDate</span><span class="o">=</span><span class="s2">&quot;2025-06-01&quot;</span><span class="p">,</span>
         <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-06-30&quot;</span><span class="p">,</span>
@@ -2326,17 +2354,17 @@ and rate limit budget without any chance of success.</p>
 is the fastest way to understand what the SDK is doing under the hood.</p>
 <h3 id="enabling-debug-logging">Enabling Debug Logging<a class="headerlink" href="#enabling-debug-logging" title="Permanent link">&para;</a></h3>
 <p><strong>Log everything</strong> (SDK + all other libraries):</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 </code></pre></div>
 <p><strong>Log only the SDK</strong> (recommended for most debugging):</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;sonnys_data_client&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 </code></pre></div>
 <p><strong>Add a StreamHandler for scripts</strong> that don't already configure logging:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
 <span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(name)s</span><span class="s2">: </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">))</span>

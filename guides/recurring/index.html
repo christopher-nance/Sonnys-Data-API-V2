@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -166,7 +166,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -284,7 +284,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -975,6 +975,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../backoffice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BackOffice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../error-handling/" class="md-nav__link">
         
   
@@ -1539,11 +1567,13 @@
 
 
 <h1 id="recurring-accounts">Recurring Accounts<a class="headerlink" href="#recurring-accounts" title="Permanent link">&para;</a></h1>
+<p><img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /></p>
 <p>The <strong>Recurring Accounts</strong> resource provides access to recurring (membership)
 car wash accounts. This is the richest standard resource in the client, offering
 five methods for listing accounts, fetching full details, tracking status
 changes, and reviewing modification history. Each account includes billing
 information, plan details, associated tags, vehicles, and customer data.</p>
+<p>Backed by the <strong>Data API</strong> — uses your <code>api_id</code> / <code>api_key</code> credentials.</p>
 <h2 id="choosing-the-right-method">Choosing the Right Method<a class="headerlink" href="#choosing-the-right-method" title="Permanent link">&para;</a></h2>
 <p>The recurring resource offers five methods. Pick the one that matches your use
 case to avoid fetching more data than you need:</p>
@@ -1599,7 +1629,7 @@ edits. Reserve <code>list_details()</code> for cases where you need the full nes
 <code>Recurring</code> objects as <code>get()</code> but for every account, so it is significantly
 heavier.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="listparams-listrecurringlistitem"><code>list(**params) -&gt; list[RecurringListItem]</code><a class="headerlink" href="#listparams-listrecurringlistitem" title="Permanent link">&para;</a></h3>
+<h3 id="listparams-listrecurringlistitem"><code>list(**params) -&gt; list[RecurringListItem]</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#listparams-listrecurringlistitem" title="Permanent link">&para;</a></h3>
 <p>Fetch all recurring accounts. Returns a list of <code>RecurringListItem</code> objects with
 summary fields. The client automatically paginates through all pages of results.</p>
 <div class="highlight"><pre><span></span><code><span class="n">accounts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
@@ -1610,25 +1640,25 @@ summary fields. The client automatically paginates through all pages of results.
     <span class="n">endDate</span><span class="o">=</span><span class="s2">&quot;2025-01-31&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
-<h3 id="getaccount_id-recurring"><code>get(account_id) -&gt; Recurring</code><a class="headerlink" href="#getaccount_id-recurring" title="Permanent link">&para;</a></h3>
+<h3 id="getaccount_id-recurring"><code>get(account_id) -&gt; Recurring</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#getaccount_id-recurring" title="Permanent link">&para;</a></h3>
 <p>Fetch full details for a single recurring account by its ID. Returns a
 <code>Recurring</code> object with nested customer, tags, vehicles, billing history, and
 status history.</p>
 <div class="highlight"><pre><span></span><code><span class="n">account</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;12345&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="list_status_changesparams-listrecurringstatuschange"><code>list_status_changes(**params) -&gt; list[RecurringStatusChange]</code><a class="headerlink" href="#list_status_changesparams-listrecurringstatuschange" title="Permanent link">&para;</a></h3>
+<h3 id="list_status_changesparams-listrecurringstatuschange"><code>list_status_changes(**params) -&gt; list[RecurringStatusChange]</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#list_status_changesparams-listrecurringstatuschange" title="Permanent link">&para;</a></h3>
 <p>Fetch all recurring account status changes. Returns a list of
 <code>RecurringStatusChange</code> objects tracking when accounts changed status (e.g.,
 active to cancelled).</p>
 <div class="highlight"><pre><span></span><code><span class="n">changes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_status_changes</span><span class="p">()</span>
 </code></pre></div>
-<h3 id="list_modificationsparams-listrecurringmodification"><code>list_modifications(**params) -&gt; list[RecurringModification]</code><a class="headerlink" href="#list_modificationsparams-listrecurringmodification" title="Permanent link">&para;</a></h3>
+<h3 id="list_modificationsparams-listrecurringmodification"><code>list_modifications(**params) -&gt; list[RecurringModification]</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#list_modificationsparams-listrecurringmodification" title="Permanent link">&para;</a></h3>
 <p>Fetch all recurring account modifications. Returns a list of
 <code>RecurringModification</code> objects -- each includes the full account detail plus a
 list of modification entries.</p>
 <div class="highlight"><pre><span></span><code><span class="n">modifications</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_modifications</span><span class="p">()</span>
 </code></pre></div>
-<h3 id="list_detailsparams-listrecurring"><code>list_details(**params) -&gt; list[Recurring]</code><a class="headerlink" href="#list_detailsparams-listrecurring" title="Permanent link">&para;</a></h3>
+<h3 id="list_detailsparams-listrecurring"><code>list_details(**params) -&gt; list[Recurring]</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#list_detailsparams-listrecurring" title="Permanent link">&para;</a></h3>
 <p>Fetch all recurring accounts with full detail. Returns full <code>Recurring</code> objects
 (the same model as <code>get()</code>) for every account, rather than the summary
 <code>RecurringListItem</code> objects returned by <code>list()</code>.</p>
@@ -1643,7 +1673,7 @@ you need the complete account data in bulk.</p>
 </div>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <h3 id="list-recurring-accounts">List recurring accounts<a class="headerlink" href="#list-recurring-accounts" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">accounts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
@@ -2060,8 +2090,8 @@ modifications list.</p>
 <p>Use <code>list_status_changes()</code> to analyze account churn over a date range. Each
 status change includes the old and new status, the date, and the employee and
 site responsible:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">changes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">recurring</span><span class="o">.</span><span class="n">list_status_changes</span><span class="p">(</span>

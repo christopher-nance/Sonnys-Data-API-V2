@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -166,7 +166,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -284,7 +284,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -620,6 +620,34 @@
     
   
     Stats
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backoffice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BackOffice
   
 
     
@@ -1541,7 +1569,7 @@ sites and databases.</p>
 <h3 id="single-site-vs-multi-site-setup">Single-Site vs Multi-Site Setup<a class="headerlink" href="#single-site-vs-multi-site-setup" title="Permanent link">&para;</a></h3>
 <p>When you pass <code>site_code</code> to the constructor, every request is scoped to that
 site automatically via the <code>X-Sonnys-Site-Code</code> header:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="c1"># Scoped to a single site -- all requests return data for JOLIET only</span>
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
@@ -1577,7 +1605,7 @@ you need a quick cross-site total.</p>
 <h3 id="iterating-multiple-sites">Iterating Multiple Sites<a class="headerlink" href="#iterating-multiple-sites" title="Permanent link">&para;</a></h3>
 <p>When you need per-site breakdowns, create a separate client for each site
 code. This is the standard pattern for daily dashboards and scheduled reports:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
@@ -1609,7 +1637,7 @@ for details and mitigation strategies.</p>
 <p>Some organizations operate entirely separate databases with different API
 credentials. For example, WashU and Icon each have their own <code>api_id</code> and
 <code>api_key</code>. Create independent clients for each database:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="c1"># WashU database -- separate API credentials</span>
 <span class="n">washu_client</span> <span class="o">=</span> <span class="n">SonnysClient</span><span class="p">(</span>
@@ -1648,7 +1676,7 @@ rate limit (20 req/15s per API ID). They will not interfere with each other.</p>
 <h3 id="consolidated-reporting">Consolidated Reporting<a class="headerlink" href="#consolidated-reporting" title="Permanent link">&para;</a></h3>
 <p>A common need is aggregating data across sites into a single report. This
 pattern collects revenue per site for a date range and produces a summary:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
@@ -1696,8 +1724,8 @@ for a configurable pattern.</p>
 <p>When working with multiple clients simultaneously, use <code>contextlib.ExitStack</code>
 to manage their lifecycles cleanly. This ensures all clients are closed even
 if an error occurs partway through:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;WashU&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;api_id&quot;</span><span class="p">:</span> <span class="s2">&quot;washu-api-id&quot;</span><span class="p">,</span> <span class="s2">&quot;api_key&quot;</span><span class="p">:</span> <span class="s2">&quot;washu-api-key&quot;</span><span class="p">},</span>
@@ -1720,8 +1748,8 @@ if an error occurs partway through:</p>
 </code></pre></div>
 <p>For the common case of iterating sites within a single database, you can
 combine <code>ExitStack</code> with site-scoped clients:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
@@ -1781,8 +1809,8 @@ window algorithm:</p>
 <p>The key insight is that requests <strong>never fail</strong> due to the client-side rate
 limiter. Instead, the client automatically waits until a slot opens. You can
 observe this behavior by enabling debug logging:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;sonnys_data_client&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 
@@ -1931,7 +1959,7 @@ If other processes share the same API ID, actual times will be longer due
 to contention.</p>
 </div>
 <p><strong>Example: estimating a monthly export</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">math</span>
 
 <span class="c1"># Estimate for a site that processes ~800 transactions per day</span>
 <span class="n">days_in_month</span> <span class="o">=</span> <span class="mi">30</span>
@@ -1954,8 +1982,8 @@ A 240-page <code>load_job()</code> export will take significantly longer than a
 <p>Practical tips to keep your scripts running smoothly without hitting rate
 limits:</p>
 <p><strong>1. Add sleep between site iterations</strong></p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
@@ -1981,8 +2009,8 @@ lower.</p>
 <p><strong>3. Keep date ranges narrow</strong></p>
 <p>Fewer records per query means fewer pages, which means fewer requests.
 Day-by-day iteration is the safest approach for large exports:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">start</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2025</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -2081,7 +2109,7 @@ detail (tenders, line items, discounts) on every record.</p>
 <code>get()</code> costs 500 requests. The same data from <code>load_job()</code> costs roughly
 5 job submissions + polling. If you need full detail on many transactions,
 always prefer <code>load_job()</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
     <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
@@ -2143,9 +2171,9 @@ request so you get a clear message instead of a cryptic 400 error.</p>
 <p>For <code>load_job()</code> exports spanning multiple days, iterate day by day. The
 <a href="../transactions/#multi-day-exports">Transactions guide</a> shows this pattern in
 detail. Here is the performance-optimized version with request spacing:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
     <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
@@ -2186,11 +2214,11 @@ latency. A request that gets a 429, waits 1 second, retries, and succeeds
 takes ~1.7 seconds instead of ~0.7 seconds. Proactive spacing is faster
 overall than reactive retry.</p>
 <p>Here is a configurable pattern for bulk operations with built-in spacing:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">export_site_transactions</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">export_site_transactions</span><span class="p">(</span>
     <span class="n">api_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">site_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2235,8 +2263,8 @@ overall than reactive retry.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exported </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> transactions&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>For multi-site exports, add an additional delay between sites:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 
 <span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
@@ -2325,7 +2353,7 @@ job lifecycle.</p>
 <p><strong>Hybrid approach:</strong> Use <code>list()</code> to get transaction counts and summaries,
 then use <code>load_job()</code> only for the specific date ranges where you need full
 detail:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="c1"># Step 1: Quick summary scan with list()</span>
@@ -2357,8 +2385,8 @@ and run.</p>
 <p>Export transaction data for a date range to a CSV file. Uses <code>model_dump()</code>
 to convert each Pydantic model to a dictionary, then writes rows with the
 standard <code>csv</code> module.</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
     <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
@@ -2390,8 +2418,8 @@ with just <code>trans_number</code>, <code>trans_id</code>, <code>total</code>, 
 <h3 id="export-to-json">Export to JSON<a class="headerlink" href="#export-to-json" title="Permanent link">&para;</a></h3>
 <p>Export transaction data to a JSON file. Use <code>model_dump(mode="json")</code> to get
 a JSON-serializable dictionary (handles dates, decimals, etc.).</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span>
     <span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span>
@@ -2420,12 +2448,12 @@ expects camelCase field names matching the raw API format (e.g.,
 <p>A script designed to run once per day that exports yesterday's transactions to
 a date-stamped CSV file. Ideal for cron jobs or Windows Task Scheduler.</p>
 <div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;daily_export.py -- Export yesterday&#39;s transactions to a date-stamped CSV.&quot;&quot;&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -2470,12 +2498,12 @@ executable and the script path as the argument.</p>
 per-site CSV files or a single consolidated CSV with a <code>site_code</code> column.
 This example builds a consolidated file.</p>
 <div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;multi_site_report.py -- Consolidated daily report across all sites.&quot;&quot;&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">SITES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">,</span> <span class="s2">&quot;PLNFLD&quot;</span><span class="p">,</span> <span class="s2">&quot;NILES&quot;</span><span class="p">]</span>
 
@@ -2523,13 +2551,13 @@ writing inside the site loop and use
 recurring account data, filters to active accounts, calculates key metrics
 (active count, monthly recurring revenue), and writes a summary to JSON.</p>
 <div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;recurring_pipeline.py -- Recurring account data pipeline.&quot;&quot;&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client._exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIError</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client._exceptions</span> <span class="kn">import</span> <span class="n">APIError</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -2580,10 +2608,10 @@ try/except to handle partial failures gracefully.</p>
 threshold and logs a warning when the value is below expected volume. Run this
 on a schedule to catch low-volume days early.</p>
 <div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;monitor_volume.py -- Check daily transaction volume against threshold.&quot;&quot;&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> </span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>

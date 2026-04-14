@@ -14,14 +14,14 @@
         <link rel="prev" href="../transactions/">
       
       
-        <link rel="next" href="../error-handling/">
+        <link rel="next" href="../backoffice/">
       
       
         
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -166,7 +166,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -284,7 +284,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -875,6 +875,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../backoffice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BackOffice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../error-handling/" class="md-nav__link">
         
   
@@ -1339,6 +1367,7 @@
 
 
 <h1 id="stats">Stats<a class="headerlink" href="#stats" title="Permanent link">&para;</a></h1>
+<p><img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /></p>
 <p>The <strong>Stats</strong> resource provides computed business analytics and KPIs derived
 from transaction data. Unlike other resources that wrap REST endpoints
 directly, <code>client.stats</code> fetches raw data from the API and aggregates it
@@ -1487,7 +1516,7 @@ can pass either an ISO-8601 date string or a Python <code>datetime</code> object
 <span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">total_sales</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 
 <span class="c1"># datetime objects</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">total_sales</span><span class="p">(</span>
     <span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
     <span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span>
@@ -1498,7 +1527,7 @@ can pass either an ISO-8601 date string or a Python <code>datetime</code> object
 datetime objects are assumed to be UTC.  Timezone-aware datetimes are converted
 to UTC.  If <code>start</code> is after <code>end</code>, a <code>ValueError</code> is raised.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="total_salesstart-end-salesresult"><code>total_sales(start, end) -&gt; SalesResult</code><a class="headerlink" href="#total_salesstart-end-salesresult" title="Permanent link">&para;</a></h3>
+<h3 id="total_salesstart-end-salesresult"><code>total_sales(start, end) -&gt; SalesResult</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#total_salesstart-end-salesresult" title="Permanent link">&para;</a></h3>
 <p>Compute a revenue breakdown for a date range. Fetches all transactions via the
 enriched v2 endpoint and categorizes them into three buckets: recurring plan
 sales, recurring redemptions, and retail.</p>
@@ -1576,7 +1605,7 @@ of additional API calls per query -- which is not practical given the
 </tr>
 </tbody>
 </table>
-<h3 id="total_washesstart-end-washresult"><code>total_washes(start, end) -&gt; WashResult</code><a class="headerlink" href="#total_washesstart-end-washresult" title="Permanent link">&para;</a></h3>
+<h3 id="total_washesstart-end-washresult"><code>total_washes(start, end) -&gt; WashResult</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#total_washesstart-end-washresult" title="Permanent link">&para;</a></h3>
 <p>Compute wash volume for a date range. Uses three data sources to classify
 transactions accurately:</p>
 <ul>
@@ -1632,13 +1661,13 @@ Negative-total transactions (refunds) are excluded entirely.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="retail_wash_countstart-end-int"><code>retail_wash_count(start, end) -&gt; int</code><a class="headerlink" href="#retail_wash_countstart-end-int" title="Permanent link">&para;</a></h3>
+<h3 id="retail_wash_countstart-end-int"><code>retail_wash_count(start, end) -&gt; int</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#retail_wash_countstart-end-int" title="Permanent link">&para;</a></h3>
 <p>Count retail wash transactions for a date range. A retail wash is a <code>type=wash</code>
 transaction that is neither a recurring plan sale nor a recurring redemption.</p>
 <div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">retail_wash_count</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retail washes: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="new_memberships_soldstart-end-int"><code>new_memberships_sold(start, end) -&gt; int</code><a class="headerlink" href="#new_memberships_soldstart-end-int" title="Permanent link">&para;</a></h3>
+<h3 id="new_memberships_soldstart-end-int"><code>new_memberships_sold(start, end) -&gt; int</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#new_memberships_soldstart-end-int" title="Permanent link">&para;</a></h3>
 <p>Count genuine new membership sales for a date range. Fetches v2 transactions
 to identify plan sale candidates, then verifies each via the v1 detail
 endpoint (<code>is_recurring_sale</code>) to exclude plan upgrades/switches (e.g.
@@ -1647,7 +1676,7 @@ are counted.</p>
 <div class="highlight"><pre><span></span><code><span class="n">count</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">new_memberships_sold</span><span class="p">(</span><span class="s2">&quot;2026-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2026-01-31&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New memberships sold: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="conversion_ratestart-end-conversionresult"><code>conversion_rate(start, end) -&gt; ConversionResult</code><a class="headerlink" href="#conversion_ratestart-end-conversionresult" title="Permanent link">&para;</a></h3>
+<h3 id="conversion_ratestart-end-conversionresult"><code>conversion_rate(start, end) -&gt; ConversionResult</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#conversion_ratestart-end-conversionresult" title="Permanent link">&para;</a></h3>
 <p>Compute the membership conversion rate for a date range. Measures how
 effectively a site converts eligible wash customers into membership sign-ups.
 The rate is computed as <code>new_memberships / eligible_washes</code>.</p>
@@ -1688,7 +1717,7 @@ non-negative transaction types.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="total_labor_coststart-end-laborcostresult"><code>total_labor_cost(start, end) -&gt; LaborCostResult</code><a class="headerlink" href="#total_labor_coststart-end-laborcostresult" title="Permanent link">&para;</a></h3>
+<h3 id="total_labor_coststart-end-laborcostresult"><code>total_labor_cost(start, end) -&gt; LaborCostResult</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#total_labor_coststart-end-laborcostresult" title="Permanent link">&para;</a></h3>
 <p>Compute labor cost breakdown for a date range. Fetches clock entries for all
 employees via a 14-day windowed bulk fetch (the API's hard maximum per
 request), then aggregates regular and overtime costs in a single pass. Each
@@ -1750,7 +1779,7 @@ clock-entries endpoint does not support a site filter.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="cost_per_carstart-end-costpercarresult"><code>cost_per_car(start, end) -&gt; CostPerCarResult</code><a class="headerlink" href="#cost_per_carstart-end-costpercarresult" title="Permanent link">&para;</a></h3>
+<h3 id="cost_per_carstart-end-costpercarresult"><code>cost_per_car(start, end) -&gt; CostPerCarResult</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#cost_per_carstart-end-costpercarresult" title="Permanent link">&para;</a></h3>
 <p>Compute labor cost per car for a date range. Divides total labor cost by total
 wash volume to measure labor efficiency. A value of <code>4.25</code> means the site spent
 $4.25 in labor for each car washed. When there are zero washes the result is
@@ -1788,7 +1817,7 @@ $4.25 in labor for each car washed. When there are zero washes the result is
 </tr>
 </tbody>
 </table>
-<h3 id="reportstart-end-statsreport"><code>report(start, end) -&gt; StatsReport</code><a class="headerlink" href="#reportstart-end-statsreport" title="Permanent link">&para;</a></h3>
+<h3 id="reportstart-end-statsreport"><code>report(start, end) -&gt; StatsReport</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#reportstart-end-statsreport" title="Permanent link">&para;</a></h3>
 <p>Compute all KPIs for a date range in a single call, including sales, washes,
 memberships, conversion rate, labor costs, and cost per car. Makes <strong>4 bulk
 API calls</strong> (3 transaction + 1 employee list) plus <strong>N_emp x ceil(days/14)
@@ -1861,7 +1890,7 @@ entry iterations, and detail lookups.</p>
 </table>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <h3 id="monthly-performance-snapshot">Monthly performance snapshot<a class="headerlink" href="#monthly-performance-snapshot" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
                    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
@@ -1884,7 +1913,7 @@ entry iterations, and detail lookups.</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cost/car:      $</span><span class="si">{</span><span class="n">rpt</span><span class="o">.</span><span class="n">cost_per_car</span><span class="o">.</span><span class="n">cost_per_car</span><span class="si">:</span><span class="s2">&gt;10.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="compare-two-periods">Compare two periods<a class="headerlink" href="#compare-two-periods" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
                    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
@@ -1901,7 +1930,7 @@ entry iterations, and detail lookups.</p>
 <h3 id="quick-single-metric-check">Quick single-metric check<a class="headerlink" href="#quick-single-metric-check" title="Permanent link">&para;</a></h3>
 <p>When you only need one number, use the individual methods to minimize API
 calls:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
                    <span class="n">site_code</span><span class="o">=</span><span class="s2">&quot;JOLIET&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
@@ -1941,6 +1970,18 @@ need labor data alongside other KPIs -- it shares the clock entry fetch
 with all other computations. For labor-only queries,
 <code>total_labor_cost()</code> is sufficient and avoids the extra transaction
 fetches.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Faster alternative: <code>client.backoffice.timeclock()</code></p>
+<p>For large date ranges or multi-site operators, consider the
+<a href="../backoffice/">BackOffice scraper</a> instead. The
+<code>/report/employee-timesheets</code> page renders every employee across
+every site for a whole month in a single authenticated HTTP request
+— typically orders of magnitude faster than the Data API path and
+with no rate-limit pressure. It also exposes <strong>per-shift</strong> detail
+(site, punch-in/out times, modification flags) that
+<code>LaborCostResult</code> does not. Requires an extra BackOffice
+administrator credential at client construction.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">No caching between calls</p>

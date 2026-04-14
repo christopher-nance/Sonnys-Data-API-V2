@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -166,7 +166,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -284,7 +284,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/christopher-nance/Sonnys-Data-API-Client" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/christopher-nance/Sonnys-Data-API-V2" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -848,6 +848,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../backoffice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BackOffice
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../error-handling/" class="md-nav__link">
         
   
@@ -1285,22 +1313,32 @@
 
 
 <h1 id="employees">Employees<a class="headerlink" href="#employees" title="Permanent link">&para;</a></h1>
+<p><img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /></p>
 <p>The <strong>Employees</strong> resource provides access to employee records and their clock
 entry history. Beyond the standard <code>list()</code> and <code>get()</code> methods, this resource
 includes a dedicated <code>get_clock_entries()</code> method for retrieving time-tracking
 data with date range filtering.</p>
+<p>Backed by the <strong>Data API</strong> — uses your <code>api_id</code> / <code>api_key</code> credentials.</p>
+<div class="admonition tip">
+<p class="admonition-title">For bulk timeclock data, use the BackOffice scraper</p>
+<p><code>get_clock_entries()</code> is fine for a single employee over a small date
+range. For bulk per-employee, per-shift data across <strong>all</strong> employees
+and sites, <a href="../backoffice/"><code>client.backoffice.timeclock()</code></a> is orders
+of magnitude faster — one HTTP round trip instead of
+<code>N_employees × ceil(days/14)</code> API calls.</p>
+</div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="listparams-listemployeelistitem"><code>list(**params) -&gt; list[EmployeeListItem]</code><a class="headerlink" href="#listparams-listemployeelistitem" title="Permanent link">&para;</a></h3>
+<h3 id="listparams-listemployeelistitem"><code>list(**params) -&gt; list[EmployeeListItem]</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#listparams-listemployeelistitem" title="Permanent link">&para;</a></h3>
 <p>Fetch all employees. Returns a list of <code>EmployeeListItem</code> objects with summary
 fields. The client automatically paginates through all pages of results.</p>
 <div class="highlight"><pre><span></span><code><span class="n">employees</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">employees</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 </code></pre></div>
-<h3 id="getemployee_id-employee"><code>get(employee_id) -&gt; Employee</code><a class="headerlink" href="#getemployee_id-employee" title="Permanent link">&para;</a></h3>
+<h3 id="getemployee_id-employee"><code>get(employee_id) -&gt; Employee</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#getemployee_id-employee" title="Permanent link">&para;</a></h3>
 <p>Fetch full details for a single employee by their ID. Returns an <code>Employee</code>
 object with all fields including active status, start date, phone, and email.</p>
 <div class="highlight"><pre><span></span><code><span class="n">employee</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">employees</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;42&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="get_clock_entriesemployee_id-start_datenone-end_datenone-listclockentry"><code>get_clock_entries(employee_id, *, start_date=None, end_date=None) -&gt; list[ClockEntry]</code><a class="headerlink" href="#get_clock_entriesemployee_id-start_datenone-end_datenone-listclockentry" title="Permanent link">&para;</a></h3>
+<h3 id="get_clock_entriesemployee_id-start_datenone-end_datenone-listclockentry"><code>get_clock_entries(employee_id, *, start_date=None, end_date=None) -&gt; list[ClockEntry]</code> <img alt="API" src="https://img.shields.io/badge/source-API-1976d2" /><a class="headerlink" href="#get_clock_entriesemployee_id-start_datenone-end_datenone-listclockentry" title="Permanent link">&para;</a></h3>
 <p>Fetch clock entries for a specific employee. Returns a flat list of <code>ClockEntry</code>
 objects. Optionally filter by date range using <code>start_date</code> and <code>end_date</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">entries</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">employees</span><span class="o">.</span><span class="n">get_clock_entries</span><span class="p">(</span>
@@ -1317,7 +1355,7 @@ by name, not by position. These are passed to the API as <code>startDate</code> 
 </div>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <h3 id="list-all-employees">List all employees<a class="headerlink" href="#list-all-employees" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sonnys_data_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">SonnysClient</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">sonnys_data_client</span> <span class="kn">import</span> <span class="n">SonnysClient</span>
 
 <span class="k">with</span> <span class="n">SonnysClient</span><span class="p">(</span><span class="n">api_id</span><span class="o">=</span><span class="s2">&quot;your-api-id&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
     <span class="n">employees</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">employees</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
