@@ -1,13 +1,17 @@
 # Giftcards
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Giftcards** resource provides access to gift card liability records. Each
 record tracks a gift card's original value, amount used, and the site where it
 was sold. Use this resource to retrieve gift card balances and monitor usage
 across your locations.
 
+Backed by the **Data API** — uses your `api_id` / `api_key` credentials.
+
 ## Methods
 
-### `list(**params) -> list[GiftcardListItem]`
+### `list(**params) -> list[GiftcardListItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all gift card records. Returns a list of `GiftcardListItem` objects. The
 client automatically paginates through all pages of results.

@@ -1,10 +1,14 @@
 # Recurring Accounts
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Recurring Accounts** resource provides access to recurring (membership)
 car wash accounts. This is the richest standard resource in the client, offering
 five methods for listing accounts, fetching full details, tracking status
 changes, and reviewing modification history. Each account includes billing
 information, plan details, associated tags, vehicles, and customer data.
+
+Backed by the **Data API** — uses your `api_id` / `api_key` credentials.
 
 ## Choosing the Right Method
 
@@ -31,7 +35,7 @@ heavier.
 
 ## Methods
 
-### `list(**params) -> list[RecurringListItem]`
+### `list(**params) -> list[RecurringListItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all recurring accounts. Returns a list of `RecurringListItem` objects with
 summary fields. The client automatically paginates through all pages of results.
@@ -49,7 +53,7 @@ accounts = client.recurring.list(
 )
 ```
 
-### `get(account_id) -> Recurring`
+### `get(account_id) -> Recurring` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch full details for a single recurring account by its ID. Returns a
 `Recurring` object with nested customer, tags, vehicles, billing history, and
@@ -59,7 +63,7 @@ status history.
 account = client.recurring.get("12345")
 ```
 
-### `list_status_changes(**params) -> list[RecurringStatusChange]`
+### `list_status_changes(**params) -> list[RecurringStatusChange]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all recurring account status changes. Returns a list of
 `RecurringStatusChange` objects tracking when accounts changed status (e.g.,
@@ -69,7 +73,7 @@ active to cancelled).
 changes = client.recurring.list_status_changes()
 ```
 
-### `list_modifications(**params) -> list[RecurringModification]`
+### `list_modifications(**params) -> list[RecurringModification]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all recurring account modifications. Returns a list of
 `RecurringModification` objects -- each includes the full account detail plus a
@@ -79,7 +83,7 @@ list of modification entries.
 modifications = client.recurring.list_modifications()
 ```
 
-### `list_details(**params) -> list[Recurring]`
+### `list_details(**params) -> list[Recurring]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all recurring accounts with full detail. Returns full `Recurring` objects
 (the same model as `get()`) for every account, rather than the summary

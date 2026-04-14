@@ -1,13 +1,24 @@
 # Employees
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Employees** resource provides access to employee records and their clock
 entry history. Beyond the standard `list()` and `get()` methods, this resource
 includes a dedicated `get_clock_entries()` method for retrieving time-tracking
 data with date range filtering.
 
+Backed by the **Data API** — uses your `api_id` / `api_key` credentials.
+
+!!! tip "For bulk timeclock data, use the BackOffice scraper"
+    `get_clock_entries()` is fine for a single employee over a small date
+    range. For bulk per-employee, per-shift data across **all** employees
+    and sites, [`client.backoffice.timeclock()`](backoffice.md) is orders
+    of magnitude faster — one HTTP round trip instead of
+    `N_employees × ceil(days/14)` API calls.
+
 ## Methods
 
-### `list(**params) -> list[EmployeeListItem]`
+### `list(**params) -> list[EmployeeListItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all employees. Returns a list of `EmployeeListItem` objects with summary
 fields. The client automatically paginates through all pages of results.
@@ -16,7 +27,7 @@ fields. The client automatically paginates through all pages of results.
 employees = client.employees.list()
 ```
 
-### `get(employee_id) -> Employee`
+### `get(employee_id) -> Employee` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch full details for a single employee by their ID. Returns an `Employee`
 object with all fields including active status, start date, phone, and email.
@@ -25,7 +36,7 @@ object with all fields including active status, start date, phone, and email.
 employee = client.employees.get("42")
 ```
 
-### `get_clock_entries(employee_id, *, start_date=None, end_date=None) -> list[ClockEntry]`
+### `get_clock_entries(employee_id, *, start_date=None, end_date=None) -> list[ClockEntry]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch clock entries for a specific employee. Returns a flat list of `ClockEntry`
 objects. Optionally filter by date range using `start_date` and `end_date`.

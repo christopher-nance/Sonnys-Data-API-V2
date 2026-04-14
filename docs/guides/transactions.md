@@ -1,10 +1,14 @@
 # Transactions
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Transactions** resource provides access to transaction records across all
 wash types. This is the most feature-rich resource in the client, offering five
 methods including type-filtered listing, an enriched v2 endpoint, and a batch
 job system for large exports. Use this resource to retrieve transaction
 summaries, full details with tenders and line items, and bulk data exports.
+
+Backed by the **Data API** — uses your `api_id` / `api_key` credentials.
 
 ## Choosing the Right Method
 
@@ -66,7 +70,7 @@ accept the same query parameters:
 
 ## Methods
 
-### `list(**params) -> list[TransactionListItem]`
+### `list(**params) -> list[TransactionListItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all transactions. Returns a list of `TransactionListItem` objects with
 summary fields. The client automatically paginates through all pages of results.
@@ -84,7 +88,7 @@ transactions = client.transactions.list(
 )
 ```
 
-### `get(trans_id) -> Transaction`
+### `get(trans_id) -> Transaction` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch full details for a single transaction by its ID. Returns a `Transaction`
 object with tenders, line items, discounts, and employee information.
@@ -93,7 +97,7 @@ object with tenders, line items, discounts, and employee information.
 transaction = client.transactions.get("98765")
 ```
 
-### `list_by_type(item_type, **params) -> list[TransactionListItem]`
+### `list_by_type(item_type, **params) -> list[TransactionListItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all transactions of a specific type. The `item_type` parameter accepts
 these values:
@@ -110,7 +114,7 @@ these values:
 wash_transactions = client.transactions.list_by_type("wash")
 ```
 
-### `list_v2(**params) -> list[TransactionV2ListItem]`
+### `list_v2(**params) -> list[TransactionV2ListItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all transactions using the v2 endpoint. Returns enriched list items with
 additional fields: `customer_id`, `is_recurring_plan_sale`,
@@ -127,7 +131,7 @@ transactions_v2 = client.transactions.list_v2(
     The API caches v2 responses for **10 minutes** per reporting criteria. If
     you need real-time data, use the standard `list()` method instead.
 
-### `load_job(*, poll_interval=2.0, timeout=300.0, **params) -> list[TransactionJobItem]`
+### `load_job(*, poll_interval=2.0, timeout=300.0, **params) -> list[TransactionJobItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Submit a batch job and auto-poll until results are ready. Returns
 `TransactionJobItem` objects -- full transaction details enriched with v2

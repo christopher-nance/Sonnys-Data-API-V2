@@ -1,5 +1,7 @@
 # Stats
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Stats** resource provides computed business analytics and KPIs derived
 from transaction data. Unlike other resources that wrap REST endpoints
 directly, `client.stats` fetches raw data from the API and aggregates it
@@ -84,7 +86,7 @@ to UTC.  If `start` is after `end`, a `ValueError` is raised.
 
 ## Methods
 
-### `total_sales(start, end) -> SalesResult`
+### `total_sales(start, end) -> SalesResult` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Compute a revenue breakdown for a date range. Fetches all transactions via the
 enriched v2 endpoint and categorizes them into three buckets: recurring plan
@@ -127,7 +129,7 @@ print(f"Retail: ${result.retail:.2f} ({result.retail_count})")
 | `retail` | `float` | Revenue from retail transactions |
 | `retail_count` | `int` | Number of retail transactions |
 
-### `total_washes(start, end) -> WashResult`
+### `total_washes(start, end) -> WashResult` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Compute wash volume for a date range. Uses three data sources to classify
 transactions accurately:
@@ -160,7 +162,7 @@ print(f"Free washes: {result.free_wash_count}")
 | `eligible_wash_count` | `int` | Derived: `total - member - free`. Denominator for conversion rate |
 | `free_wash_count` | `int` | Washes with `total == 0` (complimentary) |
 
-### `retail_wash_count(start, end) -> int`
+### `retail_wash_count(start, end) -> int` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Count retail wash transactions for a date range. A retail wash is a `type=wash`
 transaction that is neither a recurring plan sale nor a recurring redemption.
@@ -170,7 +172,7 @@ count = client.stats.retail_wash_count("2026-01-01", "2026-01-31")
 print(f"Retail washes: {count}")
 ```
 
-### `new_memberships_sold(start, end) -> int`
+### `new_memberships_sold(start, end) -> int` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Count genuine new membership sales for a date range. Fetches v2 transactions
 to identify plan sale candidates, then verifies each via the v1 detail
@@ -183,7 +185,7 @@ count = client.stats.new_memberships_sold("2026-01-01", "2026-01-31")
 print(f"New memberships sold: {count}")
 ```
 
-### `conversion_rate(start, end) -> ConversionResult`
+### `conversion_rate(start, end) -> ConversionResult` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Compute the membership conversion rate for a date range. Measures how
 effectively a site converts eligible wash customers into membership sign-ups.
@@ -211,7 +213,7 @@ When there are zero eligible washes the rate is `0.0` (division-by-zero safe).
 | `new_memberships` | `int` | Number of genuine new membership sales |
 | `eligible_washes` | `int` | Eligible washes (denominator) |
 
-### `total_labor_cost(start, end) -> LaborCostResult`
+### `total_labor_cost(start, end) -> LaborCostResult` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Compute labor cost breakdown for a date range. Fetches clock entries for all
 employees via a 14-day windowed bulk fetch (the API's hard maximum per
@@ -242,7 +244,7 @@ print(f"Clock entries: {result.entry_count}")
 | `total_hours` | `float` | Combined hours (`regular_hours + overtime_hours`) |
 | `entry_count` | `int` | Number of clock entries aggregated |
 
-### `cost_per_car(start, end) -> CostPerCarResult`
+### `cost_per_car(start, end) -> CostPerCarResult` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Compute labor cost per car for a date range. Divides total labor cost by total
 wash volume to measure labor efficiency. A value of `4.25` means the site spent
@@ -265,7 +267,7 @@ print(f"Total washes: {result.total_washes}")
 | `total_labor_cost` | `float` | Aggregate labor cost from `LaborCostResult` |
 | `total_washes` | `int` | Wash count from `WashResult` |
 
-### `report(start, end) -> StatsReport`
+### `report(start, end) -> StatsReport` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Compute all KPIs for a date range in a single call, including sales, washes,
 memberships, conversion rate, labor costs, and cost per car. Makes **4 bulk

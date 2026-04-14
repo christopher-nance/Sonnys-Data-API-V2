@@ -1,5 +1,7 @@
 # BackOffice
 
+![BackOffice](https://img.shields.io/badge/source-BackOffice-6f42c1)
+
 The **BackOffice** resource scrapes the Sonny's BackOffice web UI (the
 manager portal, e.g. `https://washu.sonnyscontrols.com`) to retrieve
 timeclock data far faster than the Data API path can. The BackOffice
@@ -7,6 +9,10 @@ employee-timesheets report returns every employee across every site for
 an entire month in a single authenticated page load, whereas
 `client.stats.total_labor_cost()` must iterate every employee in 14-day
 windows against the API rate limit.
+
+Backed by the **BackOffice web UI** (NOT the Data API) — requires the
+separate `backoffice_username` / `backoffice_password` credentials at
+client construction.
 
 !!! info "When to use this vs. `stats.total_labor_cost()`"
     Use `client.backoffice.timeclock()` when you need **fast, bulk,
@@ -55,7 +61,7 @@ with SonnysClient(
 
 ## Methods
 
-### `timeclock(start, end, *, site_id=None) -> BackOfficeTimeclockResult`
+### `timeclock(start, end, *, site_id=None) -> BackOfficeTimeclockResult` ![BackOffice](https://img.shields.io/badge/source-BackOffice-6f42c1)
 
 Scrape the `/report/employee-timesheets` page for a date range and
 return per-shift punch-in/punch-out detail grouped by employee, plus a
@@ -149,6 +155,22 @@ at different sites.
 | `was_created_in_back_office` | `bool` | `True` for rows that a manager added manually from Back Office |
 | `comment` | `str \| None` | Audit comment from the preceding `addon-row-comment` row (e.g. *"Unable to punch in..."*) |
 | `is_open` | `bool` (property) | Convenience: `True` when `date_out is None` (employee still clocked in at the moment the report was rendered) |
+
+!!! info "Empty results"
+    When the requested date range has **zero clock entries**, BackOffice
+    replaces the entire report with a single "No clock entries found
+    matching the given criteria." message. The scraper detects this and
+    returns a :class:`BackOfficeTimeclockResult` with an empty
+    ``employees`` list and all totals set to ``0.0``. ``period_start``
+    and ``period_end`` echo the caller's requested range (since the
+    server does not surface them on the empty page). The safest
+    no-results check is:
+
+    ```python
+    result = client.backoffice.timeclock(start, end)
+    if not result.employees:
+        print("No punches in this range.")
+    ```
 
 !!! info "Open shifts (still clocked in)"
     When `timeclock()` is called for a date range that includes today,

@@ -36,6 +36,9 @@ FIXTURE_PATH = Path(__file__).parent / "fixtures" / "backoffice_timesheets_sampl
 OPEN_SHIFT_FIXTURE_PATH = (
     Path(__file__).parent / "fixtures" / "backoffice_timesheets_open_shifts.html"
 )
+EMPTY_FIXTURE_PATH = (
+    Path(__file__).parent / "fixtures" / "backoffice_timesheets_empty.html"
+)
 
 
 @pytest.fixture()
@@ -436,3 +439,55 @@ class TestOpenShiftGrandTotals:
         assert parsed_open.total_regular_hours == pytest.approx(131.54)
         assert parsed_open.total_regular_wages == pytest.approx(1747.15)
         assert parsed_open.total_wages == pytest.approx(1747.15)
+
+
+# ---------------------------------------------------------------------------
+# Empty-result fixture (no clock entries for the requested range)
+# ---------------------------------------------------------------------------
+
+
+class TestEmptyResult:
+    """BackOffice returns a single <h3> when no clock entries exist."""
+
+    def test_parses_to_zero_result(self) -> None:
+        html = EMPTY_FIXTURE_PATH.read_text(encoding="utf-8")
+        result = _parse_timesheet_page(
+            html,
+            request_start="2030-01-05",
+            request_end="2030-01-05",
+        )
+        assert result.employees == []
+        assert result.period_start == "2030-01-05"
+        assert result.period_end == "2030-01-05"
+        assert result.total_regular_hours == 0.0
+        assert result.total_regular_wages == 0.0
+        assert result.total_overtime_hours == 0.0
+        assert result.total_overtime_wages == 0.0
+        assert result.total_wages == 0.0
+
+    def test_request_range_defaults_to_empty_strings(self) -> None:
+        """When called without request_start/end (e.g. from tests), the
+        period fields fall back to empty strings rather than crashing."""
+        html = EMPTY_FIXTURE_PATH.read_text(encoding="utf-8")
+        result = _parse_timesheet_page(html)
+        assert result.employees == []
+        assert result.period_start == ""
+        assert result.period_end == ""
+        assert result.total_wages == 0.0
+
+    def test_detects_sentinel_in_noisy_html(self) -> None:
+        """The empty-state h3 can appear inside arbitrary surrounding markup."""
+        html = """
+        <div class="main-column-full-width">
+          <div class="some-wrapper">
+            <h3 class="text-center nix-bm">
+              No clock entries found matching the given criteria.
+            </h3>
+          </div>
+        </div>
+        """
+        result = _parse_timesheet_page(
+            html, request_start="2030-01-05", request_end="2030-01-05"
+        )
+        assert result.employees == []
+        assert result.total_wages == 0.0

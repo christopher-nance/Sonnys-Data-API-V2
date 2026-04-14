@@ -1,13 +1,17 @@
 # Customers
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Customers** resource provides access to car wash customer records. Each
 customer includes contact information, loyalty data, and an optional mailing
 address. Use this resource to retrieve customer lists or fetch full details for
 a single customer by ID.
 
+Backed by the **Data API** — uses your `api_id` / `api_key` credentials.
+
 ## Methods
 
-### `list(**params) -> list[CustomerListItem]`
+### `list(**params) -> list[CustomerListItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all customers. Returns a list of `CustomerListItem` objects with summary
 fields. The client automatically paginates through all pages of results.
@@ -25,7 +29,7 @@ customers = client.customers.list(
 )
 ```
 
-### `get(customer_id) -> Customer`
+### `get(customer_id) -> Customer` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch full details for a single customer by their ID. Returns a `Customer`
 object with all fields including address, email, loyalty number, and SMS
