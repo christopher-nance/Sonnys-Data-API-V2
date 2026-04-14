@@ -2,6 +2,19 @@
 
 All notable changes to `sonnys-data-client` are documented in this file.
 
+## 1.4.1
+
+### Fixed
+
+- `client.backoffice.timeclock()` no longer raises
+  ``BackOfficeScrapeError`` when the requested date range has zero
+  clock entries. BackOffice renders a single "No clock entries found
+  matching the given criteria." sentinel in that case; the scraper
+  now detects it and returns an empty
+  :class:`BackOfficeTimeclockResult` (empty ``employees`` list, all
+  totals ``0.0``, ``period_start`` / ``period_end`` echo the caller's
+  requested range).
+
 ## 1.4.0
 
 ### Added

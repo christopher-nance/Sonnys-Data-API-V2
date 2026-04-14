@@ -55,6 +55,10 @@ _PERIOD_RE = re.compile(
     r"Period of\s*(\d{1,2}/\d{1,2}/\d{4})\s*-\s*(\d{1,2}/\d{1,2}/\d{4})"
 )
 
+# BackOffice renders this sentinel <h3> when the requested date range
+# has zero clock entries (no employees punched in at all).
+_EMPTY_RESULT_TEXT = "No clock entries found matching the given criteria"
+
 
 class BackOfficeResource(BaseResource):
     """Scraper for the BackOffice employee timesheets report.
@@ -123,7 +127,11 @@ class BackOfficeResource(BaseResource):
         session = self._ensure_logged_in()
         html = self._fetch_timesheet_html(session, start_d, end_d, site_id)
         try:
-            return _parse_timesheet_page(html)
+            return _parse_timesheet_page(
+                html,
+                request_start=start_d.isoformat(),
+                request_end=end_d.isoformat(),
+            )
         except BackOfficeScrapeError:
             raise
         except Exception as e:
@@ -256,12 +264,38 @@ class BackOfficeResource(BaseResource):
 # ---------------------------------------------------------------------------
 
 
-def _parse_timesheet_page(html: str) -> BackOfficeTimeclockResult:
+def _parse_timesheet_page(
+    html: str,
+    *,
+    request_start: str | None = None,
+    request_end: str | None = None,
+) -> BackOfficeTimeclockResult:
     """Parse the full timesheets HTML page into a structured result.
 
     See :class:`BackOfficeResource` for the expected page structure.
+
+    If the BackOffice report renders its "No clock entries found"
+    sentinel (because the requested date range has zero punches), this
+    returns a zero-filled :class:`BackOfficeTimeclockResult` with an
+    empty ``employees`` list. ``request_start`` and ``request_end`` are
+    used to populate ``period_start`` / ``period_end`` in that case,
+    since BackOffice does not echo the requested range back on the
+    empty page. Both default to an empty string so tests that call
+    this helper directly without a range still work.
     """
     soup = BeautifulSoup(html, "html.parser")
+
+    if _is_empty_result_page(soup):
+        return BackOfficeTimeclockResult(
+            period_start=request_start or "",
+            period_end=request_end or "",
+            employees=[],
+            total_regular_hours=0.0,
+            total_regular_wages=0.0,
+            total_overtime_hours=0.0,
+            total_overtime_wages=0.0,
+            total_wages=0.0,
+        )
 
     period_start, period_end = _parse_period_header(soup)
     employees = _parse_employee_blocks(soup)
@@ -277,6 +311,14 @@ def _parse_timesheet_page(html: str) -> BackOfficeTimeclockResult:
         total_overtime_wages=totals["overtime_wages"],
         total_wages=totals["total_wages"],
     )
+
+
+def _is_empty_result_page(soup: BeautifulSoup) -> bool:
+    """Return True if the page is BackOffice's 'no clock entries' state."""
+    for h3 in soup.find_all("h3"):
+        if _EMPTY_RESULT_TEXT in (h3.get_text(strip=True) or ""):
+            return True
+    return False
 
 
 def _parse_period_header(soup: BeautifulSoup) -> tuple[str, str]:

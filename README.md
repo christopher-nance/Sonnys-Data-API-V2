@@ -5,7 +5,7 @@
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Pydantic v2](https://img.shields.io/badge/pydantic-v2-green)
 ![License: Wash Associates Internal Use](https://img.shields.io/badge/license-Wash%20Associates%20Internal%20Use-blue)
-![Version 1.4.0](https://img.shields.io/badge/version-1.4.0-brightgreen)
+![Version 1.4.1](https://img.shields.io/badge/version-1.4.1-brightgreen)
 
 `sonnys-data-client` wraps the Sonny's Carwash Controls REST API with a
 resource-based interface (`client.transactions.list()`,
@@ -112,18 +112,23 @@ Credentials are sent as HTTP headers on every request:
 
 ## Resources
 
-| Resource | Methods |
-|---|---|
-| `client.customers` | `list(**params)`, `get(id)` |
-| `client.items` | `list(**params)` |
-| `client.employees` | `list(**params)`, `get(id)`, `get_clock_entries(employee_id, *, start_date, end_date)` |
-| `client.sites` | `list(**params)` |
-| `client.giftcards` | `list(**params)` |
-| `client.washbooks` | `list(**params)`, `get(id)` |
-| `client.recurring` | `list(**params)`, `get(id)`, `list_status_changes(**params)`, `list_modifications(**params)`, `list_details(**params)` |
-| `client.transactions` | `list(**params)`, `get(id)`, `list_by_type(item_type, **params)`, `list_v2(**params)`, `load_job(*, poll_interval, timeout, **params)` |
-| `client.stats` | `total_sales(start, end)`, `total_washes(start, end)`, `retail_wash_count(start, end)`, `new_memberships_sold(start, end)`, `conversion_rate(start, end)`, `total_labor_cost(start, end)`, `cost_per_car(start, end)`, `report(start, end)` |
-| `client.backoffice` | `timeclock(start, end, *, site_id=None)` (requires `backoffice_username` / `backoffice_password`) |
+Each resource is backed by a **data source**:
+
+- ![API](https://img.shields.io/badge/source-API-1976d2) — wraps the Sonny's Data REST API (`trigonapi.sonnyscontrols.com`). Uses your `api_id` / `api_key`.
+- ![BackOffice](https://img.shields.io/badge/source-BackOffice-6f42c1) — scrapes the manager-portal web UI (`{api_id}.sonnyscontrols.com`). Requires the separate `backoffice_username` / `backoffice_password`.
+
+| Resource | Source | Methods |
+|---|---|---|
+| `client.customers` | ![API](https://img.shields.io/badge/source-API-1976d2) | `list(**params)`, `get(id)` |
+| `client.items` | ![API](https://img.shields.io/badge/source-API-1976d2) | `list(**params)` |
+| `client.employees` | ![API](https://img.shields.io/badge/source-API-1976d2) | `list(**params)`, `get(id)`, `get_clock_entries(employee_id, *, start_date, end_date)` |
+| `client.sites` | ![API](https://img.shields.io/badge/source-API-1976d2) | `list(**params)` |
+| `client.giftcards` | ![API](https://img.shields.io/badge/source-API-1976d2) | `list(**params)` |
+| `client.washbooks` | ![API](https://img.shields.io/badge/source-API-1976d2) | `list(**params)`, `get(id)` |
+| `client.recurring` | ![API](https://img.shields.io/badge/source-API-1976d2) | `list(**params)`, `get(id)`, `list_status_changes(**params)`, `list_modifications(**params)`, `list_details(**params)` |
+| `client.transactions` | ![API](https://img.shields.io/badge/source-API-1976d2) | `list(**params)`, `get(id)`, `list_by_type(item_type, **params)`, `list_v2(**params)`, `load_job(*, poll_interval, timeout, **params)` |
+| `client.stats` | ![API](https://img.shields.io/badge/source-API-1976d2) | `total_sales(start, end)`, `total_washes(start, end)`, `retail_wash_count(start, end)`, `new_memberships_sold(start, end)`, `conversion_rate(start, end)`, `total_labor_cost(start, end)`, `cost_per_car(start, end)`, `report(start, end)` |
+| `client.backoffice` | ![BackOffice](https://img.shields.io/badge/source-BackOffice-6f42c1) | `timeclock(start, end, *, site_id=None)` (requires `backoffice_username` / `backoffice_password`) |
 
 All `list()` methods auto-paginate by default -- every page is fetched
 transparently and the complete result set is returned. Common query parameters

@@ -1,13 +1,17 @@
 # Items
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Items** resource provides access to the wash items and products catalog.
 Each item represents a product or service offered at a car wash site, including
 its SKU, pricing, and department classification. This is a list-only resource
 -- there is no `get()` method for individual item detail.
 
+Backed by the **Data API** — uses your `api_id` / `api_key` credentials.
+
 ## Methods
 
-### `list(**params) -> list[Item]`
+### `list(**params) -> list[Item]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all items. Returns a list of `Item` objects representing the full product
 catalog. The client automatically paginates through all pages of results.

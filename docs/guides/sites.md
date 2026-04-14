@@ -1,13 +1,17 @@
 # Sites
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Sites** resource provides access to the car wash site locations associated
 with your API credentials. Each site represents a physical car wash location
 with its identifying code, name, and timezone. This is a list-only resource
 -- there is no `get()` method for individual site detail.
 
+Backed by the **Data API** — uses your `api_id` / `api_key` credentials.
+
 ## Methods
 
-### `list(**params) -> list[Site]`
+### `list(**params) -> list[Site]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all sites. Returns a list of `Site` objects representing every car wash
 location associated with the API credentials.

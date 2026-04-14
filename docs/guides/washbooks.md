@@ -1,13 +1,17 @@
 # Washbooks
 
+![API](https://img.shields.io/badge/source-API-1976d2)
+
 The **Washbooks** resource provides access to prepaid wash book accounts. Each
 account tracks balances, sign-up and cancellation dates, and billing site
 information. The detail endpoint expands each account with customer contact
 info, RFID tags, associated vehicles, and recurring billing details.
 
+Backed by the **Data API** — uses your `api_id` / `api_key` credentials.
+
 ## Methods
 
-### `list(**params) -> list[WashbookListItem]`
+### `list(**params) -> list[WashbookListItem]` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch all wash book accounts. Returns a list of `WashbookListItem` objects with
 summary fields. The client automatically paginates through all pages of results.
@@ -25,7 +29,7 @@ washbooks = client.washbooks.list(
 )
 ```
 
-### `get(account_id) -> Washbook`
+### `get(account_id) -> Washbook` ![API](https://img.shields.io/badge/source-API-1976d2)
 
 Fetch full details for a single wash book account by its ID. Returns a
 `Washbook` object with nested customer, tag, vehicle, and recurring billing
