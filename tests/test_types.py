@@ -123,6 +123,65 @@ class TestTransactionModels:
         assert txn.items[0].name == "Premium Wash"
         assert txn.items[0].is_voided is False
 
+    def test_transaction_coerces_empty_optional_strings_to_none(self):
+        """Transaction should coerce "" to None for optional string fields.
+
+        The API returns empty strings (not null) for unset optional string
+        fields like employee_greeter, so ``x is None`` checks work reliably.
+        """
+        data = {
+            "id": "abc-124",
+            "number": 43,
+            "type": "Sale",
+            "completeDate": "2024-06-15T10:30:00",
+            "locationCode": "MAIN",
+            "salesDeviceName": "POS-1",
+            "total": 10.0,
+            "tenders": [],
+            "items": [],
+            "customerName": "",
+            "customerId": "",
+            "vehicleLicensePlate": "",
+            "employeeCashier": "",
+            "employeeGreeter": "",
+            "discounts": [],
+            "isRecurringPayment": False,
+            "isRecurringRedemption": False,
+            "isRecurringSale": False,
+            "isPrepaidRedemption": False,
+            "isPrepaidSale": False,
+        }
+        txn = types.Transaction(**data)
+        assert txn.customer_name is None
+        assert txn.customer_id is None
+        assert txn.vehicle_license_plate is None
+        assert txn.employee_cashier is None
+        assert txn.employee_greeter is None
+
+    def test_transaction_job_item_inherits_blank_coercion(self):
+        """TransactionJobItem inherits the Transaction empty->None validator."""
+        data = {
+            "id": "abc-125",
+            "number": 44,
+            "type": "Sale",
+            "completeDate": "2024-06-15T10:30:00",
+            "locationCode": "MAIN",
+            "salesDeviceName": "POS-1",
+            "total": 10.0,
+            "tenders": [],
+            "items": [],
+            "employeeGreeter": "",
+            "discounts": [],
+            "isRecurringPayment": False,
+            "isRecurringRedemption": False,
+            "isRecurringSale": True,
+            "isPrepaidRedemption": False,
+            "isPrepaidSale": False,
+        }
+        job_item = types.TransactionJobItem(**data)
+        assert job_item.employee_greeter is None
+        assert job_item.is_recurring_sale is True
+
     def test_transaction_list_item(self):
         """TransactionListItem should parse basic list data."""
         data = {

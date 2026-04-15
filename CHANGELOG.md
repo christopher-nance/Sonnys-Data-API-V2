@@ -2,6 +2,19 @@
 
 All notable changes to `sonnys-data-client` are documented in this file.
 
+## 1.5.0
+
+### Fixed
+
+- `Transaction` (and `TransactionJobItem`, which extends it) now coerces
+  the API's empty-string sentinel to `None` for optional string fields:
+  `customer_name`, `customer_id`, `vehicle_license_plate`,
+  `employee_cashier`, and `employee_greeter`. The upstream API returns
+  `""` instead of `null` when these fields are unset (e.g. a transaction
+  with no greeter assigned), which broke `x is None` checks. Truthiness
+  checks (`if txn.employee_greeter:`) were already correct and continue
+  to work.
+
 ## 1.4.1
 
 ### Fixed
