@@ -2,7 +2,7 @@
 
 All notable changes to `sonnys-data-client` are documented in this file.
 
-## 1.4.2
+## 1.5.1
 
 ### Fixed
 
@@ -17,8 +17,6 @@ All notable changes to `sonnys-data-client` are documented in this file.
   against the BackOffice "Sales Overview V2 Report" *Total Cars* figure
   on FRVW for 2026-05-06 (15 total / 2 net cars; previously the client
   returned 21 / 7).
-- `_version.py` now reports `1.4.2`; it had been pinned at `0.1.0` while
-  `pyproject.toml` advanced through the 1.x series.
 
 ### Changed
 
@@ -26,6 +24,19 @@ All notable changes to `sonnys-data-client` are documented in this file.
   `type=recurring` fetch was load-bearing only for the removed fallback
   branch and is no longer needed. By extension, `conversion_rate()`,
   `cost_per_car()`, and `report()` each make one fewer bulk call.
+
+## 1.5.0
+
+### Fixed
+
+- `Transaction` (and `TransactionJobItem`, which extends it) now coerces
+  the API's empty-string sentinel to `None` for optional string fields:
+  `customer_name`, `customer_id`, `vehicle_license_plate`,
+  `employee_cashier`, and `employee_greeter`. The upstream API returns
+  `""` instead of `null` when these fields are unset (e.g. a transaction
+  with no greeter assigned), which broke `x is None` checks. Truthiness
+  checks (`if txn.employee_greeter:`) were already correct and continue
+  to work.
 
 ## 1.4.1
 
