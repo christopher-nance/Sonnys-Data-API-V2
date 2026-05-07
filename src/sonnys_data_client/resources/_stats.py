@@ -443,7 +443,10 @@ class StatsResource(BaseResource):
         Fetches v2 transactions (for membership flags), v1 ``type=wash``
         (to identify car washes), and v1 ``type=recurring`` (to identify
         recharges).  Classification priority: redemption > plan sale >
-        wash > recharge > unknown.
+        wash.  Transactions matching none of these (e.g. recurring
+        recharges, prepaid gift-card sales, prepaid membership sales)
+        are excluded from the wash count, matching the BackOffice
+        "Sales Overview V2 Report" Total Cars figure.
 
         ``eligible_wash_count`` is derived as
         ``total - member_wash_count - free_wash_count``.
@@ -475,10 +478,6 @@ class StatsResource(BaseResource):
             t.trans_id
             for t in self._fetch_transactions_by_type(start, end, "wash")
         }
-        recurring_ids = {
-            t.trans_id
-            for t in self._fetch_transactions_by_type(start, end, "recurring")
-        }
         v2_transactions = self._fetch_transactions_v2(start, end)
 
         member_wash_count = 0
@@ -493,17 +492,11 @@ class StatsResource(BaseResource):
                 if txn.trans_id in wash_ids:
                     plan_sale_wash_count += 1
             elif txn.trans_id in wash_ids:
-                # Wash takes priority over recurring (some are both)
                 retail_wash_count += 1
                 if txn.total == 0:
                     free_wash_count += 1
-            elif txn.trans_id in recurring_ids:
-                pass  # recharges — not a car wash
-            elif txn.total >= 0:
-                # Unknown non-negative type — count as a wash
-                retail_wash_count += 1
-                if txn.total == 0:
-                    free_wash_count += 1
+            # Anything else (recurring recharges, prepaid gift-card sales,
+            # prepaid membership sales, etc.) is not a car wash.
 
         total = member_wash_count + retail_wash_count + plan_sale_wash_count
         eligible_wash_count = total - member_wash_count - free_wash_count
@@ -529,9 +522,9 @@ class StatsResource(BaseResource):
 
         Eligible washes are derived from the total wash count:
         ``total_washes - member_washes - free_washes``.  This includes
-        retail washes with ``total > 0``, plan sale washes, and unknown
-        non-negative transaction types.  When there are zero eligible
-        washes the rate is ``0.0`` (division-by-zero safe).
+        paid retail washes (``total > 0``) and plan sale washes.  When
+        there are zero eligible washes the rate is ``0.0``
+        (division-by-zero safe).
 
         Args:
             start: Range start as an ISO-8601 string (e.g. ``"2026-01-01"``)
@@ -677,10 +670,10 @@ class StatsResource(BaseResource):
     ) -> StatsReport:
         """Compute all KPIs for a date range in a single call.
 
-        Fetches v2 transactions, v1 ``type=wash``, v1 ``type=recurring``,
-        clock entries for all employees, and verifies each plan sale
-        candidate via ``get()`` to exclude plan upgrades/switches.  Makes
-        **4 bulk API calls** (3 transaction + 1 employee list) plus
+        Fetches v2 transactions, v1 ``type=wash``, clock entries for
+        all employees, and verifies each plan sale candidate via
+        ``get()`` to exclude plan upgrades/switches.  Makes
+        **3 bulk API calls** (2 transaction + 1 employee list) plus
         **N_employees x ceil(days/14) clock-entry calls** and
         **~N detail calls** (one per v2 plan sale candidate, typically
         ~15/day), then computes every KPI locally.
@@ -715,15 +708,11 @@ class StatsResource(BaseResource):
             print(f"Labor cost: ${rpt.labor.total_cost:.2f}")
             print(f"Cost per car: ${rpt.cost_per_car.cost_per_car:.2f}")
         """
-        # --- 1. Fetch data (3 bulk API calls + ~N get() calls) ---
+        # --- 1. Fetch data (2 bulk transaction calls + ~N get() calls) ---
         v2_transactions = self._fetch_transactions_v2(start, end)
         wash_ids = {
             t.trans_id
             for t in self._fetch_transactions_by_type(start, end, "wash")
-        }
-        recurring_ids = {
-            t.trans_id
-            for t in self._fetch_transactions_by_type(start, end, "recurring")
         }
         # Verify plan sales via v1 get() to exclude upgrades/switches
         genuine_sale_ids = self._genuine_plan_sale_ids(v2_transactions)
@@ -754,17 +743,11 @@ class StatsResource(BaseResource):
                 retail += txn.total
                 retail_count += 1
                 if txn.trans_id in wash_ids:
-                    # Wash takes priority over recurring (some are both)
                     retail_wash_count += 1
                     if txn.total == 0:
                         free_wash_count += 1
-                elif txn.trans_id in recurring_ids:
-                    pass  # recharges — not a car wash
-                elif txn.total >= 0:
-                    # Unknown non-negative type — count as a wash
-                    retail_wash_count += 1
-                    if txn.total == 0:
-                        free_wash_count += 1
+                # Anything else (recurring recharges, prepaid gift-card sales,
+                # prepaid membership sales, etc.) is not a car wash.
 
         sales_total = recurring_plan_sales + retail
         sales_count = recurring_plan_sales_count + retail_count
