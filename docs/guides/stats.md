@@ -46,13 +46,13 @@ The stats resource offers eight methods. Pick the one that matches your use case
 | Method | Returns | Description | API Calls |
 |--------|---------|-------------|-----------|
 | `total_sales(start, end)` | `SalesResult` | Revenue breakdown by category (recurring, retail) | 1 |
-| `total_washes(start, end)` | `WashResult` | Wash volume breakdown (member, retail, eligible, free) | 3 |
+| `total_washes(start, end)` | `WashResult` | Wash volume breakdown (member, retail, eligible, free) | 2 |
 | `retail_wash_count(start, end)` | `int` | Count of retail wash transactions | 2 |
 | `new_memberships_sold(start, end)` | `int` | Count of genuine new membership sales | 1 + ~N |
-| `conversion_rate(start, end)` | `ConversionResult` | Membership conversion rate KPI | 4 + ~N |
+| `conversion_rate(start, end)` | `ConversionResult` | Membership conversion rate KPI | 3 + ~N |
 | `total_labor_cost(start, end)` | `LaborCostResult` | Labor cost breakdown (regular/overtime) from clock entries | N_emp x ceil(days/14) + 1 |
-| `cost_per_car(start, end)` | `CostPerCarResult` | Labor cost per car washed | N_emp x ceil(days/14) + 4 |
-| `report(start, end)` | `StatsReport` | All KPIs in a single call (most efficient) | 4 + N_emp x ceil(days/14) + ~N |
+| `cost_per_car(start, end)` | `CostPerCarResult` | Labor cost per car washed | N_emp x ceil(days/14) + 3 |
+| `report(start, end)` | `StatsReport` | All KPIs in a single call (most efficient) | 3 + N_emp x ceil(days/14) + ~N |
 
 Where **~N** is the number of v2 plan sale candidates verified via `get()`
 (typically ~15/day).  This verification excludes plan upgrades/switches from
@@ -131,16 +131,17 @@ print(f"Retail: ${result.retail:.2f} ({result.retail_count})")
 
 ### `total_washes(start, end) -> WashResult` ![API](https://img.shields.io/badge/source-API-1976d2)
 
-Compute wash volume for a date range. Uses three data sources to classify
+Compute wash volume for a date range. Uses two data sources to classify
 transactions accurately:
 
 - **v2 endpoint** -- provides `is_recurring_plan_sale` and `is_recurring_plan_redemption` flags
 - **v1 `type=wash`** -- identifies actual car wash transactions
-- **v1 `type=recurring`** -- identifies recharges (monthly billing) to exclude
 
-Classification priority: redemption > plan sale > wash > recharge > unknown.
-Transactions in both `type=wash` and `type=recurring` are treated as washes.
-Negative-total transactions (refunds) are excluded entirely.
+Classification priority: redemption > plan sale (with wash) > wash. Any
+v2 transaction that is neither a redemption nor a plan sale and does not
+appear in `type=wash` (e.g. recurring recharges, prepaid gift-card sales,
+prepaid membership sales) is excluded from the wash count, matching the
+BackOffice "Sales Overview V2 Report" *Total Cars* figure.
 
 ```python
 result = client.stats.total_washes("2026-01-01", "2026-01-31")
@@ -158,7 +159,7 @@ print(f"Free washes: {result.free_wash_count}")
 |-------|------|-------------|
 | `total` | `int` | Total wash count (member + retail + plan sale washes) |
 | `member_wash_count` | `int` | Membership redemption washes |
-| `retail_wash_count` | `int` | Non-member washes (includes unknown non-negative types) |
+| `retail_wash_count` | `int` | Non-member, non-plan-sale washes (only `type=wash` transactions) |
 | `eligible_wash_count` | `int` | Derived: `total - member - free`. Denominator for conversion rate |
 | `free_wash_count` | `int` | Washes with `total == 0` (complimentary) |
 
@@ -192,8 +193,7 @@ effectively a site converts eligible wash customers into membership sign-ups.
 The rate is computed as `new_memberships / eligible_washes`.
 
 Eligible washes are derived from total washes: `total - member - free`. This
-includes retail washes with `total > 0`, plan sale washes, and unknown
-non-negative transaction types.
+includes paid retail washes (`total > 0`) and plan sale washes.
 
 ```python
 result = client.stats.conversion_rate("2026-01-01", "2026-01-31")

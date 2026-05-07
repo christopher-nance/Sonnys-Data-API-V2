@@ -2,6 +2,29 @@
 
 All notable changes to `sonnys-data-client` are documented in this file.
 
+## 1.5.1
+
+### Fixed
+
+- `client.stats.total_washes()` and `client.stats.report()` no longer
+  over-count wash volume by misclassifying prepaid sales (gift cards,
+  prepaid membership purchases) and other non-wash transactions as
+  retail washes. The previous logic had an "unknown non-negative type"
+  fallback that swept in any v2 transaction that wasn't tagged as
+  `type=wash` or `type=recurring`. A v2 transaction is now only counted
+  as a wash if it is a recurring redemption, a recurring plan sale that
+  also appears in `type=wash`, or itself appears in `type=wash`. Verified
+  against the BackOffice "Sales Overview V2 Report" *Total Cars* figure
+  on FRVW for 2026-05-06 (15 total / 2 net cars; previously the client
+  returned 21 / 7).
+
+### Changed
+
+- `client.stats.total_washes()` now makes 2 bulk API calls (was 3) — the
+  `type=recurring` fetch was load-bearing only for the removed fallback
+  branch and is no longer needed. By extension, `conversion_rate()`,
+  `cost_per_car()`, and `report()` each make one fewer bulk call.
+
 ## 1.5.0
 
 ### Fixed
