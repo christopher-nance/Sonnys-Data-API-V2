@@ -1,6 +1,6 @@
 """Transaction response models."""
 
-from pydantic import Field
+from pydantic import Field, field_validator
 
 from sonnys_data_client.types._base import SonnysModel
 
@@ -105,6 +105,23 @@ class Transaction(SonnysModel):
     is_recurring_sale: bool
     is_prepaid_redemption: bool
     is_prepaid_sale: bool
+
+    @field_validator(
+        "customer_name",
+        "customer_id",
+        "vehicle_license_plate",
+        "employee_cashier",
+        "employee_greeter",
+        mode="before",
+    )
+    @classmethod
+    def _blank_to_none(cls, v: object) -> object:
+        # The API returns "" for unset optional string fields (e.g. a
+        # transaction with no greeter assigned). Coerce to None so
+        # `x is None` works and truthiness checks stay consistent.
+        if isinstance(v, str) and v == "":
+            return None
+        return v
 
 
 class TransactionJobItem(Transaction):

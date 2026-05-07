@@ -5,7 +5,7 @@
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Pydantic v2](https://img.shields.io/badge/pydantic-v2-green)
 ![License: Wash Associates Internal Use](https://img.shields.io/badge/license-Wash%20Associates%20Internal%20Use-blue)
-![Version 1.4.1](https://img.shields.io/badge/version-1.4.1-brightgreen)
+![Version 1.5.0](https://img.shields.io/badge/version-1.5.0-brightgreen)
 
 `sonnys-data-client` wraps the Sonny's Carwash Controls REST API with a
 resource-based interface (`client.transactions.list()`,
